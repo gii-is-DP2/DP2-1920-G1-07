@@ -17,7 +17,7 @@ public class DonationServiceTest {
 	@Test
 	public void testCountWithInitialData() {
 		int count = donationService.donationCount();
-		assertEquals(count,0);
+		assertEquals(count,2);
 	}
 
 }
