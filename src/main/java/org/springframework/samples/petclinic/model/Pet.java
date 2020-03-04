@@ -60,6 +60,15 @@ public class Pet extends NamedEntity {
 	@JoinColumn(name = "owner_id")
 	private Owner owner;
 
+	// Añadido para Sala y Sitter(Cuidador)
+	@ManyToOne
+	@JoinColumn(name="room_id")
+	private Room room;
+	
+	@ManyToOne
+	@JoinColumn(name = "sitter_id")
+	private Sitter sitter;
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pet", fetch = FetchType.EAGER)
 	private Set<Visit> visits;
 
@@ -85,6 +94,22 @@ public class Pet extends NamedEntity {
 
 	protected void setOwner(Owner owner) {
 		this.owner = owner;
+	}
+	
+	public Room getRoom() {
+		return this.room;
+	}
+
+	protected void setRoom(Room room) {
+		this.room = room;
+	}
+	
+	public Sitter getSitter() {
+		return this.sitter;
+	}
+
+	protected void setSitter(Sitter sitter) {
+		this.sitter = sitter;
 	}
 
 	protected Set<Visit> getVisitsInternal() {
