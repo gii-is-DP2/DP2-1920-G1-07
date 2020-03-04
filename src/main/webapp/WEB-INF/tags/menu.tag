@@ -5,7 +5,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
 <%@ attribute name="name" required="true" rtexprvalue="true"
-	description="Name of the active menu: home, owners, vets or error"%>
+	description="Name of the active menu: home, owners, vets, causes or error"%>
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
@@ -44,6 +44,12 @@
 					title="trigger a RuntimeException to see how it is handled">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
 					<span>Error</span>
+				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'cause'}" url="/cause"
+					title="causes">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Causes</span>
 				</petclinic:menuItem>
 
 			</ul>

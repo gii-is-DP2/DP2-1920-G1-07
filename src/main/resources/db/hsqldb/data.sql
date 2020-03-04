@@ -62,3 +62,11 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
+INSERT INTO status VALUES (1, 'PENDING');
+INSERT INTO status VALUES (2, 'ACCEPTED');
+INSERT INTO status VALUES (3, 'REJECTED');
+
+INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (1, 'First Cause', 'This is my first cause', '2020-12-30', 10000.00, 1, 'owner1');
+INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (2, 'Second Cause', 'This is my second cause', '2020-06-20', 10000.00, 3, 'owner1');
+INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (3, 'Third Cause', 'This is my third cause', '2020-10-30', 10000.00, 2, 'owner1');
+
