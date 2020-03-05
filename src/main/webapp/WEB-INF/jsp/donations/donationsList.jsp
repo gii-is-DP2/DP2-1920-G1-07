@@ -15,8 +15,9 @@
 			<tr>
 
 				<th style="width: 200px;">Name</th>
-				<th>Money
-				<th>
+				<th>Money</th>
+				<th>Actions</th>
+
 			</tr>
 		</thead>
 		<tbody>
@@ -24,19 +25,31 @@
 				<tr>
 					<td><c:choose>
 							<c:when test="${donation.anonymous=='FALSE'}">
-        	<c:out value="${donation.user.username}" />
-        <br />
+								<c:out value="${donation.user.username}" />
+								<br />
 							</c:when>
 							<c:otherwise>
-        				<c:out value="Anonymous" />
-        <br />
+								<c:out value="Anonymous" />
+								<br />
 							</c:otherwise>
-						</c:choose> 
-						</td>
+						</c:choose></td>
 					<td><c:out value="${donation.money}" /></td>
 
+					<td><spring:url value="/donations/delete/{donationId}"
+							var="donationUrl">
+							<spring:param name="donationId" value="${donation.id}" />
+						</spring:url> <a href="${fn:escapeXml(donationUrl)}">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
+	</table>
+	<table class="table-buttons">
+		<tr>
+			<td>
+				<spring:url value="/donations/new"
+					var="donationUrl2">
+				</spring:url> 
+				<a href="${fn:escapeXml(donationUrl2)}">Add Donation</a></td>
+		</tr>
 	</table>
 </petclinic:layout>

@@ -16,10 +16,15 @@
 package org.springframework.samples.petclinic.service;
 
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,10 +43,15 @@ public class UserService {
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
+	
 
 	@Transactional
 	public void saveUser(User user) throws DataAccessException {
 		user.setEnabled(true);
-		userRepository.save(user);
+		userRepository.save(user);		
 	}
+	
+	
+	
+
 }
