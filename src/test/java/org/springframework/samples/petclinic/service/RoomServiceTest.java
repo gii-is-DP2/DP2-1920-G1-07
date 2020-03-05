@@ -16,9 +16,9 @@ public class RoomServiceTest {
 	@Autowired
 	private RoomService roomService;
 	
-	@Test
-	public void testCountRoomWithInitialData() {
-		int count = roomService.roomCount();
-		assertEquals(count, 1);
-	}
+//	@Test
+//	public void testCountRoomWithInitialData() {
+//		int count = roomService.roomCount();
+//		assertEquals(count, 1);
+//	}
 }
