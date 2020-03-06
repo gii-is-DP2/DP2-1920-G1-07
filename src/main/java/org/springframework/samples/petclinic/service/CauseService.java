@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CauseService {
 
+	@Autowired
 	private CauseRepository causeRepository;
 
 
@@ -36,6 +37,10 @@ public class CauseService {
 	@Transactional
 	public Status findPendingStatus() throws DataAccessException {
 		return this.causeRepository.findPendingStatus();
+	}
+
+	public Collection<Cause> findMyCauses(final String userName) throws DataAccessException {
+		return this.causeRepository.findMyCauses(userName);
 	}
 
 }

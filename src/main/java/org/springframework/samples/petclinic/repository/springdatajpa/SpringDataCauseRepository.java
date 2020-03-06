@@ -15,7 +15,7 @@ public interface SpringDataCauseRepository extends CauseRepository, Repository<C
 
 	@Override
 	@Query("select c from Cause c where c.id=:id")
-	Cause findById(@Param("id") int id);
+	Cause findById(@Param("id") int id) throws DataAccessException;
 
 	@Override
 	@Query("select c from Cause c where c.status.id=2")
@@ -24,4 +24,8 @@ public interface SpringDataCauseRepository extends CauseRepository, Repository<C
 	@Override
 	@Query("select s from Status s where s.id=1")
 	Status findPendingStatus() throws DataAccessException;
+
+	@Override
+	@Query("select c from Cause c where c.user.username LIKE username")
+	Collection<Cause> findMyCauses(String username) throws DataAccessException;
 }

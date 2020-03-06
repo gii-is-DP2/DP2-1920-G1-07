@@ -6,8 +6,28 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="cause">
-	
-
+<petclinic:layout pageName="causes">
+	<h2>
+		<c:if test="${cause['new']}">New </c:if> Cause
+	</h2>
+	<form:form modelAttribute="cause" class="form-horizontal" id="add-cause-form">
+		<div class="form-group has-feedback">
+			<petclinic:inputField label="Title" name="title"/>
+			<petclinic:inputField label="Description" name="description"/>
+			<petclinic:inputField label="Money" name="money"/>
+			<petclinic:inputField label="Deadline" name="deadline"/>
+			
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<c:choose>
+					<c:when test="${cause['new']}">
+						<button class="btn btn-default" type="submit">Add Cause</button>
+					</c:when>
+				</c:choose>
+			</div>
+		</div>
+		
+	</form:form>
 
 </petclinic:layout>

@@ -46,9 +46,7 @@ public class UserService {
 		this.userRepository.save(user);
 	}
 
-	@Transactional(readOnly = true)
-	public User findUserById(final int userId) throws DataAccessException {
-		String id = Integer.toString(userId);
-		return this.userRepository.findById(id);
+	public User findUserByUserName(final String userName) throws DataAccessException {
+		return this.userRepository.findUserByUsername(userName);
 	}
 }

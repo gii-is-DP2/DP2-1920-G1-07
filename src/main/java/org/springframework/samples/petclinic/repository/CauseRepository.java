@@ -38,4 +38,6 @@ public interface CauseRepository {
 	Collection<Cause> findAcceptedCauses() throws DataAccessException;
 
 	Status findPendingStatus() throws DataAccessException;
+
+	Collection<Cause> findMyCauses(String userName) throws DataAccessException;
 }

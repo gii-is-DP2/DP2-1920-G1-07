@@ -5,7 +5,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
-<petclinic:layout pageName="cause">
+<petclinic:layout pageName="causes">
 	<h2>Causes</h2>
 	
 	<table id="causesTable" class="table table-striped">
@@ -15,34 +15,30 @@
 				<th>Description</th>
 				<th>Deadline</th>
 				<th>Money</th>
+				<th>Status</th>
 			</tr>
 		</thead>
 
 		<tbody>
-			<c:forEach items="${cause}" var="cause">
+			<c:forEach items="${causes}" var="causes">
 				<tr>
 					<td>
-						<c:out value="${cause.title}"></c:out>
+						<c:out value="${causes.title}"></c:out>
 					</td>
 					<td>
-						<c:out value="${cause.description}"></c:out>
+						<c:out value="${causes.description}"></c:out>
 					</td>
 					<td>
-						<c:out value="${cause.deadline}"></c:out>
+						<c:out value="${causes.deadline}"></c:out>
 					</td>
 					<td>
-						<c:out value="${cause.money}"></c:out>
+						<c:out value="${causes.money}"></c:out>
+					</td>
+					<td>
+						<c:out value="${causes.status.name}"></c:out>
 					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
-	
-    <spring:url value="/cause/new" var="addCause"/>
-    <a href="${fn:escapeXml(addCause)}" class="btn btn-default">Add New Cause</a>
-    
-    <spring:url value="/cause/myCauses" var="myCauses"/>
-    <a href="${fn:escapeXml(myCauses)}" class="btn btn-default">See My Causes</a>
-         
-	
 </petclinic:layout>
