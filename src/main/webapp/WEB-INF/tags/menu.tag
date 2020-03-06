@@ -39,6 +39,20 @@
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Veterinarians</span>
 				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'vets'}" url="/visits"
+					title="visits">
+					<span class="glyphicon glyphicon-visits-list" aria-hidden="true"></span>
+					<span>Visits</span>
+				</petclinic:menuItem>
+				
+				 <petclinic:menuItem active="${name eq 'owners'}" url="/profile"
+					title="My profile">
+					<span class="glyphicon glyphicon-visits-list" aria-hidden="true"></span>
+					<span>My profile</span>
+				</petclinic:menuItem> 
+				
+
 
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
