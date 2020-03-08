@@ -146,18 +146,15 @@ public class OwnerController {
 
 	////////////////////////////////
 
-	@GetMapping("/profile")
-	public String idProfile(@Valid final Owner owner, final BindingResult result) {
-		return "redirect:/profile/" + owner.getId();
+	@GetMapping(value = "/owners/profile")
+	public String processFindProfile(final Owner owner, final BindingResult result, final Map<String, Object> model) {
+		//		Owner owner = owner.getId();
+		return "redirect:/owners/profile/" + owner.getId();
+
 	}
 
-	//	@PostMapping("/profile")
-	//	public String idPostProfile(@Valid final Owner owner, final BindingResult result) {
-	//		return "redirect:/profile/" + owner.getId();
-	//	}
-
-	@GetMapping("/profile/{ownerId}")
-	public ModelAndView profileOwner(@PathVariable("ownerId") final int ownerId) {
+	@GetMapping("/owners/profile/{ownerId}")
+	public ModelAndView showProfile(@PathVariable("ownerId") final int ownerId) {
 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
 		mav.addObject(this.ownerService.findOwnerById(ownerId));
 		return mav;
