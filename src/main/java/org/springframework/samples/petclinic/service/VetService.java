@@ -17,12 +17,15 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.repository.SpecialtyRepository;
 import org.springframework.samples.petclinic.repository.VetRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +46,8 @@ public class VetService {
 
 	@Autowired
 	private AuthoritiesService	authoritiesService;
+
+	private SpecialtyRepository	specialtyRepository;
 
 
 	@Autowired
@@ -73,6 +78,25 @@ public class VetService {
 	@Transactional(readOnly = true)
 	public Collection<Visit> findVisits() throws DataAccessException {
 		return this.vetRepository.findVisits();
+	}
+
+	@Transactional(readOnly = true)
+	public Set<Specialty> findSpecialiesById(final Integer[] ids) {
+		Set<Specialty> res = new HashSet<>();
+		for (Integer id : ids) {
+			res.add(this.specialtyRepository.findOne(id));
+		}
+		return res;
+	}
+
+	@Transactional
+	public void saveVet(final Vet vet) throws DataAccessException {
+		this.vetRepository.save(vet);
+		if (!vet.getSpecialties().isEmpty()) {
+			for (Specialty s : vet.getSpecialties()) {
+				this.vetRepository.saveVetSpecialty(vet.getId(), s.getId());
+			}
+		}
 	}
 
 }

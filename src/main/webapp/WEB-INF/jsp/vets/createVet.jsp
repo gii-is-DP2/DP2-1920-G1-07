@@ -14,10 +14,7 @@
         <div class="form-group has-feedback">
             <petclinic:inputField label="First Name" name="firstName"/>
             <petclinic:inputField label="Last Name" name="lastName"/>
-             <div class="control-group">
-                    <petclinic:selectField name="specialties"
-						label="Specialties " names="${specialties}" size="3" />
-                </div> 
+        <petclinic:selectField label="Specialties" name="specialties" size="3" names="${specialties}"/>
             <petclinic:inputField label="Username" name="user.username"/>
             <petclinic:inputField label="Password" name="user.password"/>
         </div>

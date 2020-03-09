@@ -50,4 +50,6 @@ public interface VetRepository {
 
 	List<Visit> findVisits() throws DataAccessException;
 
+	void saveVetSpecialty(int idVet, int idSpecialty) throws DataAccessException;
+
 }

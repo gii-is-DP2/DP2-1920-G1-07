@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -32,7 +33,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author Juergen Hoeller
@@ -67,17 +68,17 @@ public class VetController {
 		return "vets/vetList";
 	}
 
-	@GetMapping(value = {
-		"/vets.xml"
-	})
-	public @ResponseBody Vets showResourcesVetList() {
-		// Here we are returning an object of type 'Vets' rather than a collection of Vet
-		// objects
-		// so it is simpler for JSon/Object mapping
-		Vets vets = new Vets();
-		vets.getVetList().addAll(this.vetService.findVets());
-		return vets;
-	}
+	//	@GetMapping(value = {
+	//		"/vets.xml"
+	//	})
+	//	public @ResponseBody Vets showResourcesVetList() {
+	//		// Here we are returning an object of type 'Vets' rather than a collection of Vet
+	//		// objects
+	//		// so it is simpler for JSon/Object mapping
+	//		Vets vets = new Vets();
+	//		vets.getVetList().addAll(this.vetService.findVets());
+	//		return vets;
+	//	}
 
 	@GetMapping(value = "/vets/create")
 	public String initCreationForm(final Map<String, Object> model) {
@@ -87,12 +88,17 @@ public class VetController {
 	}
 
 	@PostMapping(value = "/vets/create")
-	public String processCreationForm(@Valid final Vet vet, final BindingResult result) {
+	public String processCreationForm(@Valid final Vet vet, final BindingResult result, @RequestParam(required = false) final Integer[] specialties) {
 		if (result.hasErrors()) {
 			return VetController.VIEWS_VET_CREATE_FORM;
 		} else {
-			//creating owner, user and authorities
-			this.vetService.saveOwner(vet);
+			if (specialties != null) {
+				Set<Specialty> esp = this.vetService.findSpecialiesById(specialties);
+				for (Specialty e : esp) {
+					vet.addSpecialty(e);
+				}
+			}
+			this.vetService.saveVet(vet);
 
 			return "redirect:/vets";
 		}
