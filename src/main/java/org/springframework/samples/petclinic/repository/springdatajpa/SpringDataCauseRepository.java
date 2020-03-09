@@ -26,6 +26,6 @@ public interface SpringDataCauseRepository extends CauseRepository, Repository<C
 	Status findPendingStatus() throws DataAccessException;
 
 	@Override
-	@Query("select c from Cause c where c.user.username LIKE username")
+	@Query("select c from Cause c where c.user.username LIKE :username")
 	Collection<Cause> findMyCauses(String username) throws DataAccessException;
 }

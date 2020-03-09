@@ -2,6 +2,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,14 +50,15 @@ public class CauseController {
 		return "causes/causesList";
 	}
 
-	@GetMapping("/myCauses")
-	public String showMyCausesList(final ModelMap modelMap, final HttpServletRequest request) {
+	@GetMapping(path = "/myCauses")
+	public String showMyCausesList(final ModelMap model, final HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();
 		String userName = principal.getName();
+		model.put("userName", userName);
 
 		Collection<Cause> myCauses = this.causeService.findMyCauses(userName);
 
-		modelMap.addAttribute("causes", myCauses);
+		model.addAttribute("causes", myCauses);
 		return "causes/myCausesList";
 	}
 
@@ -73,9 +75,13 @@ public class CauseController {
 		String userName = principal.getName();
 		User u = this.userService.findUserByUserName(userName);
 
+		LocalDate deadline = cause.getDeadline();
+		LocalDate now = LocalDate.now();
+		Boolean posterior = deadline.isBefore(now);
+
 		cause.setUser(u);
 
-		if (result.hasErrors()) {
+		if (result.hasErrors() || posterior) {
 			return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
 		} else {
 			cause.setStatus(this.causeService.findPendingStatus());
