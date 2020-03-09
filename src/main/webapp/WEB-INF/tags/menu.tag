@@ -46,6 +46,20 @@
 					<span>My pets</span>
 				</petclinic:menuItem>
 				</sec:authorize>
+				
+				<sec:authorize access="hasAnyAuthority('owner')">
+				<petclinic:menuItem url="/request/new" active="${name eq 'Sitter'}" title="Send Request">
+					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+					<span>Become sitter</span>
+				</petclinic:menuItem>
+				</sec:authorize>
+				
+				<sec:authorize access="hasAnyAuthority('admin')">
+				<petclinic:menuItem url="/admin/request" active="${name eq 'Requests'}" title="List of request">
+					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+					<span>List of request</span>
+				</petclinic:menuItem>
+				</sec:authorize>
 			</ul>
 
 
@@ -84,6 +98,7 @@
 								</div>
 							</li>
 							<li class="divider"></li>
+							
 <!-- 							
                             <li> 
 								<div class="navbar-login navbar-login-session">
