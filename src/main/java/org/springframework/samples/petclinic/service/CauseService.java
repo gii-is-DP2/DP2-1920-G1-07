@@ -43,4 +43,16 @@ public class CauseService {
 		return this.causeRepository.findMyCauses(userName);
 	}
 
+	public Collection<Cause> findPendingCauses() throws DataAccessException {
+		return this.causeRepository.findPendingCauses();
+	}
+
+	public Cause findCauseById(final int causeId) throws DataAccessException {
+		return this.causeRepository.findById(causeId);
+	}
+
+	public Collection<Status> findStatus() throws DataAccessException {
+		return this.causeRepository.findStatus();
+	}
+
 }
