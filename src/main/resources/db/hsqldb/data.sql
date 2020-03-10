@@ -69,7 +69,7 @@ INSERT INTO status VALUES (3, 'REJECTED');
 INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (1, 'First Cause', 'This is my first cause', '2020-12-30', 10000.00, 1, 'owner1');
 INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (2, 'Second Cause', 'This is my second cause', '2020-06-20', 10000.00, 3, 'owner1');
 INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (3, 'Third Cause', 'This is my third cause', '2020-10-30', 10000.00, 2, 'owner1');
+INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (4, 'Prueba Cause', 'This is my third cause', '2020-10-30', 10000.00, 2, 'admin1');
 
-INSERT INTO donations VALUES (1,'TRUE',1000,'admin1',1,null);
-INSERT INTO donations VALUES (2,'FALSE',50,'owner1',1,null);
+
 

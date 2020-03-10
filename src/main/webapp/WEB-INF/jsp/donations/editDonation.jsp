@@ -10,12 +10,19 @@
     <jsp:body>
         <h2>Donation</h2>
 
-        <form:form modelAttribute="donation" class="form-horizontal" action="/cause/donations/save">
+        <form:form modelAttribute="donation" class="form-horizontal">
             	 <div class="form-group has-feedback">
                <div class="form-group">
                     <label class="col-sm-2 control-label">Cause</label>
                     <div class="col-sm-10">
                         <c:out value="${donation.causes.title}" />
+                    </div>
+                </div>
+                <div class="form-group has-feedback">
+               <div class="form-group">
+                    <label class="col-sm-2 control-label">User</label>
+                    <div class="col-sm-10">
+                        <c:out value="${donation.user.username}" />
                     </div>
                 </div>
                 <petclinic:inputField label="Money" name="money"/>

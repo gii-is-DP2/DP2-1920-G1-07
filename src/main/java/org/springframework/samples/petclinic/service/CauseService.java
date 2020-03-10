@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Cause;
+import org.springframework.samples.petclinic.model.Donation;
 import org.springframework.samples.petclinic.model.Status;
 import org.springframework.samples.petclinic.repository.CauseRepository;
 import org.springframework.stereotype.Service;
@@ -43,13 +44,10 @@ public class CauseService {
 		return this.causeRepository.findMyCauses(userName);
 	}
 	
-	public Cause findCauseName(String nombre) throws DataAccessException {
-		return this.causeRepository.findCauseByName(nombre);
-	}
 	
 	public Cause findCauseById(int id) throws DataAccessException {
-		return this.causeRepository.findCauseById(id);
+		return this.causeRepository.findById(id);
 	}
 
-
+	
 }

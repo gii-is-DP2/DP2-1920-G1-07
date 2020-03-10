@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "donations")
+@Table(name = "donation")
 public class Donation extends BaseEntity{
 	
 	@ManyToOne    
@@ -23,8 +23,6 @@ public class Donation extends BaseEntity{
 	
 	@Column(name = "anonymous")
 	private Boolean anonymous;
-	@Column(name = "nombre")
-	private String nombre;
 
 	@ManyToOne
 	private Cause causes;

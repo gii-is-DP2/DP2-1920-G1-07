@@ -50,6 +50,7 @@
     <spring:url value="/cause/myCauses" var="myCauses"/>
     <a href="${fn:escapeXml(myCauses)}" class="btn btn-default">See My Causes</a>
     
+  
    
          
 	

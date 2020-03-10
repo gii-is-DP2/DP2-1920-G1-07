@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.model.Cause;
+import org.springframework.samples.petclinic.model.Donation;
 import org.springframework.samples.petclinic.model.Status;
 
 public interface CauseRepository {
@@ -41,8 +42,9 @@ public interface CauseRepository {
 
 	Collection<Cause> findMyCauses(String userName) throws DataAccessException;
 	
-	Cause findCauseByName(String nombre) throws DataAccessException;
 	
-	Cause findCauseById(int id) throws DataAccessException;
+	
+	
+
 	
 }

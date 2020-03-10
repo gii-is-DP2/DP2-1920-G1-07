@@ -54,6 +54,14 @@
 					<spring:param name="causeId" value="${causes.id}"/>
 				</spring:url> 
 				<a href="${fn:escapeXml(donationUrl2)}">Add Donation</a></td>
-		</tr>
+</tr>
+<tr>
+  <td>
+  <spring:url value="/cause/{causeId}/donations/myDonations" var="myDonations">
+  <spring:param name="causeId" value="${causes.id}"/>
+				</spring:url> 
+    <a href="${fn:escapeXml(myDonations)}">See My Donations</a></td>
+    </tr>
+		
 	</table>
 </petclinic:layout>>
