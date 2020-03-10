@@ -31,7 +31,7 @@ import org.springframework.samples.petclinic.repository.PetRepository;
  * @since 15.1.2013
  */
 public interface SpringDataPetRepository extends PetRepository, Repository<Pet, Integer> {
-
+     	 
 	@Override
 	@Query("SELECT ptype FROM PetType ptype ORDER BY ptype.name")
 	List<PetType> findPetTypes() throws DataAccessException;

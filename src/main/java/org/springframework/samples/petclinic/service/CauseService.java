@@ -42,5 +42,14 @@ public class CauseService {
 	public Collection<Cause> findMyCauses(final String userName) throws DataAccessException {
 		return this.causeRepository.findMyCauses(userName);
 	}
+	
+	public Cause findCauseName(String nombre) throws DataAccessException {
+		return this.causeRepository.findCauseByName(nombre);
+	}
+	
+	public Cause findCauseById(int id) throws DataAccessException {
+		return this.causeRepository.findCauseById(id);
+	}
+
 
 }

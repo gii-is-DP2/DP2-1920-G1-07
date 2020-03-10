@@ -28,4 +28,14 @@ public interface SpringDataCauseRepository extends CauseRepository, Repository<C
 	@Override
 	@Query("select c from Cause c where c.user.username LIKE username")
 	Collection<Cause> findMyCauses(String username) throws DataAccessException;
+	
+	
+	@Override
+	@Query("select c from Cause c where c.title=:nombre")
+	Cause findCauseByName(String nombre) throws DataAccessException;
+	
+	@Override
+	@Query("select c from Cause c where c.id=:id")
+	Cause findCauseById(int id) throws DataAccessException;
+	
 }
