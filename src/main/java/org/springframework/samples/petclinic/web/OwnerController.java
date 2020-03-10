@@ -148,7 +148,7 @@ public class OwnerController {
 
 	@GetMapping(value = "/owners/profile")
 	public String processFindProfile(final Owner owner, final BindingResult result, final Map<String, Object> model) {
-		//		Owner owner = owner.getId();
+
 		return "redirect:/owners/profile/" + owner.getId();
 
 	}

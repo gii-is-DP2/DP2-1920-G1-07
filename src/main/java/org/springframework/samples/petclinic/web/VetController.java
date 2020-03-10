@@ -17,8 +17,8 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -29,11 +29,11 @@ import org.springframework.samples.petclinic.model.Vets;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author Juergen Hoeller
@@ -81,27 +81,22 @@ public class VetController {
 	//	}
 
 	@GetMapping(value = "/vets/create")
-	public String initCreationForm(final Map<String, Object> model) {
+	public String initCreationForm(final ModelMap model) {
 		Vet vet = new Vet();
+		vet.setVisits(new HashSet<>());
 		model.put("vet", vet);
 		return VetController.VIEWS_VET_CREATE_FORM;
 	}
 
 	@PostMapping(value = "/vets/create")
-	public String processCreationForm(@Valid final Vet vet, final BindingResult result, @RequestParam(required = false) final Integer[] specialties) {
+	public String processCreationForm(@Valid final Vet vet, final BindingResult result) {
 		if (result.hasErrors()) {
 			return VetController.VIEWS_VET_CREATE_FORM;
 		} else {
-			if (specialties != null) {
-				Set<Specialty> esp = this.vetService.findSpecialiesById(specialties);
-				for (Specialty e : esp) {
-					vet.addSpecialty(e);
-				}
-			}
 			this.vetService.saveVet(vet);
-
-			return "redirect:/vets";
 		}
+
+		return "redirect:/vets";
 	}
 
 	@ModelAttribute("specialties")

@@ -1,18 +1,3 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package org.springframework.samples.petclinic.model;
 
@@ -36,8 +21,6 @@ import javax.xml.bind.annotation.XmlElement;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 
-import lombok.Data;
-
 /**
  * Simple JavaBean domain object representing a veterinarian.
  *
@@ -46,14 +29,13 @@ import lombok.Data;
  * @author Sam Brannen
  * @author Arjen Poutsma
  */
-@Data
 @Entity
 @Table(name = "vets")
 public class Vet extends Person {
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "vet_specialties", joinColumns = @JoinColumn(name = "vet_id"), inverseJoinColumns = @JoinColumn(name = "specialty_id"))
-	private Set<Specialty>	specialties;
+	private Set<Specialty>	specialties	= new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "vet")
 	private Set<Visit>		visits;
@@ -68,6 +50,14 @@ public class Vet extends Person {
 			this.specialties = new HashSet<>();
 		}
 		return this.specialties;
+	}
+
+	//	public void setSpecialties(final Set<Specialty> specialties) {
+	//		this.specialties = specialties;
+	//	}
+
+	public void setVisits(final Set<Visit> visits) {
+		this.visits = visits;
 	}
 
 	protected void setSpecialtiesInternal(final Set<Specialty> specialties) {
@@ -117,5 +107,9 @@ public class Vet extends Person {
 	public void setUser(final User user) {
 		this.user = user;
 	}
+
+	//	public Vet() {
+	//		this.specialties = new HashSet<>();
+	//	}
 
 }
