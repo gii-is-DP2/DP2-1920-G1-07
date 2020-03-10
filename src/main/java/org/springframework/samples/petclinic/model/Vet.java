@@ -52,9 +52,9 @@ public class Vet extends Person {
 		return this.specialties;
 	}
 
-	//	public void setSpecialties(final Set<Specialty> specialties) {
-	//		this.specialties = specialties;
-	//	}
+	//		public void setSpecialties(final Set<Specialty> specialties) {
+	//			this.specialties = specialties;
+	//		}
 
 	public void setVisits(final Set<Visit> visits) {
 		this.visits = visits;

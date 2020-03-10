@@ -17,8 +17,6 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -81,12 +79,10 @@ public class VetService {
 	}
 
 	@Transactional(readOnly = true)
-	public Set<Specialty> findSpecialiesById(final Integer[] ids) {
-		Set<Specialty> res = new HashSet<>();
-		for (Integer id : ids) {
-			res.add(this.specialtyRepository.findOne(id));
-		}
-		return res;
+	public Specialty findSpecialiesById(final int id) {
+		//		Set<Specialty> res = new HashSet<>();
+		Specialty s = this.specialtyRepository.findOne(id);
+		return s;
 	}
 
 	@Transactional
