@@ -94,13 +94,10 @@ public class VetController {
 		if (result.hasErrors()) {
 			return VetController.VIEWS_VET_CREATE_FORM;
 		} else {
-			System.out.println("HOLA ESTOY AQUI");
 			for (int i : specialties) {
-				System.out.println("ESTAS SON LAS id de ESPECIALIDADES SELECCIONADAS ----> " + i);
 
 				Specialty s = this.vetService.findSpecialiesById(i);
 
-				System.out.println("llego aqui socio");
 				vet.addSpecialty(s);
 			}
 			this.vetService.saveVet(vet);

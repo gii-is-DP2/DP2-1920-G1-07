@@ -33,20 +33,18 @@
     </table>
 
     <table class="table-buttons">
-        <tr>
-            <td>
-                <a href="<spring:url value="/vets.xml" htmlEscape="true" />">View as XML</a>
-            </td>  
+        <tr> 
              <td>
-             <sec:authorize access="hasAnyAuthority('vets')">
+          <sec:authorize access="hasAnyAuthority('veterinarian')">  
             <a class="btn btn-default" href='<spring:url value="/vets/visit" htmlEscape="true"/>'>Visits List</a>
-            </sec:authorize>
+          -   </sec:authorize>  -
             </td>     
+            
             <td>
             <sec:authorize access="hasAnyAuthority('admin')">
             <a class="btn btn-default" href='<spring:url value="/vets/create" htmlEscape="true"/>'>Create Vet</a>
             </sec:authorize>
-            </td>      
+            </td>  
         </tr>
     </table>
 </petclinic:layout>

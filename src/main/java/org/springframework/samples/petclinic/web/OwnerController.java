@@ -146,18 +146,18 @@ public class OwnerController {
 
 	////////////////////////////////
 
-	@GetMapping(value = "/owners/profile")
-	public String processFindProfile(final Owner owner, final BindingResult result, final Map<String, Object> model) {
-		Integer idOwner = owner.getId();
-		return "redirect:/owners/profile/" + idOwner;
-
-	}
-
-	@GetMapping("/owners/profile/{ownerId}")
-	public ModelAndView showProfile(@PathVariable("ownerId") final int ownerId) {
-		ModelAndView mav = new ModelAndView("owners/ownerDetails");
-		mav.addObject(this.ownerService.findOwnerById(ownerId));
-		return mav;
-	}
+	//	@GetMapping(value = "/owners/profile")
+	//	public String processFindProfile(final Owner owner, final BindingResult result, final Map<String, Object> model) {
+	//		Integer idOwner = owner.getId();
+	//		return "redirect:/owners/profile/" + idOwner;
+	//
+	//	}
+	//
+	//	@GetMapping("/owners/profile/{ownerId}")
+	//	public ModelAndView showProfile(@PathVariable("ownerId") final int ownerId) {
+	//		ModelAndView mav = new ModelAndView("owners/ownerDetails");
+	//		mav.addObject(this.ownerService.findOwnerById(ownerId));
+	//		return mav;
+	//	}
 
 }

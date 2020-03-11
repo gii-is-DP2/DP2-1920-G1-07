@@ -28,13 +28,7 @@
     </table>
 
     <table class="table-buttons">
-        <tr>
-            <td>
-                <a href="<spring:url value="/vets.xml" htmlEscape="true" />">View as XML</a>
-            </td>      
-            <td>
-            <a class="btn btn-default" href='<spring:url value="/vets/create" htmlEscape="true"/>'>Create Vet</a>
-            </td>      
+        <tr>           
         </tr>
     </table>
 </petclinic:layout>
