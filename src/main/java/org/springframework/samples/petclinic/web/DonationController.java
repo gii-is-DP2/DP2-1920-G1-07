@@ -1,5 +1,6 @@
+
 package org.springframework.samples.petclinic.web;
-  
+
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Optional;
@@ -26,118 +27,110 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/cause/{causeId}/donations")
 public class DonationController {
- 
+
 	@Autowired
-	private DonationService donationService;
-	@Autowired 
-	private CauseService causeService;
-	
-	
-//	@ModelAttribute("causes")
-//	public Cause findCauseById(HttpServletRequest request){
-//		String causeId = request.getAttribute("causeId").toString();
-//		return this.causeService.findCauseById(Integer.parseInt(causeId));
-//		
-//	}
-		
+	private DonationService	donationService;
+	@Autowired
+	private CauseService	causeService;
+
+
+	//	@ModelAttribute("causes")
+	//	public Cause findCauseById(HttpServletRequest request){
+	//		String causeId = request.getAttribute("causeId").toString();
+	//		return this.causeService.findCauseById(Integer.parseInt(causeId));
+	//
+	//	}
+
 	@GetMapping()
-	public String listDonations(ModelMap modelMap,@PathVariable("causeId") final int causeId) {
+	public String listDonations(final ModelMap modelMap, @PathVariable("causeId") final int causeId) {
 
 		String view = "donations/donationsList";
 		Iterable<Donation> donations = this.donationService.findDonationCause(causeId);
 		Cause causes = this.causeService.findCauseById(causeId);
-		
-		
-		
+
 		modelMap.addAttribute("causes", causes);
 		modelMap.addAttribute("donations", donations);
 		return view;
-  
-	}
-	
 
-//	@GetMapping(path = "/new")
-//	public String createDonation(ModelMap modelMap) {
-//
-//		String view = "donations/editDonation";
-//		
-//		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//		UserDetails userDetails = null;
-//		if (principal instanceof UserDetails) {
-//		  userDetails = (UserDetails) principal;
-//		} 
-//		String userName = userDetails.getUsername();
-//		User u = new User();
-//		u.setUsername(userName);
-//		
-//		Donation d = new Donation();
-//		d.setUser(u);
-//		
-//
-//		modelMap.addAttribute("donation", d);
-//		
-//
-//		return view;
-//	
-//	}
-	
+	}
+
+	//	@GetMapping(path = "/new")
+	//	public String createDonation(ModelMap modelMap) {
+	//
+	//		String view = "donations/editDonation";
+	//
+	//		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	//		UserDetails userDetails = null;
+	//		if (principal instanceof UserDetails) {
+	//		  userDetails = (UserDetails) principal;
+	//		}
+	//		String userName = userDetails.getUsername();
+	//		User u = new User();
+	//		u.setUsername(userName);
+	//
+	//		Donation d = new Donation();
+	//		d.setUser(u);
+	//
+	//
+	//		modelMap.addAttribute("donation", d);
+	//
+	//
+	//		return view;
+	//
+	//	}
+
 	@GetMapping(value = "/new")
-	public String initCreationForm(Cause c, ModelMap model,@PathVariable("causeId") final int causeId) {
+	public String initCreationForm(final Cause c, final ModelMap model, @PathVariable("causeId") final int causeId) {
 		String view = "donations/editDonation";
-		Donation donation= new Donation();
+		Donation donation = new Donation();
 		c.addDonation(donation);
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails userDetails = null;
 		if (principal instanceof UserDetails) {
-		  userDetails = (UserDetails) principal;
+			userDetails = (UserDetails) principal;
 		}
 		String userName = userDetails.getUsername();
 		User u = new User();
 		u.setUsername(userName);
 		donation.setUser(u);
-		
+
 		Cause causes = this.causeService.findCauseById(causeId);
 		String nombre = causes.getTitle();
 		donation.setCauses(causes);
 		donation.getCauses().setTitle(nombre);
-		
+
 		model.put("donation", donation);
 		System.out.println("ESTOY ENTRANDO AQUI CAPI");
 		System.out.println(donation.getUser().getUsername());
-		
-		return view;   
-		
+
+		return view;
+
 	}
 
-	
-
-
 	@PostMapping(path = "/new")
-	public String saveDonation(@Valid Donation donation, BindingResult result, ModelMap modelMap,@PathVariable("causeId") final int causeId) {
+	public String saveDonation(@Valid final Donation donation, final BindingResult result, final ModelMap modelMap, @PathVariable("causeId") final int causeId) {
 		String view = "redirect:/cause/{causeId}/donations";
-		
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails userDetails = null;
 		if (principal instanceof UserDetails) {
-		  userDetails = (UserDetails) principal;
+			userDetails = (UserDetails) principal;
 		}
 		String userName = userDetails.getUsername();
 		User u = new User();
 		u.setUsername(userName);
 		donation.setUser(u);
-		
+
 		Cause causes = this.causeService.findCauseById(causeId);
 		String nombre = causes.getTitle();
 		donation.setCauses(causes);
 		donation.getCauses().setTitle(nombre);
-		
-		
- 
+
 		if (result.hasErrors()) {
 			modelMap.addAttribute("donation", donation);
 			return "donations/editDonation";
 		} else {
-			donationService.saveDonation(donation);
+			this.donationService.saveDonation(donation);
 
 			modelMap.addAttribute("message", "Donation successfully saved!");
 		}
@@ -146,17 +139,16 @@ public class DonationController {
 	}
 
 	@GetMapping(path = "/delete/{donationId}")
-	public String deleteDonation(@PathVariable("donationId") int donationId, ModelMap modelMap) {
-		String view = "redirect:/cause/donations";
-	
-		Optional<Donation> donation = donationService.findDonationById(donationId);
+	public String deleteDonation(@PathVariable("donationId") final int donationId, final ModelMap modelMap, @PathVariable("causeId") final int causeId) {
+		String view = "redirect:/cause/{causeId}/donations";
+
+		Optional<Donation> donation = this.donationService.findDonationById(donationId);
 
 		if (donation.isPresent()) {
-			donationService.delete(donation.get());
-			
+			this.donationService.delete(donation.get());
+
 			modelMap.addAttribute("message", "Donation successfully deleted!");
-		 	 
-			  
+
 		} else {
 
 			modelMap.addAttribute("message", "Donation not found!");
@@ -164,7 +156,7 @@ public class DonationController {
 
 		return view;
 	}
-	
+
 	@GetMapping("/myDonations")
 	public String showMyDonationsList(final ModelMap modelMap, final HttpServletRequest request) {
 		String view = "donations/myDonationsList";
@@ -176,6 +168,5 @@ public class DonationController {
 		modelMap.addAttribute("donations", myDonations);
 		return view;
 	}
-
 
 }
