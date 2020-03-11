@@ -33,14 +33,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
-				.antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers("/users/new").permitAll()
+				.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
+				.antMatchers("/users/new").permitAll()
 				.antMatchers("/cause/donations").hasAnyAuthority("owner","admin")
 				.antMatchers("/cause/donations/**").hasAnyAuthority("owner","admin")
-				.antMatchers("/cause/**").hasAnyAuthority("owner","admin")
 				.antMatchers("/donations/**").hasAnyAuthority("admin", "owner")
-				.antMatchers("/cause").permitAll().antMatchers("/cause/**").hasAnyAuthority("admin", "owner", "vets")
-				.antMatchers("/myCauses").hasAnyAuthority("admin", "owner", "vets").antMatchers("/admin/**")
-				.hasAnyAuthority("admin").antMatchers("/owners/**").hasAnyAuthority("owner", "admin")
+				.antMatchers("/cause").permitAll()
+				.antMatchers("/cause/**").hasAnyAuthority("admin", "owner", "veterinarian")
+				.antMatchers("/myCauses").hasAnyAuthority("admin", "owner", "veterinarian")
+				.antMatchers("/causes/PendingCauses").hasAnyAuthority("admin")
+				.antMatchers("/admin/**").hasAnyAuthority("admin")
+				.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")
 				.antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
 				/* .loginPage("/login") */
 				.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
