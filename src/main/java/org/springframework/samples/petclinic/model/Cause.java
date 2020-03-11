@@ -11,13 +11,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "cause")
 public class Cause extends BaseEntity {
@@ -31,6 +34,7 @@ public class Cause extends BaseEntity {
 	private String		description;
 
 	@Column(name = "money")
+	@NotNull
 	private Double		money;
 
 	@Column(name = "deadline")

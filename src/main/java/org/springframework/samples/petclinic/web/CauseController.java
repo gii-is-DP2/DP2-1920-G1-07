@@ -17,6 +17,7 @@ import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -81,11 +82,17 @@ public class CauseController {
 
 		LocalDate deadline = cause.getDeadline();
 		LocalDate now = LocalDate.now();
-		Boolean posterior = deadline.isBefore(now);
 
 		cause.setUser(u);
 
-		if (result.hasErrors() || posterior) {
+		if (deadline != null) {
+			Boolean posterior = deadline.isBefore(now);
+			if (posterior) {
+				ObjectError error = new ObjectError("deadline", "The deadline is before the current date");
+				result.addError(error);
+			}
+		}
+		if (result.hasErrors()) {
 			return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
 		} else {
 			cause.setStatus(this.causeService.findPendingStatus());
