@@ -37,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class VetService {
 
+	@Autowired
 	private VetRepository		vetRepository;
 
 	@Autowired
@@ -45,6 +46,7 @@ public class VetService {
 	@Autowired
 	private AuthoritiesService	authoritiesService;
 
+	@Autowired
 	private SpecialtyRepository	specialtyRepository;
 
 
@@ -79,20 +81,20 @@ public class VetService {
 	}
 
 	@Transactional(readOnly = true)
-	public Specialty findSpecialiesById(final int id) {
+	public Specialty findSpecialiesById(final int id) throws DataAccessException {
 		//		Set<Specialty> res = new HashSet<>();
-		Specialty s = this.specialtyRepository.findOne(id);
+		Specialty s = this.specialtyRepository.findOneById(id);
 		return s;
 	}
 
 	@Transactional
 	public void saveVet(final Vet vet) throws DataAccessException {
 		this.vetRepository.save(vet);
-		if (!vet.getSpecialties().isEmpty()) {
-			for (Specialty s : vet.getSpecialties()) {
-				this.vetRepository.saveVetSpecialty(vet.getId(), s.getId());
-			}
-		}
+		//		if (!vet.getSpecialties().isEmpty()) {
+		//			for (Specialty s : vet.getSpecialties()) {
+		//				this.vetRepository.saveVetSpecialty(vet.getId(), s.getId());
+		//			}
+		//		}
 	}
 
 }

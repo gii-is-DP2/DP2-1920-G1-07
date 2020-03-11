@@ -99,6 +99,7 @@ public class VetController {
 				System.out.println("ESTAS SON LAS id de ESPECIALIDADES SELECCIONADAS ----> " + i);
 
 				Specialty s = this.vetService.findSpecialiesById(i);
+
 				System.out.println("llego aqui socio");
 				vet.addSpecialty(s);
 			}

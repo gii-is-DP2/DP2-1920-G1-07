@@ -6,5 +6,5 @@ import org.springframework.samples.petclinic.model.Specialty;
 
 public interface SpecialtyRepository {
 
-	Specialty findOne(int idSpecialty) throws DataAccessException;
+	Specialty findOneById(int idSpecialty) throws DataAccessException;
 }

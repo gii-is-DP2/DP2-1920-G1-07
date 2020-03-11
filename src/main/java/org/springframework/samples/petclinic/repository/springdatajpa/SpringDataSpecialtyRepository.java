@@ -9,6 +9,7 @@ import org.springframework.samples.petclinic.repository.SpecialtyRepository;
 public interface SpringDataSpecialtyRepository extends SpecialtyRepository, CrudRepository<Specialty, Integer> {
 
 	@Override
-	@Query("SELECT e from Specialty e where e.id =:idSpecialty")
-	Specialty findOne(int idSpecialty);
+	@Query("SELECT e FROM Specialty e WHERE e.id = :idSpecialty")
+	Specialty findOneById(int idSpecialty);
+
 }
