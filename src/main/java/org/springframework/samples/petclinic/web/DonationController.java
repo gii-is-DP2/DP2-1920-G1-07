@@ -2,7 +2,9 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -93,7 +95,8 @@ public class DonationController {
 		User u = new User();
 		u.setUsername(userName);
 		donation.setUser(u);
-
+		List<String> x = Arrays.asList("true", "false");
+		model.addAttribute("anonymous", x);
 		Cause causes = this.causeService.findCauseById(causeId);
 		String nombre = causes.getTitle();
 		donation.setCauses(causes);
