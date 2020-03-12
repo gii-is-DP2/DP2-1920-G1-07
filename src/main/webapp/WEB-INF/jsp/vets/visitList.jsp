@@ -13,9 +13,12 @@
             <th>Visit</th>
         </tr>
         </thead>
-        <tbody>
+       <tbody>
         <c:forEach items="${vets.visitList}" var="vet">
             <tr>
+                <td>
+                    <c:out value="${vet.firstName} ${vet.lastName}"/>
+                </td>
                 <td>
                     <c:forEach var="visit" items="${vet.visits}">
                         <c:out value="${visit.id} "/>
@@ -25,10 +28,5 @@
             </tr>
         </c:forEach>
         </tbody>
-    </table>
-
-    <table class="table-buttons">
-        <tr>           
-        </tr>
     </table>
 </petclinic:layout>

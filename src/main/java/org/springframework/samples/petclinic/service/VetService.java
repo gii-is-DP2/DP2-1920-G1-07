@@ -61,13 +61,13 @@ public class VetService {
 	}
 
 	@Transactional
-	public void saveOwner(final Vet vet) throws DataAccessException {
-		//creating owner
+	public void saveVet(final Vet vet) throws DataAccessException {
+		//creating vet
 		this.vetRepository.save(vet);
 		//creating user
 		this.userService.saveUser(vet.getUser());
 		//creating authorities
-		this.authoritiesService.saveAuthorities(vet.getUser().getUsername(), "vet");
+		this.authoritiesService.saveAuthorities(vet.getUser().getUsername(), "veterinarian");
 	}
 
 	@Transactional(readOnly = true)
@@ -82,19 +82,7 @@ public class VetService {
 
 	@Transactional(readOnly = true)
 	public Specialty findSpecialiesById(final int id) throws DataAccessException {
-		//		Set<Specialty> res = new HashSet<>();
 		Specialty s = this.specialtyRepository.findOneById(id);
 		return s;
 	}
-
-	@Transactional
-	public void saveVet(final Vet vet) throws DataAccessException {
-		this.vetRepository.save(vet);
-		//		if (!vet.getSpecialties().isEmpty()) {
-		//			for (Specialty s : vet.getSpecialties()) {
-		//				this.vetRepository.saveVetSpecialty(vet.getId(), s.getId());
-		//			}
-		//		}
-	}
-
 }

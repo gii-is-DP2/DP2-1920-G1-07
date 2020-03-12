@@ -52,10 +52,6 @@ public class Vet extends Person {
 		return this.specialties;
 	}
 
-	//		public void setSpecialties(final Set<Specialty> specialties) {
-	//			this.specialties = specialties;
-	//		}
-
 	public void setVisits(final Set<Visit> visits) {
 		this.visits = visits;
 	}
@@ -107,9 +103,4 @@ public class Vet extends Person {
 	public void setUser(final User user) {
 		this.user = user;
 	}
-
-	//	public Vet() {
-	//		this.specialties = new HashSet<>();
-	//	}
-
 }

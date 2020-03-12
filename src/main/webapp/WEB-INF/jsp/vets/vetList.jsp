@@ -37,7 +37,7 @@
              <td>
           <sec:authorize access="hasAnyAuthority('veterinarian')">  
             <a class="btn btn-default" href='<spring:url value="/vets/visit" htmlEscape="true"/>'>Visits List</a>
-          -   </sec:authorize>  -
+            </sec:authorize>  
             </td>     
             
             <td>

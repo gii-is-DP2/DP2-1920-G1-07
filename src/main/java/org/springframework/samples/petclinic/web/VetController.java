@@ -27,6 +27,8 @@ import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Vets;
 import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.model.Visits;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -45,15 +47,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class VetController {
 
-	private static final String	VIEWS_VET_CREATE_FORM	= "vets/createVet";
-	private static final String	VIEWS_VET_LIST			= "vets/visitList";
+	private static final String			VIEWS_VET_CREATE_FORM	= "vets/createVet";
+	private static final String			VIEWS_VET_LIST			= "vets/visitList";
 
-	private final VetService	vetService;
+	private final VetService			vetService;
+	private final AuthoritiesService	authService;
 
 
 	@Autowired
-	public VetController(final VetService clinicService) {
+	public VetController(final VetService clinicService, final AuthoritiesService authService) {
 		this.vetService = clinicService;
+		this.authService = authService;
 	}
 
 	@GetMapping(value = {
@@ -69,18 +73,6 @@ public class VetController {
 		return "vets/vetList";
 	}
 
-	//	@GetMapping(value = {
-	//		"/vets.xml"
-	//	})
-	//	public @ResponseBody Vets showResourcesVetList() {
-	//		// Here we are returning an object of type 'Vets' rather than a collection of Vet
-	//		// objects
-	//		// so it is simpler for JSon/Object mapping
-	//		Vets vets = new Vets();
-	//		vets.getVetList().addAll(this.vetService.findVets());
-	//		return vets;
-	//	}
-
 	@GetMapping(value = "/vets/create")
 	public String initCreationForm(final ModelMap model) {
 		Vet vet = new Vet();
@@ -95,11 +87,11 @@ public class VetController {
 			return VetController.VIEWS_VET_CREATE_FORM;
 		} else {
 			for (int i : specialties) {
-
 				Specialty s = this.vetService.findSpecialiesById(i);
-
 				vet.addSpecialty(s);
 			}
+			//			this.authService.saveAuthorities(vet.getUser().getUsername(), "veterinarian");
+			vet.getUser().setEnabled(true);
 			this.vetService.saveVet(vet);
 		}
 
@@ -116,18 +108,11 @@ public class VetController {
 		return this.vetService.findVisits();
 	}
 
-	//	@GetMapping(value = {
-	//		"/vets"
-	//	})
-	//	public String showVisitList(final Map<String, Object> model) {
-	//		Vets vets = new Vets();
-	//		vets.getVetList().addAll(this.vetService.findVets());
-	//		model.put("vets", vets);
-	//		return "vets/vetList";
-	//	}
-
 	@GetMapping(value = "/vets/visit")
 	public String visitList(final Map<String, Object> model) {
+		Visits visits = new Visits();
+		visits.getVisitList().addAll(this.vetService.findVisits());
+		model.put("visits", visits);
 		return VetController.VIEWS_VET_LIST;
 	}
 
