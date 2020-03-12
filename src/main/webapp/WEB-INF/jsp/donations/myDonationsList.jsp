@@ -30,4 +30,8 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	
+		<spring:url value="/cause" var="volver" />
+
+	<a href="${fn:escapeXml(volver)}" class="btn btn-default">Return</a>
 </petclinic:layout>

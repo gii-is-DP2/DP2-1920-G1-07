@@ -82,18 +82,17 @@ public class DonationController {
 	//	}
 
 	@GetMapping(value = "/new")
-	public String initCreationForm(final Cause c, final ModelMap model, @PathVariable("causeId") final int causeId) {
+	public String initCreationForm(final Cause c, final ModelMap model, final HttpServletRequest request, @PathVariable("causeId") final int causeId) {
 		String view = "donations/editDonation";
 		Donation donation = new Donation();
 		c.addDonation(donation);
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserDetails userDetails = null;
-		if (principal instanceof UserDetails) {
-			userDetails = (UserDetails) principal;
-		}
-		String userName = userDetails.getUsername();
+		
+		Principal principal = request.getUserPrincipal();
+		String userName = principal.getName();
+		
 		User u = new User();
 		u.setUsername(userName);
+		
 		donation.setUser(u);
 		List<String> x = Arrays.asList("true", "false");
 		model.addAttribute("anonymous", x);
@@ -111,15 +110,12 @@ public class DonationController {
 	}
 
 	@PostMapping(path = "/new")
-	public String saveDonation(@Valid final Donation donation, final BindingResult result, final ModelMap modelMap, @PathVariable("causeId") final int causeId) {
+	public String saveDonation(@Valid final Donation donation, final BindingResult result, final ModelMap model, final HttpServletRequest request, @PathVariable("causeId") final int causeId) {
 		String view = "redirect:/cause/{causeId}/donations";
 
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		UserDetails userDetails = null;
-		if (principal instanceof UserDetails) {
-			userDetails = (UserDetails) principal;
-		}
-		String userName = userDetails.getUsername();
+		Principal principal = request.getUserPrincipal();
+		String userName = principal.getName();
+		
 		User u = new User();
 		u.setUsername(userName);
 		donation.setUser(u);
@@ -129,13 +125,16 @@ public class DonationController {
 		donation.setCauses(causes);
 		donation.getCauses().setTitle(nombre);
 
+		List<String> x = Arrays.asList("true", "false");
+		model.addAttribute("anonymous", x);
+		
 		if (result.hasErrors()) {
-			modelMap.addAttribute("donation", donation);
+			model.addAttribute("donation", donation);
 			return "donations/editDonation";
 		} else {
 			this.donationService.saveDonation(donation);
 
-			modelMap.addAttribute("message", "Donation successfully saved!");
+			model.addAttribute("message", "Donation successfully saved!");
 		}
 
 		return view;

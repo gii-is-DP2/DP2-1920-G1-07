@@ -6,6 +6,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 
 <petclinic:layout pageName="donations">
 	<h2>Donations</h2>
@@ -16,7 +18,9 @@
 
 				<th style="width: 200px;">Name</th>
 				<th>Money</th>
-				<th>Actions</th>
+				<sec:authorize access="hasAnyAuthority('admin')">
+					<th>Actions</th>
+				</sec:authorize>
 
 			</tr>
 		</thead>
@@ -35,33 +39,34 @@
 						</c:choose></td>
 					<td><c:out value="${donation.money}" /></td>
 
-					<td><spring:url value="/cause/{causeId}/donations/delete/{donationId}"
-							var="donationUrl">
-							<spring:param name="donationId" value="${donation.id}" />
-							<spring:param name="causeId" value="${donation.causes.id}"/>
-						</spring:url> <a href="${fn:escapeXml(donationUrl)}">Delete</a></td>
+					<sec:authorize access="hasAnyAuthority('admin')">
+						<td><spring:url
+								value="/cause/{causeId}/donations/delete/{donationId}"
+								var="donationUrl">
+								<spring:param name="donationId" value="${donation.id}" />
+								<spring:param name="causeId" value="${donation.causes.id}" />
+							</spring:url> <a href="${fn:escapeXml(donationUrl)}">Delete</a></td>
+							   </sec:authorize>
 						
 						
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
-	<table class="table-buttons">
-		<tr>
-			<td>
+	
 				<spring:url value="/cause/{causeId}/donations/new"
 					var="donationUrl2">
 					<spring:param name="causeId" value="${causes.id}"/>
 				</spring:url> 
-				<a href="${fn:escapeXml(donationUrl2)}">Add Donation</a></td>
-</tr>
-<tr>
-  <td>
+				<a href="${fn:escapeXml(donationUrl2)}" class="btn btn-default">Add Donation</a>
+
+  
   <spring:url value="/cause/{causeId}/donations/myDonations" var="myDonations">
   <spring:param name="causeId" value="${causes.id}"/>
 				</spring:url> 
-    <a href="${fn:escapeXml(myDonations)}">See My Donations</a></td>
-    </tr>
-		
-	</table>
+    <a href="${fn:escapeXml(myDonations)}" class="btn btn-default">See My Donations</a>
+
+<spring:url value="/cause" var="volver" />
+	<a href="${fn:escapeXml(volver)}" class="btn btn-default">Return</a>
+
 </petclinic:layout>>
