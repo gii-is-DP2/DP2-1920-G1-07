@@ -17,7 +17,6 @@
 			<petclinic:inputField label="Description" name="description" />
 			<petclinic:inputField label="Money" name="money" />
 			<petclinic:inputField label="Deadline" name="deadline" />
-			<form:errors path="*" cssClass="errorblock" style="padding-left: 211px;" element="div" />
 		</div>
 
 		<div class="form-group">

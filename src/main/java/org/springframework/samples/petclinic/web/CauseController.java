@@ -2,7 +2,6 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
-import java.time.LocalDate;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +16,6 @@ import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -48,6 +46,11 @@ public class CauseController {
 		dataBinder.setDisallowedFields("id");
 	}
 
+	@InitBinder("cause")
+	public void initCauseBinder(final WebDataBinder dataBinder) {
+		dataBinder.setValidator(new CauseValidator());
+	}
+
 	@GetMapping
 	public String showCausesList(final ModelMap modelMap) {
 		Collection<Cause> causes = this.causeService.findAcceptedCauses();
@@ -75,23 +78,13 @@ public class CauseController {
 	}
 
 	@PostMapping(value = "/new")
-	public String processCreationForm(@Valid final Cause cause, final BindingResult result, final HttpServletRequest request) {
+	public String processCreationForm(@Valid final Cause cause, final BindingResult result, final ModelMap model, final HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();
 		String userName = principal.getName();
 		User u = this.userService.findUserByUserName(userName);
 
-		LocalDate deadline = cause.getDeadline();
-		LocalDate now = LocalDate.now();
-
 		cause.setUser(u);
 
-		if (deadline != null) {
-			Boolean posterior = deadline.isBefore(now);
-			if (posterior) {
-				ObjectError error = new ObjectError("deadline", "The deadline is before the current date");
-				result.addError(error);
-			}
-		}
 		if (result.hasErrors()) {
 			return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
 		} else {
