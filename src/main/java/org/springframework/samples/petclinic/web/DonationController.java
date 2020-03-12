@@ -169,6 +169,6 @@ public class DonationController {
   
 		modelMap.addAttribute("donations", myDonations);
 		return view;
-	}
+	} 
 
-}
+} 
