@@ -166,7 +166,7 @@ public class DonationController {
 		String userName = principal.getName();
 
 		Collection<Donation> myDonations = this.donationService.findMyDonations(userName);
-
+ 
 		modelMap.addAttribute("donations", myDonations);
 		return view;
 	}
