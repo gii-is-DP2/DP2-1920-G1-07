@@ -16,6 +16,8 @@ import org.springframework.samples.petclinic.model.Donation;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.CauseService;
 import org.springframework.samples.petclinic.service.DonationService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -141,11 +143,19 @@ public class DonationController {
 	}
 
 	@GetMapping(path = "/delete/{donationId}")
-	public String deleteDonation(@PathVariable("donationId") final int donationId, final ModelMap modelMap, @PathVariable("causeId") final int causeId) {
+	public String deleteDonation(@PathVariable("donationId") final int donationId,final HttpServletRequest request, final ModelMap modelMap, @PathVariable("causeId") final int causeId) {
 		String view = "redirect:/cause/{causeId}/donations";
 
 		Optional<Donation> donation = this.donationService.findDonationById(donationId);
 
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String authority="";
+		for(GrantedAuthority a : auth.getAuthorities()){
+			authority = a.getAuthority();
+		}
+		if(!authority.equals("admin")) {
+			return "redirect:/oups";
+		}
 		if (donation.isPresent()) {
 			this.donationService.delete(donation.get());
 
