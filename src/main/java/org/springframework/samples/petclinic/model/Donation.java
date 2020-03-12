@@ -21,7 +21,7 @@ public class Donation extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User	user;
-
+  
 	@Column(name = "money")
 	@DecimalMin("0.01")
 	@NotNull
