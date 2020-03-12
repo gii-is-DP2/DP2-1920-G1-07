@@ -151,7 +151,7 @@ public class DonationController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String authority="";
 		for(GrantedAuthority a : auth.getAuthorities()){
-			authority = a.getAuthority();
+			authority = a.getAuthority(); 
 		}
 		if(!authority.equals("admin")) {
 			return "redirect:/oups";
