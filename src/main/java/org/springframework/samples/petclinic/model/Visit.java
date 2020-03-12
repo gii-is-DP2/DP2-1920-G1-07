@@ -28,6 +28,7 @@ import javax.validation.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Simple JavaBean domain object representing a visit.
@@ -35,6 +36,7 @@ import lombok.Data;
  * @author Ken Krebs
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "visits")
 public class Visit extends BaseEntity {

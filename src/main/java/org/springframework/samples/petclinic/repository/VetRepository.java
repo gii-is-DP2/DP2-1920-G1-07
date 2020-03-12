@@ -48,7 +48,7 @@ public interface VetRepository {
 
 	List<Specialty> findSpecialties() throws DataAccessException;
 
-	List<Visit> findVisits() throws DataAccessException;
+	List<Visit> findVisits(String userName) throws DataAccessException;
 
 	void save(List<Specialty> specialties) throws DataAccessException;
 

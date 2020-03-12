@@ -76,8 +76,8 @@ public class VetService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Visit> findVisits() throws DataAccessException {
-		return this.vetRepository.findVisits();
+	public Collection<Visit> findVisits(final String userName) throws DataAccessException {
+		return this.vetRepository.findVisits(userName);
 	}
 
 	@Transactional(readOnly = true)

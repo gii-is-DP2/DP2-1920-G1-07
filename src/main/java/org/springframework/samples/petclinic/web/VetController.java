@@ -16,10 +16,12 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,6 @@ import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Vets;
 import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.model.Visits;
-import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -47,17 +47,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class VetController {
 
-	private static final String			VIEWS_VET_CREATE_FORM	= "vets/createVet";
-	private static final String			VIEWS_VET_LIST			= "vets/visitList";
+	private static final String	VIEWS_VET_CREATE_FORM	= "vets/createVet";
+	private static final String	VIEWS_VET_LIST			= "vets/visitList";
 
-	private final VetService			vetService;
-	private final AuthoritiesService	authService;
+	private final VetService	vetService;
 
 
 	@Autowired
-	public VetController(final VetService clinicService, final AuthoritiesService authService) {
+	public VetController(final VetService clinicService) {
 		this.vetService = clinicService;
-		this.authService = authService;
 	}
 
 	@GetMapping(value = {
@@ -103,16 +101,19 @@ public class VetController {
 		return this.vetService.findSpecialties();
 	}
 
-	@ModelAttribute("visits")
-	public Collection<Visit> populateVisits() {
-		return this.vetService.findVisits();
-	}
+	//	@ModelAttribute("visits")
+	//	public Collection<Visit> populateVisits() {
+	//		return this.vetService.findVisits();
+	//	}
 
 	@GetMapping(value = "/vets/visit")
-	public String visitList(final Map<String, Object> model) {
-		Visits visits = new Visits();
-		visits.getVisitList().addAll(this.vetService.findVisits());
-		model.put("visits", visits);
+	public String visitList(final Map<String, Object> model, final HttpServletRequest request) {
+		Principal principal = request.getUserPrincipal();
+		String userName = principal.getName();
+		model.put("userName", userName);
+
+		Collection<Visit> v = this.vetService.findVisits(userName);
+		model.put("visits", v);
 		return VetController.VIEWS_VET_LIST;
 	}
 
