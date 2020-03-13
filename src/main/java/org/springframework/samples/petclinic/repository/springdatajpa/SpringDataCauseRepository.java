@@ -36,4 +36,6 @@ public interface SpringDataCauseRepository extends CauseRepository, Repository<C
 	@Override
 	@Query("select s from Status s")
 	Collection<Status> findStatus() throws DataAccessException;
+	
+
 }

@@ -19,4 +19,6 @@ public interface SpringDataDonationRepository extends DonationRepository, CrudRe
 	@Override
 	@Query("select d from Donation d where d.user.username LIKE :username")
 	public Collection<Donation> findMyDonations(String username) throws DataAccessException;
+	
+
 }
