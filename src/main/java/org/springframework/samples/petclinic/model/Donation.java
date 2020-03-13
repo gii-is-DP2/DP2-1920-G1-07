@@ -32,5 +32,8 @@ public class Donation extends BaseEntity {
 
 	@ManyToOne
 	private Cause	causes;
+	
+	@Column(name = "moneyRest") 
+	private Double moneyRest;
 
 }

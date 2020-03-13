@@ -26,8 +26,16 @@
                       			<c:out value="${donation.user.username}" />
                     		</div>
                 	</div>
+                	<div class="form-group has-feedback">
+               		<div class="form-group">
+                    	<label class="col-sm-2 control-label">Remaining money</label>
+                    		<div class="col-sm-10">
+                      			<c:out value="${donation.moneyRest}" />
+                    		</div>
+                	</div>
                 <petclinic:inputField label="Money" name="money" />
-				<petclinic:selectField label="¿Anonymous?" name="anonymous" size="2" names="${anonymous}" />
+				<petclinic:selectField label="¿Anonymous?" name="anonymous" size="2"
+							names="${anonymous}" />
                 
                 </div>
             </div>
@@ -35,7 +43,8 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <input type="hidden" name="id" value="${donation.id}" />
+                    <input type="hidden" name="id"
+							value="${donation.id}" />
                     <button class="btn btn-default" type="submit">Save Donation</button>
                     <spring:url value="/cause" var="volver" />
 	
@@ -43,7 +52,8 @@
                     
                 </div>
             </div>
-        </form:form>
+        
+		</form:form>
 
        
     </jsp:body>

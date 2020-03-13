@@ -101,18 +101,29 @@ public class DonationController {
 
 		User u = new User();
 		u.setUsername(userName);
+
+		Cause causes = this.causeService.findCauseById(causeId);
+		Collection<Donation> ds = donationService.findDonationCause(causeId);
+		Double moneyD = 0.;
+		Double moneyF = causes.getMoney();
 		
+		if (!ds.isEmpty()) {
+
+			moneyD = ds.stream().mapToDouble(x -> x.getMoney()).sum();
+
+		}
+		Double moneyRest = moneyF - moneyD;
+		donation.setMoneyRest(moneyRest);
 
 		donation.setUser(u);
 		List<String> x = Arrays.asList("true", "false");
 		model.addAttribute("anonymous", x);
-		Cause causes = this.causeService.findCauseById(causeId);
 		String nombre = causes.getTitle();
 		donation.setCauses(causes);
 		donation.getCauses().setTitle(nombre);
 
 		model.put("donation", donation);
-		System.out.println("ESTOY ENTRANDO AQUI CAPI");
+
 		System.out.println(donation.getUser().getUsername());
 
 		return view;
@@ -135,18 +146,22 @@ public class DonationController {
 		String nombre = causes.getTitle();
 		donation.setCauses(causes);
 		donation.getCauses().setTitle(nombre);
-		
+
 		Collection<Donation> ds = donationService.findDonationCause(causeId);
-		Double moneyD=0.;
-		Double moneyF=causes.getMoney();
-		if(!ds.isEmpty()) {
-			
-			moneyD=ds.stream().mapToDouble(x->x.getMoney()).sum();	
-			
+		Double moneyD = 0.;
+		Double moneyF = causes.getMoney();
+		
+		if (!ds.isEmpty()) {
+
+			moneyD = ds.stream().mapToDouble(x -> x.getMoney()).sum();
+
 		}
+		Double moneyRest = moneyF - moneyD;
+		donation.setMoneyRest(moneyRest);
 
 		if (donation.getMoney() != null) {
-			if (donation.getMoney() > moneyF-moneyD) {
+
+			if (donation.getMoney() > moneyRest) {
 				return "redirect:/oups";
 			}
 		}

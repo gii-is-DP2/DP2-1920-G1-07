@@ -61,6 +61,7 @@ public class Cause extends BaseEntity {
 
 	@OneToMany
 	private Set<Donation>	donations;
+	
 
 
 	protected Set<Donation> getDonationsInternal() {
