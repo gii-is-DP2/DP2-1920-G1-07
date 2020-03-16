@@ -24,7 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.PetService;
-import org.springframework.stereotype.Controller;
+import org.springframework.samples.petclinic.service.VisitService;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,14 +33,13 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-/**
  * @author Juergen Hoeller
  * @author Ken Krebs
  * @author Arjen Poutsma
  * @author Michael Isvy
  */
 @Controller
+@RequestMapping("/visits")
 public class VisitController {
 
 	private final PetService petService;
@@ -60,7 +60,6 @@ public class VisitController {
 	 * - Make sure we always have fresh data - Since we do not use the session scope, make
 	 * sure that Pet object always has an id (Even though id is not part of the form
 	 * fields)
-	 * 
 	 * @param petId
 	 * @return Pet
 	 */
@@ -93,6 +92,19 @@ public class VisitController {
 	public String showVisits(@PathVariable final int petId, final Map<String, Object> model) {
 		model.put("visits", this.petService.findPetById(petId).getVisits());
 		return "visitList";
+	}
+
+
+	@Autowired
+	private VisitService visitService;
+
+
+	@GetMapping()
+	public String listadoVisitas(final ModelMap model) {
+		String vista = "visits/listadoVisitas";
+		Iterable<Visit> visits = this.visitService.visitFind();
+		model.addAttribute("visits", visits);
+		return vista;
 	}
 
 }

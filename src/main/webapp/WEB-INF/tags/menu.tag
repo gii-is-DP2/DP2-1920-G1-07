@@ -28,18 +28,28 @@
 					<span>Home</span>
 				</petclinic:menuItem>
 
+        <sec:authorize access="hasAnyAuthority('admin', 'owner')">
 				<petclinic:menuItem active="${name eq 'room'}" url="/rooms"
 					title="room">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Rooms</span>
-				</petclinic:menuItem>
-
+        </petclinic:menuItem>
+				</sec:authorize>
+				
 				<petclinic:menuItem active="${name eq 'vets'}" url="/vets"
 					title="veterinarians">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Veterinarians</span>
 				</petclinic:menuItem>
 				
+		<%-- 		<sec:authorize access="hasAnyAuthority('owner')">
+				 <petclinic:menuItem active="${name eq 'owners'}" url="/owners/profile"
+					title="My profile">
+					<span class="glyphicon glyphicon-visits-list" aria-hidden="true"></span>
+					<span>My profile</span>
+				</petclinic:menuItem> 
+				</sec:authorize>
+				 --%>
 
 				<sec:authorize access="hasAnyAuthority('owner')">
 				<petclinic:menuItem url="/owner/pets" active="${name eq 'Pets'}" title="My pets">

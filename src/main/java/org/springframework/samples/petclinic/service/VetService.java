@@ -20,7 +20,10 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
+import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.repository.SpecialtyRepository;
 import org.springframework.samples.petclinic.repository.VetRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +37,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class VetService {
 
-	private VetRepository vetRepository;
+	@Autowired
+	private VetRepository		vetRepository;
+
+	@Autowired
+	private UserService			userService;
+
+	@Autowired
+	private AuthoritiesService	authoritiesService;
+
+	@Autowired
+	private SpecialtyRepository	specialtyRepository;
 
 
 	@Autowired
@@ -47,4 +60,28 @@ public class VetService {
 		return this.vetRepository.findAll();
 	}
 
+	@Transactional
+	public void saveVet(final Vet vet) throws DataAccessException {
+		//creating vet
+		this.vetRepository.save(vet);
+		//creating user
+		this.userService.saveUser(vet.getUser());
+		//creating authorities
+		this.authoritiesService.saveAuthorities(vet.getUser().getUsername(), "veterinarian");
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Specialty> findSpecialties() throws DataAccessException {
+		return this.vetRepository.findSpecialties();
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Visit> findVisits(final String userName) throws DataAccessException {
+		return this.vetRepository.findVisits(userName);
+	}
+	@Transactional(readOnly = true)
+	public Specialty findSpecialiesById(final int id) throws DataAccessException {
+		Specialty s = this.specialtyRepository.findOneById(id);
+		return s;
+	}
 }
