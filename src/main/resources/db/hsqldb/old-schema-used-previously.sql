@@ -1,3 +1,5 @@
+DROP TABLE causes IF EXISTS;
+
 DROP TABLE vet_specialties IF EXISTS;
 DROP TABLE vets IF EXISTS;
 DROP TABLE specialties IF EXISTS;
@@ -78,3 +80,13 @@ ALTER TABLE authorities ADD CONSTRAINT fk_authorities_users FOREIGN KEY (usernam
 
 CREATE UNIQUE INDEX ix_auth_username ON authorities (username,authority);
 
+/* CREATE TABLE causes (
+	id				INTEGER IDENTITY PRIMARY KEY,
+	title			VARCHAR(255),
+	description		VARCHAR(255),
+	money			FLOAT,
+	deadline		DATE,
+	status 			VARCHAR(10) CHECK( status IN('PENDING','ACCEPTED','REJECTED') )
+);
+ALTER TABLE causes ADD CONSTRAINT fk_user_causes FOREIGN KEY (user_username) REFERENCES users (username);
+*/
