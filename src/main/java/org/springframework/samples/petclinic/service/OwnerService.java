@@ -67,9 +67,9 @@ public class OwnerService {
 		//creating authorities
 		authoritiesService.saveAuthorities(owner.getUser().getUsername(), "owner");
 	}
+	
 	@Transactional
 	public Owner findOwnerByUserName(String username) {
-	
 		return ownerRepository.findByUserName(username);
 	}		
 

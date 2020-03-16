@@ -10,10 +10,10 @@ import org.springframework.samples.petclinic.repository.UserRepository;
 
 public interface SpringDataUserRepository extends UserRepository, Repository<User, String> {
 
-	@Override
-	@Query("SELECT u from User u where u.username =:name")
-	User findUserByName(@Param("name") String name);
-	
+//	@Override
+//	@Query("SELECT u from User u where u.username =:'name'")
+//	User findUserByName(String name);
+//	
 	@Override
 	@Query("select u from User u where u.username='username'")
 	User findUserByUsername(String userName);

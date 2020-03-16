@@ -9,8 +9,8 @@ import org.springframework.samples.petclinic.model.User;
 
 public interface UserRepository extends CrudRepository<User, String> {
 
-	User findUserByName(String name) throws DataAccessException;
-	
+//	User findUserByName(String name) throws DataAccessException;
+
 	User findUserByUsername(String userName) throws DataAccessException;
 
 //	void save(User user) throws DataAccessException;

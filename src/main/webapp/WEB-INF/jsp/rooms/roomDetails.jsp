@@ -25,11 +25,11 @@
         </tr>
     </table>
 	<sec:authorize access="hasAnyAuthority('admin')">
+    	<c:if test="${notHaveReservations==true}">
     		<spring:url value="/rooms/{roomId}/edit" var="editUrl">
         		<spring:param name="roomId" value="${room.id}"/>
     		</spring:url>
     		<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit Room</a>
-		<c:if test="${notHaveReservations==true}">
 		<td>
    			<spring:url value="/rooms/delete/{roomId}" var="deleteUrl">
       			<spring:param name="roomId" value="${room.id}"/>

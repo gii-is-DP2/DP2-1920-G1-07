@@ -32,7 +32,7 @@ public interface SpringDataReservationRepository extends ReservationRepository,C
 	@Query("SELECT s FROM Status s ")
 	Collection<Status> findStatus();
 	
-	@Query("SELECT s FROM Status s WHERE s.id=2")
+	@Query("SELECT s FROM Status s WHERE s.id=1")
 	Status findPendingStatus();
 	
 	@Override

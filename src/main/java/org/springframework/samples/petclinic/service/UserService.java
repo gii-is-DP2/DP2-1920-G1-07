@@ -47,10 +47,10 @@ public class UserService {
 		this.userRepository.save(user);
 	}
 
-	@Transactional(readOnly = true)
-	public User findUserByName(final String name) {
-		return this.userRepository.findUserByName(name);
-	}
+//	@Transactional(readOnly = true)
+//	public User findUserByName(final String name) throws DataAccessException{
+//		return this.userRepository.findUserByName(name);
+//	}
 
 	public User findUserByUserName(final String userName) throws DataAccessException {
 		return this.userRepository.findUserByUsername(userName);

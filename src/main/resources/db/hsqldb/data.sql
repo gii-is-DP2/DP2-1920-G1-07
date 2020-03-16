@@ -38,16 +38,16 @@ INSERT INTO types VALUES (4, 'snake');
 INSERT INTO types VALUES (5, 'bird');
 INSERT INTO types VALUES (6, 'hamster');
 
-INSERT INTO status VALUES(1,'ACCEPTED');
-INSERT INTO status VALUES(2,'PENDING');
-INSERT INTO status VALUES(3,'REJECTED');
+INSERT INTO status VALUES (1, 'PENDING');
+INSERT INTO status VALUES (2, 'ACCEPTED');
+INSERT INTO status VALUES (3, 'REJECTED');
 
 INSERT INTO room VALUES(1,'Room1',2,4);
 INSERT INTO room VALUES(2,'Room2',1,2);
 INSERT INTO room VALUES(3,'Room3',3,1);
 INSERT INTO room VALUES(4,'Room4',4,5);
 
-INSERT INTO owners VALUES (11, 'Prueba', 'Prueba', '110 W. Liberty St.', 'Madison', '666666666', 'owner');
+
 INSERT INTO owners VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023', 'owner1');
 INSERT INTO owners VALUES (2, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749', 'owner1');
 INSERT INTO owners VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763', 'owner1');
@@ -59,7 +59,7 @@ INSERT INTO owners VALUES (8, 'Maria', 'Escobito', '345 Maple St.', 'Madison', '
 INSERT INTO owners VALUES (9, 'David', 'Schroeder', '2749 Blackhawk Trail', 'Madison', '6085559435', 'owner1');
 INSERT INTO owners VALUES (10, 'Carlos', 'Estaban', '2335 Independence La.', 'Waunakee', '6085555487', 'owner1');
 INSERT INTO owners VALUES (11, 'Amine', 'Chaghir', 'C/San Francisco n3', 'Zalamea de la Serena', '6085555487', 'amine');
-
+INSERT INTO owners VALUES (12, 'Prueba', 'Prueba', '110 W. Liberty St.', 'Madison', '666666666', 'owner');
 
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (2, 'Basil', '2012-08-06', 6, 2);
@@ -80,9 +80,6 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
-INSERT INTO status VALUES (1, 'PENDING');
-INSERT INTO status VALUES (2, 'ACCEPTED');
-INSERT INTO status VALUES (3, 'REJECTED');
 
 INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (1, 'First Cause', 'This is my first cause', '2020-12-30', 10000.00, 1, 'owner1');
 INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (2, 'Second Cause', 'This is my second cause', '2020-06-20', 10000.00, 3, 'owner1');

@@ -14,6 +14,7 @@
 				<th>Description</th>
 				<th>Deadline</th>
 				<th>Money</th>
+				<th>Actions</th>
 			</tr>
 		</thead>
 

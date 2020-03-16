@@ -66,6 +66,11 @@
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
 					<span>List of request</span>
 				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'cause'}" url="/cause"
+					title="causes">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Causes</span>
+				</petclinic:menuItem>
 				</sec:authorize>
 			</ul>
 
