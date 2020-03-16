@@ -51,6 +51,9 @@ public class AuthoritiesService {
 		authority.setAuthority(role);
 		authoritiesRepository.save(authority);
 	}
+	public Authorities findAuthorityByName(String username) throws DataAccessException {
+		 return authoritiesRepository.findById(username).get();
+	}
 
 
 }

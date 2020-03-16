@@ -94,6 +94,16 @@ class OwnerServiceTests {
 		assertThat(owner.getPets().get(0).getType()).isNotNull();
 		assertThat(owner.getPets().get(0).getType().getName()).isEqualTo("cat");
 	}
+	
+	
+	@Test
+	void shouldFindOwnerByName() {
+		Owner owners = this.ownerService.findOwnerByUserName("amine");
+		assertThat(owners == null).isFalse();
+		
+//		owner = this.ownerService.findOwnerByName("Haroldd");
+//		assertThat(owner == null);
+	}
 
 	@Test
 	@Transactional

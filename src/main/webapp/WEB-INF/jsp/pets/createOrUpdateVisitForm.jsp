@@ -44,6 +44,7 @@
                 <div class="col-sm-offset-2 col-sm-10">
                     <input type="hidden" name="petId" value="${visit.pet.id}"/>
                     <button class="btn btn-default" type="submit">Add Visit</button>
+                    <input class="btn btn-default" type="button" onclick="history.back()" name="volver atrás" value="Return">
                 </div>
             </div>
         </form:form>

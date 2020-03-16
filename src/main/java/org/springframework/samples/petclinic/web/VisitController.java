@@ -25,7 +25,6 @@ import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.VisitService;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -34,9 +33,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-/**
  * @author Juergen Hoeller
  * @author Ken Krebs
  * @author Arjen Poutsma
@@ -64,7 +60,6 @@ public class VisitController {
 	 * - Make sure we always have fresh data - Since we do not use the session scope, make
 	 * sure that Pet object always has an id (Even though id is not part of the form
 	 * fields)
-	 *
 	 * @param petId
 	 * @return Pet
 	 */
@@ -89,7 +84,7 @@ public class VisitController {
 			return "pets/createOrUpdateVisitForm";
 		} else {
 			this.petService.saveVisit(visit);
-			return "redirect:/owners/{ownerId}";
+			return "redirect:/owner/pets";
 		}
 	}
 

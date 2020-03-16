@@ -79,7 +79,6 @@ public class VetService {
 	public Collection<Visit> findVisits(final String userName) throws DataAccessException {
 		return this.vetRepository.findVisits(userName);
 	}
-
 	@Transactional(readOnly = true)
 	public Specialty findSpecialiesById(final int id) throws DataAccessException {
 		Specialty s = this.specialtyRepository.findOneById(id);
