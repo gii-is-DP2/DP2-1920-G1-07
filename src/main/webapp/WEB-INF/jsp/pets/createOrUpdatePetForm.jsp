@@ -1,4 +1,4 @@
-<%@ page session="false" trimDirectiveWhitespaces="true" %>
+<<%@ page session="false" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -37,9 +37,11 @@
                     <c:choose>
                         <c:when test="${pet['new']}">
                             <button class="btn btn-default" type="submit">Add Pet</button>
+                        	<input class="btn btn-default" type="button" onclick="history.back()" name="volver atrás" value="Return">
                         </c:when>
                         <c:otherwise>
                             <button class="btn btn-default" type="submit">Update Pet</button>
+                            <input class="btn btn-default" type="button" onclick="history.back()" name="volver atrás" value="Return">
                         </c:otherwise>
                     </c:choose>
                 </div>

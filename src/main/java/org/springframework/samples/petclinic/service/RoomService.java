@@ -20,7 +20,7 @@ public class RoomService {
 	
 //	@Transactional
 //	public int roomCount() throws DataAccessException{ 
-//		return (int) roomRepo.count();
+//			return (int) roomRepo.count();
 //	}
 //	
 	@Transactional
@@ -34,7 +34,7 @@ public class RoomService {
 	}
 
 	@Transactional
-	public void delete(Room room) throws DataAccessException{
+	public void delete(@Valid Room room) throws DataAccessException{
 		roomRepo.delete(room);
 	}
 	

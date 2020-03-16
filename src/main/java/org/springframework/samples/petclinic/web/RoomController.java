@@ -13,10 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.samples.petclinic.model.Authorities;
 import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.model.Reservation;
 import org.springframework.samples.petclinic.model.Room;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.PetService;
+import org.springframework.samples.petclinic.service.ReservationService;
 import org.springframework.samples.petclinic.service.RoomService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.AuthenticatedPrincipal;
@@ -47,6 +50,12 @@ public class RoomController {
 	private PetService petService;
 	
 	@Autowired
+	private OwnerService ownerService;
+	
+	@Autowired
+	private ReservationService reservationService;
+	
+	@Autowired
 	private AuthoritiesService	authoritiesService;
 	
 	@Autowired
@@ -67,6 +76,8 @@ public class RoomController {
 		Collection<PetType> petType = petService.findPetTypes();
 		return petType;
 	}
+	
+
 	@GetMapping(value ="/rooms/new")
 	public String initCreationForm(ModelMap modelMap) {
 		String view = "rooms/createOrUpdateRoomForm";
@@ -75,9 +86,8 @@ public class RoomController {
 		return view;
 	}
 	
-	@PostMapping(value="/rooms/save")
+	@PostMapping(value="/rooms/new")
 	public String processSaveRoom(@Valid Room room, BindingResult result, ModelMap model) {
-		
 		if(result.hasErrors()) {
 			model.addAttribute("message", "Room not created");
 			model.addAttribute("room", room);
@@ -89,14 +99,14 @@ public class RoomController {
 		return "redirect:/rooms/";
 	}
 	@GetMapping(value="/rooms/delete/{roomId}")
-	public String processDeleteRoom(@PathVariable("roomId") int roomId,ModelMap modelMap) {
+	public String processDeleteRoom(@PathVariable("roomId") int roomId,Model model) {
 		String view = "redirect:/rooms/";
 		Optional<Room> room = this.roomService.findRoomById(roomId);
-		if(room.isPresent()) {
+		if(room.isPresent() && room.get().getReservations().isEmpty()) {
 			roomService.delete(room.get());
-			modelMap.addAttribute("message", "Event Successfuly deleted");
+			model.addAttribute("message", "Event Successfuly deleted");
 		}else { 
-			modelMap.addAttribute("message", "Event not found!");
+			model.addAttribute("roomNotDeleted", "The room named "+room.get().getName()+" cannot be removed because it has reservations");
 		}
 		return view;
 	}
@@ -121,8 +131,23 @@ public class RoomController {
 		
 	}
 	@GetMapping("/rooms/{roomId}")
-	public ModelAndView showRoom(@PathVariable("roomId") int roomId) {
+	public ModelAndView showRoom(@PathVariable("roomId") int roomId,Model model,HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("rooms/roomDetails");
+		
+		Room r = this.roomService.findRoomById(roomId).get();
+		Integer numReservationsAccepted = (int) r.getReservations().stream().filter(x->x.getStatus().getName().equals("ACCEPTED")).count();
+		Boolean completedRoom = numReservationsAccepted == r.getCapacity();
+		model.addAttribute("completedRoom", completedRoom);
+		//Para no poder eliminar una room si tiene reservas
+		model.addAttribute("notHaveReservations", numReservationsAccepted==0);
+		//Para mostrar las reservas de cada usuario, siempre y cuando no sea admin, ya que el admin las ve todas.
+		if(!request.getUserPrincipal().getName().equals("admin1")) {
+		Principal principal = request.getUserPrincipal();
+		int ownerId = this.ownerService.findOwnerByUserName(principal.getName()).getId();
+		Collection<Reservation> reservations = this.reservationService.findResrvationsByOwnerId(ownerId);
+		model.addAttribute("myReservations", reservations);
+		}
+		
 		mav.addObject(this.roomService.findRoomById(roomId).get());
 		return mav;
 	}

@@ -12,7 +12,9 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
@@ -23,6 +25,7 @@ import org.springframework.core.style.ToStringCreator;
 @Table(name = "room")
 public class Room extends NamedEntity {
 	
+
 	@Column(name = "capacity")
 	private Integer capacity;
 	
@@ -37,9 +40,8 @@ public class Room extends NamedEntity {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
 	private Set<Pet> pets;
 
-//	@OneToOne
-//	@JoinColumn(name="reservation_id")
-//	private Reservation reservation;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
+	private Set<Reservation> reservations;
 	
 	
 	public Integer getCapacity() {
@@ -58,13 +60,13 @@ public class Room extends NamedEntity {
 		this.type = type;
 	}
 
-//	public Sitter getSitter() {
-//		return sitter;
-//	}
-//
-//	public void setSitter(Sitter sitter) {
-//		this.sitter = sitter;
-//	}
+	public Set<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(Set<Reservation> reservations) {
+		this.reservations = reservations;
+	}
 
 	public Set<Pet> getPetsInternal() {
 		if(this.pets == null) {

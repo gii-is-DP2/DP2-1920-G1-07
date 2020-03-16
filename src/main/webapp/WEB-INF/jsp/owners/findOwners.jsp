@@ -27,7 +27,9 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-default">Find Owner</button>
+        		<input class="btn btn-default" type="button" onclick="window.location.href='http://localhost:8080'" name="volver atrás" value="Return">
             </div>
+        
         </div>
 
     </form:form>

@@ -11,10 +11,8 @@
 		<c:if test="${room['new']}">New</c:if>
 		Room
 	</h2>
-	<c:choose>
-		<c:when test="${room['new']}">
 		<form:form modelAttribute="room" class="form-horizontal"
-			id="add-room-form" action="/rooms/save">
+			id="add-room-form">
 			<div class="form-group has-feedback">
 				<petclinic:inputField label="Name" name="name" />
 				<petclinic:inputField label="Capacity" name="capacity" />
@@ -25,28 +23,17 @@
 			</div>
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
-					<button class="btn btn-default" type="submit"
-						onclick="window.location.href='/rooms/save'">Add Room</button>
+					<c:choose>
+					<c:when test="${room['new']}">
+						<button class="btn btn-default" type="submit">Add Room</button>
+						<input class="btn btn-default" type="button" onclick="history.back()" name="volver atrás" value="Return">
+					</c:when>
+					<c:otherwise>	
+						<button class="btn btn-default" type="submit">Update Room</button>
+						<input class="btn btn-default" type="button" onclick="history.back()" name="volver atrás" value="Return">
+					</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</form:form>			
-		</c:when>
-		<c:otherwise>
-			<form:form modelAttribute="room" class="form-horizontal"
-				id="add-room-form" action="/rooms/${room.id}/edit">
-				<div class="form-group has-feedback">
-					<petclinic:inputField label="Name" name="name" />
-					<petclinic:inputField label="Capacity" name="capacity" />
-					<div class="control-group">
-						<petclinic:selectField name="type" label="Type " names="${types}" size="5"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<button class="btn btn-default" type="submit">Update Room</button>
-					</div>
-				</div>
-			</form:form>
-		</c:otherwise>
-	</c:choose>
 </petclinic:layout>
