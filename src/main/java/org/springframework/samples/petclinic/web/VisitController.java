@@ -16,15 +16,19 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Pet;
+import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.PetService;
+import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.samples.petclinic.service.VisitService;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -33,16 +37,25 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+ /*
  * @author Juergen Hoeller
  * @author Ken Krebs
  * @author Arjen Poutsma
  * @author Michael Isvy
  */
 @Controller
-@RequestMapping("/visits")
 public class VisitController {
-
+	
+	@Autowired
 	private final PetService petService;
+	
+	@Autowired
+	private VisitService visitService;
+	
+	@Autowired
+	private VetService vetService;
 
 
 	@Autowired
@@ -72,17 +85,23 @@ public class VisitController {
 	}
 
 	// Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is called
-	@GetMapping(value = "/owners/*/pets/{petId}/visits/new")
+	@GetMapping(value = "/owner/pets/{petId}/visits/new")
 	public String initNewVisitForm(@PathVariable("petId") final int petId, final Map<String, Object> model) {
+		Collection<Vet> vets = this.vetService.findVets();
+		model.put("allVets", vets);
 		return "pets/createOrUpdateVisitForm";
 	}
 
 	// Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is called
-	@PostMapping(value = "/owners/{ownerId}/pets/{petId}/visits/new")
-	public String processNewVisitForm(@Valid final Visit visit, final BindingResult result) {
+	@PostMapping(value = "/owner/pets/{petId}/visits/new")
+	public String processNewVisitForm(@Valid final Visit visit, final BindingResult result,@RequestParam("vetId") int vetId) {
+		
+		
 		if (result.hasErrors()) {
 			return "pets/createOrUpdateVisitForm";
 		} else {
+			Vet v = this.vetService.findVetById(vetId);
+			visit.setVet(v);
 			this.petService.saveVisit(visit);
 			return "redirect:/owner/pets";
 		}
@@ -95,11 +114,9 @@ public class VisitController {
 	}
 
 
-	@Autowired
-	private VisitService visitService;
 
 
-	@GetMapping()
+	@GetMapping(value="/visits")
 	public String listadoVisitas(final ModelMap model) {
 		String vista = "visits/listadoVisitas";
 		Iterable<Visit> visits = this.visitService.visitFind();

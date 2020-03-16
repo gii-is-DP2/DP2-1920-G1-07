@@ -47,7 +47,11 @@ public interface SpringDataVetRepository extends VetRepository, Repository<Vet, 
 	@Override
 	@Query("select v from Visit v where v.vet.user.username = :username")
 	List<Visit> findVisits(String username) throws DataAccessException;
-
+	
+	@Override
+	@Query("select v from Vet v where v.user.username =:username")
+	Vet findVetByUserName(String username) throws DataAccessException;
+	
 	@Override
 	@Modifying
 	@Query(value = "INSERT INTO vet_specialties (vet_id, specialty_id) VALUES (:id_vet, :id_specialty)", nativeQuery = true)

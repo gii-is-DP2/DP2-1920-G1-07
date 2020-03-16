@@ -28,20 +28,20 @@
 					<span>Home</span>
 				</petclinic:menuItem>
 
-        <sec:authorize access="hasAnyAuthority('admin', 'owner')">
+        		<sec:authorize access="hasAnyAuthority('admin', 'owner')">
 				<petclinic:menuItem active="${name eq 'room'}" url="/rooms"
 					title="room">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Rooms</span>
-        </petclinic:menuItem>
+        		</petclinic:menuItem>
 				</sec:authorize>
-				
-				<petclinic:menuItem active="${name eq 'vets'}" url="/vets"
+				<sec:authorize access="hasAnyAuthority('veterinarian')">
+				<petclinic:menuItem active="${name eq 'vets'}" url="/vets/mySpace"
 					title="veterinarians">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Veterinarians</span>
+					<span>My Space</span>
 				</petclinic:menuItem>
-				
+				</sec:authorize>
 		<%-- 		<sec:authorize access="hasAnyAuthority('owner')">
 				 <petclinic:menuItem active="${name eq 'owners'}" url="/owners/profile"
 					title="My profile">
@@ -80,6 +80,11 @@
 					title="causes">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Causes</span>
+				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'vet'}" url="/vets/admin"
+					title="newVet">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Veterinarians</span>
 				</petclinic:menuItem>
 				</sec:authorize>
 			</ul>

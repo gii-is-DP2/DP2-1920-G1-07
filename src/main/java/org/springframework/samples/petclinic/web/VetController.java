@@ -20,6 +20,7 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -57,18 +58,29 @@ public class VetController {
 	public VetController(final VetService clinicService) {
 		this.vetService = clinicService;
 	}
-
-	@GetMapping(value = {
-		"/vets"
-	})
-	public String showVetList(final Map<String, Object> model) {
+	
+	
+	@GetMapping(value = {"/vets"})
+	public String showVetList(final Map<String, Object> model,@RequestParam("petId") int petId) {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects
 		// so it is simpler for Object-Xml mapping
 		Vets vets = new Vets();
 		vets.getVetList().addAll(this.vetService.findVets());
 		model.put("vets", vets);
+		model.put("petId", petId);
 		return "vets/vetList";
+	}
+	
+	@GetMapping(value = "/vets/admin")
+	public String showVetListForAdmin(final Map<String, Object> model) {
+		// Here we are returning an object of type 'Vets' rather than a collection of Vet
+		// objects
+		// so it is simpler for Object-Xml mapping
+		Vets vets = new Vets();
+		vets.getVetList().addAll(this.vetService.findVets());
+		model.put("vets", vets);
+		return "vets/vetListAdmin";
 	}
 
 	@GetMapping(value = "/vets/create")
@@ -93,7 +105,7 @@ public class VetController {
 			this.vetService.saveVet(vet);
 		}
 
-		return "redirect:/vets";
+		return "redirect:/vets/admin";
 	}
 
 	@ModelAttribute("specialties")
@@ -106,11 +118,13 @@ public class VetController {
 	//		return this.vetService.findVisits();
 	//	}
 
-	@GetMapping(value = "/vets/visit")
+	@GetMapping(value = "/vets/mySpace")
 	public String visitList(final Map<String, Object> model, final HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();
 		String userName = principal.getName();
 		model.put("userName", userName);
+		Vet vet = this.vetService.findVetByUserName(userName);
+		model.put("vet", vet);
 
 		Collection<Visit> v = this.vetService.findVisits(userName);
 		model.put("visits", v);

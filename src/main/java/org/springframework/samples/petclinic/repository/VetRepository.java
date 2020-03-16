@@ -54,4 +54,8 @@ public interface VetRepository {
 
 	void saveVetSpecialty(int idVet, int idSpecialty) throws DataAccessException;
 
+	Vet findById(int id) throws DataAccessException;
+
+	Vet findVetByUserName(String username);
+
 }

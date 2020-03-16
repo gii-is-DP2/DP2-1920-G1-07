@@ -5,7 +5,26 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="visits">
-    <h2>Visits</h2>
+  	
+  	<h2>Veterinarian Information</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>Name</th>
+            <td><b><c:out value="${vet.firstName} ${vet.lastName}"/></b></td>
+        </tr>
+        <tr>
+            <th>Specialties</th>
+            <td>
+            <c:forEach var="specialty" items="${vet.specialties}">
+            <c:out value="${specialty.name}"/>
+            </c:forEach>
+            <c:if test="${vet.nrOfSpecialties == 0}">none</c:if>
+            </td>
+        </tr>
+    </table>
+
+
+ 	<h2>My Visits</h2>
 
 	<table id="visitTable" class="table table-striped">
 		<thead>

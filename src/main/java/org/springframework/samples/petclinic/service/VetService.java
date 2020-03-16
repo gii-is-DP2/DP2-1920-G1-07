@@ -59,7 +59,13 @@ public class VetService {
 	public Collection<Vet> findVets() throws DataAccessException {
 		return this.vetRepository.findAll();
 	}
+	
+	@Transactional(readOnly = true)
+	public Vet findVetById(int id) throws DataAccessException {
+		return this.vetRepository.findById(id);
+	}
 
+	
 	@Transactional
 	public void saveVet(final Vet vet) throws DataAccessException {
 		//creating vet
@@ -83,5 +89,10 @@ public class VetService {
 	public Specialty findSpecialiesById(final int id) throws DataAccessException {
 		Specialty s = this.specialtyRepository.findOneById(id);
 		return s;
+	}
+
+	public Vet findVetByUserName(String username) throws DataAccessException {
+		Vet v = vetRepository.findVetByUserName(username);
+		return v;
 	}
 }
