@@ -9,12 +9,13 @@
 <petclinic:layout pageName="reservations">
 	<jsp:attribute name="customScript">
         <script>
-		$(function() {
-					$("#date").datepicker({
-									dateFormat : 'yy/mm/dd'
-							});
-					});						
-		</script>
+            $(function () {
+                $("#entryDate").datepicker({dateFormat: 'yy/mm/dd'});
+            });
+            $(function () {
+                $("#exitDate").datepicker({dateFormat: 'yy/mm/dd'});
+            });
+        </script>
     </jsp:attribute>
 	<jsp:body>
         <c:if test="${reservation['new']}">
