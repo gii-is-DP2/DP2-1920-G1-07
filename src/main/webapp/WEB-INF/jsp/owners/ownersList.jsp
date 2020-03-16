@@ -51,9 +51,9 @@
                    <c:out value="${owner.user.password}"/> 
                 </td> 
 -->
-                
             </tr>
         </c:forEach>
         </tbody>
     </table>
+    <input class="btn btn-default" type="button" onclick="history.back()" name="volver atrás" value="Return">
 </petclinic:layout>

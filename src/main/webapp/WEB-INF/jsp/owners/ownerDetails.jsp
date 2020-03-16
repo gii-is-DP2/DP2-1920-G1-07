@@ -37,7 +37,7 @@
         <spring:param name="ownerId" value="${owner.id}"/>
     </spring:url>
     <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Add New Pet</a>
-
+    <input class="btn btn-default" type="button" onclick="history.back()" name="volver atrás" value="Return">
     <br/>
     <br/>
     <br/>

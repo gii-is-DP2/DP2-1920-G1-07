@@ -9,8 +9,8 @@
 	type="java.util.List" description="Names in the list"%>
 <%@ attribute name="size" required="true" rtexprvalue="true"
 	description="Size of Select"%>
-<%-- <%@ attribute name="itemLabel" required="false" rtexprvalue="true" --%>
-<%-- 	description="Type of Select"%> --%>
+<%@ attribute name="itemLabel" required="false" rtexprvalue="true"
+ 	description="Type of Select"%> 
 
 <spring:bind path="${name}">
 	<c:set var="cssGroup"
@@ -22,7 +22,7 @@
 
 		<div class="col-sm-10">
 			<form:select class="form-control" path="${name}" items="${names}"
-				size="${size}" />
+				size="${size}" itemLabel="${itemLabel}"/>
 			<c:if test="${valid}">
 				<span class="glyphicon glyphicon-ok form-control-feedback"
 					aria-hidden="true"></span>
