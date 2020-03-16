@@ -27,22 +27,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired
+	@Autowired  
 	DataSource dataSource;
 
-
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-				.antMatchers("/resources/**","/webjars/**","/h2-console/**").permitAll()
-				.antMatchers(HttpMethod.GET, "/","/oups").permitAll()
+	protected void configure(final HttpSecurity http) throws Exception {
+		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
 				.antMatchers("/users/new").permitAll()
 				.antMatchers("/admin/**").hasAnyAuthority("admin")
-				.antMatchers("/owners/**").hasAnyAuthority("owner","admin")	
-				.antMatchers("/rooms").permitAll()
-				.antMatchers("/rooms/**").permitAll()
-				.antMatchers("/rooms/new").hasAuthority("admin")
-				.antMatchers("/vets/**").authenticated()
+				.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")
+				.antMatchers("/cause/donations").hasAnyAuthority("owner","admin")
+				.antMatchers("/cause/donations/**").hasAnyAuthority("owner","admin")
+				.antMatchers("/donations/**").hasAnyAuthority("admin", "owner")
 				.antMatchers("/cause").permitAll()
 				.antMatchers("/cause/**").hasAnyAuthority("admin", "owner", "veterinarian")
 				.antMatchers("/myCauses").hasAnyAuthority("admin", "owner", "veterinarian")
@@ -62,12 +59,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // se sirve desde esta misma página.
                 http.csrf().ignoringAntMatchers("/h2-console/**");
                 http.headers().frameOptions().sameOrigin();
-	}
+                }				
+				
 
 	@Override
 	public void configure(final AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication().dataSource(this.dataSource).usersByUsernameQuery("select username,password,enabled " + "from users " + "where username = ?")
-			.authoritiesByUsernameQuery("select username, authority " + "from authorities " + "where username = ?").passwordEncoder(this.passwordEncoder());
+		auth.jdbcAuthentication().dataSource(this.dataSource)
+				.usersByUsernameQuery("select username,password,enabled " + "from users " + "where username = ?")
+				.authoritiesByUsernameQuery("select username, authority " + "from authorities " + "where username = ?")
+				.passwordEncoder(this.passwordEncoder());
 	}
 
 	@Bean

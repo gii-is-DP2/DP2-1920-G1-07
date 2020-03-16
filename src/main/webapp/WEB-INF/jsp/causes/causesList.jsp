@@ -35,6 +35,12 @@
 					<td>
 						<c:out value="${cause.money}"></c:out>
 					</td>
+					<td>
+					   <spring:url value="/cause/{causeId}/donations" var="addUrl">
+   						<spring:param name="causeId" value="${cause.id}"/>
+   						</spring:url>
+   						<a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Add donation</a>
+   						</td>
 				</tr>
 			</c:forEach>
 		</tbody>

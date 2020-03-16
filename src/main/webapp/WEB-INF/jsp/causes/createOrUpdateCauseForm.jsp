@@ -17,7 +17,6 @@
 			<petclinic:inputField label="Description" name="description" />
 			<petclinic:inputField label="Money" name="money" />
 			<petclinic:inputField label="Deadline" name="deadline" />
-			<form:errors path="*" cssClass="errorblock" style="padding-left: 211px;" element="div" />
 		</div>
 
 		<div class="form-group">
@@ -27,6 +26,8 @@
 						<button class="btn btn-default" type="submit">Add Cause</button>
 					</c:when>
 				</c:choose>
+				<spring:url value="/cause" var="volver"/>
+  				<a href="${fn:escapeXml(volver)}" class="btn btn-default">Return</a>
 			</div>
 		</div>
 

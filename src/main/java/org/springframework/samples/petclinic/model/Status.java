@@ -8,3 +8,4 @@ import javax.persistence.Table;
 @Table(name = "status")
 public class Status extends NamedEntity {
 }
+  
