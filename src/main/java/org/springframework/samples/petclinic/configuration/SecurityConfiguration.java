@@ -45,6 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/myCauses").hasAnyAuthority("admin", "owner", "veterinarian")
 				.antMatchers("/causes/PendingCauses").hasAnyAuthority("admin")
 				.antMatchers("/vets/**").authenticated()
+				.antMatchers("/request/**").authenticated()
 				.anyRequest().denyAll()
 				.and()
 				 	.formLogin()
@@ -69,7 +70,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.authoritiesByUsernameQuery("select username, authority " + "from authorities " + "where username = ?")
 				.passwordEncoder(this.passwordEncoder());
 	}
-
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		PasswordEncoder encoder = NoOpPasswordEncoder.getInstance();

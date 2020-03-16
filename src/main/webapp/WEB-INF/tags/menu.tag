@@ -28,12 +28,6 @@
 					<span>Home</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
-					title="find owners">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Find owners</span>
-				</petclinic:menuItem>
-
 				<petclinic:menuItem active="${name eq 'room'}" url="/rooms"
 					title="room">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
@@ -46,10 +40,11 @@
 					<span>Veterinarians</span>
 				</petclinic:menuItem>
 				
-				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
-					title="trigger a RuntimeException to see how it is handled">
+
+				<sec:authorize access="hasAnyAuthority('owner')">
+				<petclinic:menuItem url="/owner/pets" active="${name eq 'Pets'}" title="My pets">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-					<span>Error</span>
+					<span>My pets</span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'cause'}" url="/cause"
@@ -58,6 +53,20 @@
 					<span>Causes</span>
 				</petclinic:menuItem>
 
+				</sec:authorize>
+				<sec:authorize access="hasAnyAuthority('owner')">
+				<petclinic:menuItem url="/request/new" active="${name eq 'Sitter'}" title="Send Request">
+					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+					<span>Become sitter</span>
+				</petclinic:menuItem>
+				</sec:authorize>
+				
+				<sec:authorize access="hasAnyAuthority('admin')">
+				<petclinic:menuItem url="/admin/request" active="${name eq 'Requests'}" title="List of request">
+					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+					<span>List of request</span>
+				</petclinic:menuItem>
+				</sec:authorize>
 			</ul>
 
 
@@ -70,7 +79,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
@@ -96,6 +105,7 @@
 								</div>
 							</li>
 							<li class="divider"></li>
+							
 <!-- 							
                             <li> 
 								<div class="navbar-login navbar-login-session">
