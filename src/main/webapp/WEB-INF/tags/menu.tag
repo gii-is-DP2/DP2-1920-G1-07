@@ -28,7 +28,7 @@
 					<span>Home</span>
 				</petclinic:menuItem>
 
-        		<sec:authorize access="hasAnyAuthority('admin', 'owner')">
+        		<sec:authorize access="hasAnyAuthority('admin', 'owner','sitter')">
 				<petclinic:menuItem active="${name eq 'room'}" url="/rooms"
 					title="room">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
