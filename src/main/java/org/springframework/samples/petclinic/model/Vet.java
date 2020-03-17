@@ -44,6 +44,18 @@ public class Vet extends Person {
 	@JoinColumn(name = "username", referencedColumnName = "username")
 	private User			user;
 
+	//	 Añadido para Diagnosis
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "vet", fetch = FetchType.EAGER)
+	private Set<Diagnosis>	diagnoses;
+
+
+	public Set<Diagnosis> getDiagnoses() {
+		return this.diagnoses;
+	}
+
+	public void setDiagnoses(final Set<Diagnosis> diagnoses) {
+		this.diagnoses = diagnoses;
+	}
 
 	protected Set<Specialty> getSpecialtiesInternal() {
 		if (this.specialties == null) {

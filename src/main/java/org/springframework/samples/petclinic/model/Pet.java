@@ -49,25 +49,39 @@ public class Pet extends NamedEntity {
 
 	@Column(name = "birth_date")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate	birthDate;
+	private LocalDate		birthDate;
 
 	@ManyToOne
 	@JoinColumn(name = "type_id")
-	private PetType		type;
+	private PetType			type;
 
 	@ManyToOne
 	@JoinColumn(name = "owner_id")
-	private Owner		owner;
+	private Owner			owner;
+
+	// Añadido para Diagnosis
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pet", fetch = FetchType.EAGER)
+	private Set<Diagnosis>	diagnoses;
+
+
+	public Set<Diagnosis> getDiagnoses() {
+		return this.diagnoses;
+	}
+
+	public void setDiagnoses(final Set<Diagnosis> diagnoses) {
+		this.diagnoses = diagnoses;
+	}
+
 
 	// Añadido para Sala y Sitter(Cuidador)
 	@ManyToOne
-	@JoinColumn(name="room_id")
-	private Room room;
-	
+	@JoinColumn(name = "room_id")
+	private Room		room;
+
 	@ManyToOne
 	@JoinColumn(name = "sitter_id")
-	private Sitter sitter;
-	
+	private Sitter		sitter;
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pet", fetch = FetchType.EAGER)
 	private Set<Visit>	visits;
 
@@ -95,20 +109,20 @@ public class Pet extends NamedEntity {
 	protected void setOwner(final Owner owner) {
 		this.owner = owner;
 	}
-	
+
 	public Room getRoom() {
 		return this.room;
 	}
 
-	protected void setRoom(Room room) {
+	protected void setRoom(final Room room) {
 		this.room = room;
 	}
-	
+
 	public Sitter getSitter() {
 		return this.sitter;
 	}
 
-	protected void setSitter(Sitter sitter) {
+	protected void setSitter(final Sitter sitter) {
 		this.sitter = sitter;
 	}
 
