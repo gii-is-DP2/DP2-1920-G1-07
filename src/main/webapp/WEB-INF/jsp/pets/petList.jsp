@@ -56,6 +56,15 @@
                                 </spring:url>
                                 <a href="${fn:escapeXml(visitUrl)}">Add Visit</a>
                             </td>
+                            
+                             <td>
+                                <spring:url value="/diagnosis/myDiagnosis" var="diagnosistUrl">
+                                    <spring:param name="ownerId" value="${owner.id}"/>
+                                    <spring:param name="petId" value="${pet.id}"/>
+                                </spring:url>
+                                <a href="${fn:escapeXml(diagnosistUrl)}">See my Diagnosis</a>
+                            </td>
+                                                    
                         </tr>
                     </table>
                 </td>

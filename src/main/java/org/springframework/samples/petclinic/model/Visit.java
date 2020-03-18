@@ -22,6 +22,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
@@ -66,6 +67,18 @@ public class Visit extends BaseEntity {
 	@JoinColumn(name = "pet_id")
 	private Pet			pet;
 
+	@OneToOne()
+	@JoinColumn(name = "diagnosis_id")
+	private Diagnosis	diagnosis;
+
+
+	public Diagnosis getDiagnosis() {
+		return this.diagnosis;
+	}
+
+	public void setDiagnosis(final Diagnosis diagnosis) {
+		this.diagnosis = diagnosis;
+	}
 
 	/**
 	 * Creates a new instance of Visit for the current date
