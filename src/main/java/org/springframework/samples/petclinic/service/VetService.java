@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Diagnosis;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
@@ -59,13 +60,12 @@ public class VetService {
 	public Collection<Vet> findVets() throws DataAccessException {
 		return this.vetRepository.findAll();
 	}
-	
+
 	@Transactional(readOnly = true)
-	public Vet findVetById(int id) throws DataAccessException {
+	public Vet findVetById(final int id) throws DataAccessException {
 		return this.vetRepository.findById(id);
 	}
 
-	
 	@Transactional
 	public void saveVet(final Vet vet) throws DataAccessException {
 		//creating vet
@@ -91,8 +91,13 @@ public class VetService {
 		return s;
 	}
 
-	public Vet findVetByUserName(String username) throws DataAccessException {
-		Vet v = vetRepository.findVetByUserName(username);
+	public Vet findVetByUserName(final String username) throws DataAccessException {
+		Vet v = this.vetRepository.findVetByUserName(username);
 		return v;
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<Diagnosis> findDiagnosis(final String userName) {
+		return this.vetRepository.findDiagnosis(userName);
 	}
 }

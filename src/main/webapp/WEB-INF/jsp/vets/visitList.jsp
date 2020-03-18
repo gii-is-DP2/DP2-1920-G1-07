@@ -63,27 +63,34 @@
 		</tbody>
 	</table>
 	
+	
+	<h2>My Diagnosis</h2>
 
-<!--     <table id="visitTable" class="table table-striped"> -->
-<!--         <thead> -->
-<!--         <tr> -->
-<!--             <th>Visit</th> -->
-<!--         </tr> -->
-<!--         </thead> -->
-<!--        <tbody> -->
-<%--         <c:forEach items="${vets.visitList}" var="vet"> --%>
-<!--             <tr> -->
-<!--                 <td> -->
-<%--                     <c:out value="${vet.firstName} ${vet.lastName}"/> --%>
-<!--                 </td> -->
-<!--                 <td> -->
-<%--                     <c:forEach var="visit" items="${vet.visits}"> --%>
-<%--                         <c:out value="${visit.id} "/> --%>
-<%--                     </c:forEach> --%>
-<%--                     <c:if test="${vet.nrOfVisits == 0}">none</c:if> --%>
-<!--                 </td> -->
-<!--             </tr> -->
-<%--         </c:forEach> --%>
-<!--         </tbody> -->
-<!--     </table> -->
+	<table id="diagnosisTable" class="table table-striped">
+		<thead>
+			<tr>
+				<th>Description</th>
+				<th>Date</th>
+				<th>Pet</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<c:forEach items="${diagnosis}" var="diagnosis">
+				<tr>
+					<td>
+						<c:out value="${diagnosis.description}"></c:out>
+					</td>
+					<td>
+						<c:out value="${diagnosis.date}"></c:out>
+					</td>
+					<td>
+						<c:out value="${diagnosis.pet}"></c:out>
+					</td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+	
+
 </petclinic:layout>

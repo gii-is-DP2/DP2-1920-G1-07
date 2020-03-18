@@ -20,12 +20,12 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Diagnosis;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Vets;
@@ -58,10 +58,11 @@ public class VetController {
 	public VetController(final VetService clinicService) {
 		this.vetService = clinicService;
 	}
-	
-	
-	@GetMapping(value = {"/vets"})
-	public String showVetList(final Map<String, Object> model,@RequestParam("petId") int petId) {
+
+	@GetMapping(value = {
+		"/vets"
+	})
+	public String showVetList(final Map<String, Object> model, @RequestParam("petId") final int petId) {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects
 		// so it is simpler for Object-Xml mapping
@@ -71,7 +72,7 @@ public class VetController {
 		model.put("petId", petId);
 		return "vets/vetList";
 	}
-	
+
 	@GetMapping(value = "/vets/admin")
 	public String showVetListForAdmin(final Map<String, Object> model) {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
@@ -123,11 +124,16 @@ public class VetController {
 		Principal principal = request.getUserPrincipal();
 		String userName = principal.getName();
 		model.put("userName", userName);
+
 		Vet vet = this.vetService.findVetByUserName(userName);
 		model.put("vet", vet);
 
 		Collection<Visit> v = this.vetService.findVisits(userName);
 		model.put("visits", v);
+
+		Collection<Diagnosis> d = this.vetService.findDiagnosis(userName);
+		model.put("diagnosis", d);
+
 		return VetController.VIEWS_VET_LIST;
 	}
 
