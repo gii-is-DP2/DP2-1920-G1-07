@@ -27,15 +27,15 @@ public class DiagnosisService {
 		this.diagnosisRepository.save(diagnosis);
 
 	}
-
+	
+	@Transactional
 	public Collection<Diagnosis> findDiagnosis() {
-		// TODO Auto-generated method stub
 		return this.diagnosisRepository.findDiagnosis();
 	}
-
-	public Collection<Diagnosis> findMyDiagnosis(final String userName) {
-		// TODO Auto-generated method stub
-		return this.diagnosisRepository.findMyDiagnosis(userName);
+	
+	@Transactional
+	public Collection<Diagnosis> findMyDiagnosis(final int petId) {
+		return this.diagnosisRepository.findMyDiagnosis(petId);
 	}
 
 }

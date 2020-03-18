@@ -54,8 +54,9 @@
 					<td>
 					   <spring:url value="/vet/{vetId}/diagnosis" var="addUrl">
    						<spring:param name="vetId" value="${vet.id}"/>
+   						<spring:param name="visitId" value="${visit.id}"/>
    						</spring:url>
-   						<a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Add diagnosis</a>
+   						<a href="${fn:escapeXml(addUrl)}" >Add diagnosis</a>
    						</td>
 				</tr>
 			</c:forEach>

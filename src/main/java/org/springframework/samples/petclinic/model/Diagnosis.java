@@ -39,10 +39,6 @@ public class Diagnosis extends BaseEntity {
 	@JoinColumn(name = "visit_id")
 	private Visit		visit;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "username", referencedColumnName = "username")
-	private User		user;
-
 
 	public String getDescription() {
 		return this.description;

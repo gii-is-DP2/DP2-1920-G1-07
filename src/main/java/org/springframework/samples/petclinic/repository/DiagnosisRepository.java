@@ -12,6 +12,6 @@ public interface DiagnosisRepository {
 
 	Collection<Diagnosis> findDiagnosis();
 
-	Collection<Diagnosis> findMyDiagnosis(String userName);
+	Collection<Diagnosis> findMyDiagnosis(int petId);
 
 }

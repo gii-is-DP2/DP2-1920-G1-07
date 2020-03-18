@@ -48,5 +48,7 @@ public interface VisitRepository {
 	List<Visit> findByPetId(Integer petId);
 
 	Collection<Visit> findAll() throws DataAccessException;
+	
+	Visit findById(int visitId) throws DataAccessException;
 
 }
