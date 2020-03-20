@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Diagnosis;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
@@ -57,5 +58,7 @@ public interface VetRepository {
 	Vet findById(int id) throws DataAccessException;
 
 	Vet findVetByUserName(String username);
+
+	List<Diagnosis> findDiagnosis(String userName) throws DataAccessException;
 
 }
