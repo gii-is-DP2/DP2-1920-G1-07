@@ -8,6 +8,9 @@ INSERT INTO authorities VALUES ('owner1','owner');
 INSERT INTO users(username,password,enabled) VALUES ('amine','12345',TRUE);
 INSERT INTO authorities VALUES ('amine','owner');
 
+INSERT INTO users(username,password,enabled) VALUES ('pablo','12345',TRUE);
+INSERT INTO authorities VALUES ('pablo','owner');
+
 INSERT INTO users(username,password,enabled) VALUES ('owner','owner',TRUE);
 INSERT INTO authorities VALUES ('owner','owner');
 -- One vet user, named vet1 with passwor v3t
@@ -67,6 +70,7 @@ INSERT INTO owners VALUES (9, 'David', 'Schroeder', '2749 Blackhawk Trail', 'Mad
 INSERT INTO owners VALUES (10, 'Carlos', 'Estaban', '2335 Independence La.', 'Waunakee', '6085555487', 'owner1');
 INSERT INTO owners VALUES (11, 'Amine', 'Chaghir', 'C/San Francisco n3', 'Zalamea de la Serena', '6085555487', 'amine');
 INSERT INTO owners VALUES (12, 'Prueba', 'Prueba', '110 W. Liberty St.', 'Madison', '666666666', 'owner');
+INSERT INTO owners VALUES (13, 'Pablo', 'Reneses', '110 W. Liberty St.', 'Sevilla', '666665432', 'pablo');
 
 
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
@@ -82,11 +86,13 @@ INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (10, 'Mulligan', '2
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (11, 'Freddy', '2010-03-09', 5, 9);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (12, 'Lucky', '2010-06-24', 2, 10);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (13, 'Sly', '2012-06-08', 1, 10);
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (14, 'Lena', '2017-05-11', 2, 13);
 
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (1, 7, '2013-01-01', 'rabies shot');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02', 'rabies shot');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
+INSERT INTO visits(id,pet_id,visit_date,description) VALUES (5, 14, '2020-01-04', 'spayed');
 
 
 INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (1, 'First Cause', 'This is my first cause', '2020-12-30', 10000.00, 1, 'owner1');
@@ -98,3 +104,5 @@ INSERT INTO cause(id, title, description, deadline, money, status_id, username) 
 INSERT INTO donation VALUES (1, 'true',5000.0,NULL,3,'admin1');
 INSERT INTO donation VALUES (2, 'false',2000.0,NULL,3,'admin1');
 INSERT INTO donation VALUES (3, 'true',1000.0,NULL,3,'admin1');
+
+INSERT INTO diagnosis(id, description, date, vet_id, pet_id, visit_id) VALUES (1, 'Todo bien', '2013-01-10', 7, 14, 5)
