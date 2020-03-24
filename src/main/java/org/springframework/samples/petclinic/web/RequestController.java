@@ -71,8 +71,10 @@ public class RequestController {
 		if (result.hasErrors()) {
 			return RequestController.VIEWS_REQUEST_CREATE_FORM;
 		} else {
-			if (this.requestService.findRequestByUser(user.getUsername()) != null) {
-				result.rejectValue("address", "duplicate", "You already sent a request");
+			Request r = this.requestService.findRequestByUser(user.getUsername());
+			if (r != null) {
+
+				result.rejectValue("address", "address", "You already sent a request");
 				return RequestController.VIEWS_REQUEST_CREATE_FORM;
 			} else {
 				requestEntity.setUser(user);
