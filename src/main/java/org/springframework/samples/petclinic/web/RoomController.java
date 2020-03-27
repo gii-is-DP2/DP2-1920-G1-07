@@ -95,6 +95,7 @@ public class RoomController {
 	
 	@PostMapping(value="/rooms/new")
 	public String processSaveRoom(@Valid Room room, BindingResult result, ModelMap model) {
+		
 		if(room.getCapacity() != null && room.getCapacity() == 0) {
 			FieldError err = new FieldError("room", "capacity", "The value 0 is not valid");
 			result.addError(err);

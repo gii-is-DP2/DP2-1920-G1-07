@@ -160,13 +160,27 @@ class RoomControllerTest {
 	
 	@WithMockUser(value="spring")
 	@Test
-	void testProcessCreationFormHasErrors() throws Exception {
+	void testProcessCreationFormHasErrorsOnCapacity() throws Exception {
 		mockMvc.perform(post("/rooms/new")
 				.with(csrf())
 				.param("id", "1")
-				.param("name","Bad Room"))
+				.param("name","Bad Room")
+				.param("capacity", "0")
+				.param("type","dog"))
 		.andExpect(status().isOk())
-		.andExpect(model().attributeDoesNotExist("capacity"))
+		.andExpect(model().attributeHasErrors("room"))
+		.andExpect(model().attributeHasFieldErrors("room","capacity"))
+		.andExpect(view().name("rooms/createOrUpdateRoomForm"));
+	}
+	@WithMockUser(value="spring")
+	@Test
+	void testProcessCreationFormHasErrorsOnType() throws Exception {
+		mockMvc.perform(post("/rooms/new")
+				.with(csrf())
+				.param("id", "1")
+				.param("name","Bad Room")
+				.param("capacity", "3"))
+		.andExpect(status().isOk())
 		.andExpect(model().attributeDoesNotExist("type"))
 		.andExpect(view().name("rooms/createOrUpdateRoomForm"));
 	}
@@ -195,7 +209,7 @@ class RoomControllerTest {
 	
 	@WithMockUser(value = "spring")
 	@Test
-	void testProcessUpdateRoomFormHasErrors() throws Exception {
+	void testProcessUpdateRoomFormHasErrorsOnCapacity() throws Exception {
 		mockMvc.perform(post("/rooms/{roomId}/edit",TEST_ROOM_ID)
 						.with(csrf())
 						.param("name", "Failed Room")
@@ -206,7 +220,6 @@ class RoomControllerTest {
 			   .andExpect(view().name("/rooms/createOrUpdateRoomForm"));
 	}
 	
-	//Echale un vistazo
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowRoomsWithouthReservations() throws Exception { 
