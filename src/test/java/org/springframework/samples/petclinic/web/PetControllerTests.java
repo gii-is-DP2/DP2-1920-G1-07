@@ -97,7 +97,7 @@ class PetControllerTests {
 							.param("type", "hamster")
 							.param("birthDate", "2015/02/12"))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/owners/{ownerId}"));
+				.andExpect(view().name("redirect:/owners/{ownerId}/pets"));
 	}
 
 	@WithMockUser(value = "spring")

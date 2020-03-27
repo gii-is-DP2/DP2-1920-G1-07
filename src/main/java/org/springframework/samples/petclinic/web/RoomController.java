@@ -2,8 +2,10 @@ package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -12,6 +14,7 @@ import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.samples.petclinic.model.Authorities;
+import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Reservation;
 import org.springframework.samples.petclinic.model.Room;
@@ -30,7 +33,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,26 +47,27 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class RoomController {
 
-	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "/rooms/createOrUpdateRoomForm"; 
+	private static final String VIEWS_ROOM_CREATE_OR_UPDATE_FORM = "/rooms/createOrUpdateRoomForm"; 
 	
 	
 	private final RoomService roomService;
 	
 	@Autowired
-	private PetService petService;
+	private final PetService petService;
 	
 	@Autowired
-	private OwnerService ownerService;
+	private final OwnerService ownerService;
 	
 	@Autowired
-	private ReservationService reservationService;
+	private final ReservationService reservationService;
+	
 	
 	@Autowired
-	private AuthoritiesService	authoritiesService;
-	
-	@Autowired
-	public RoomController(RoomService roomService, PetService petService) {
+	public RoomController(final RoomService roomService,final PetService petService, final OwnerService ownerService, final ReservationService reservationService) {
 		this.roomService = roomService;
+		this.petService = petService;
+		this.ownerService = ownerService;
+		this.reservationService = reservationService;
 	}
 	
 	@GetMapping(value ="/rooms")
@@ -88,6 +95,15 @@ public class RoomController {
 	
 	@PostMapping(value="/rooms/new")
 	public String processSaveRoom(@Valid Room room, BindingResult result, ModelMap model) {
+		if(room.getCapacity() != null && room.getCapacity() == 0) {
+			FieldError err = new FieldError("room", "capacity", "The value 0 is not valid");
+			result.addError(err);
+		}
+		if(room.getCapacity() == null) {
+			FieldError err = new FieldError("room", "capacity", "This field is required");
+			result.addError(err);
+		}
+		
 		if(result.hasErrors()) {
 			model.addAttribute("message", "Room not created");
 			model.addAttribute("room", room);
@@ -101,28 +117,37 @@ public class RoomController {
 	@GetMapping(value="/rooms/delete/{roomId}")
 	public String processDeleteRoom(@PathVariable("roomId") int roomId,Model model) {
 		String view = "redirect:/rooms/";
-		Optional<Room> room = this.roomService.findRoomById(roomId);
-		if(room.isPresent() && room.get().getReservations().isEmpty()) {
-			roomService.delete(room.get());
+		Room room = this.roomService.findRoomById(roomId);
+		if(room != null && room.getReservations().isEmpty()) {
+			roomService.delete(room);
 			model.addAttribute("message", "Event Successfuly deleted");
 		}else { 
-			model.addAttribute("roomNotDeleted", "The room named "+room.get().getName()+" cannot be removed because it has reservations");
+			model.addAttribute("roomNotDeleted", "The room named "+room.getName()+" cannot be removed because it has reservations");
 		}
 		return view;
 	}
 	
 	@GetMapping(value = "/rooms/{roomId}/edit")
-	public String processInitUpdateForm(@PathVariable("roomId") int roomId,Model model) {
-		Room room = this.roomService.findRoomById(roomId).get();
+	public String processInitUpdateForm(@PathVariable("roomId") int roomId,ModelMap model) {
+		Room room = this.roomService.findRoomById(roomId);
 		model.addAttribute(room);
-		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+		return VIEWS_ROOM_CREATE_OR_UPDATE_FORM;
 	}
 	
-	@PostMapping(value = "/rooms/{roomId}/edit" )
+	@PostMapping(value = "/rooms/{roomId}/edit")
 	public String processUpdateRoom(@Valid Room room, @PathVariable("roomId") int roomId,BindingResult result, ModelMap modelMap) {
+		
+		if(room.getCapacity() != null && room.getCapacity() == 0) {
+			FieldError err = new FieldError("room", "capacity", "The value 0 is not valid");
+			result.addError(err);
+		}
+		if(room.getCapacity() == null){
+			FieldError err = new FieldError("room", "capacity", "This field is required");
+			result.addError(err);
+		}
+		
 		if(result.hasErrors()) {
-			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
-			
+			return RoomController.VIEWS_ROOM_CREATE_OR_UPDATE_FORM;
 		}else {
 			room.setId(roomId);
 			this.roomService.saveRoom(room);
@@ -131,34 +156,28 @@ public class RoomController {
 		
 	}
 	@GetMapping("/rooms/{roomId}")
-	public ModelAndView showRoom(@PathVariable("roomId") int roomId,Model model,HttpServletRequest request) {
+	public ModelAndView showRoom(@PathVariable("roomId") int roomId,ModelMap model,HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("rooms/roomDetails");
 		
-		Room r = this.roomService.findRoomById(roomId).get();
+		Room r = this.roomService.findRoomById(roomId);
+		if(r.getReservations() != null) {
 		Integer numReservationsAccepted = (int) r.getReservations().stream().filter(x->x.getStatus().getName().equals("ACCEPTED")).count();
 		Boolean completedRoom = numReservationsAccepted == r.getCapacity();
 		model.addAttribute("completedRoom", completedRoom);
 		//Para no poder eliminar una room si tiene reservas
 		model.addAttribute("notHaveReservations", numReservationsAccepted==0);
-		//Para mostrar las reservas de cada usuario, siempre y cuando no sea admin, ya que el admin las ve todas.
-		if(!request.getUserPrincipal().getName().equals("admin1")) {
+		}
+		//Para mostrar las reservas de cada usuario por cada habitacion, siempre y cuando no sea admin, ya que el admin las ve todas.
+		String  p = request.getUserPrincipal().getName();
+		if(!request.getUserPrincipal().getName().equals("admin1") && !request.getUserPrincipal().getName().equals("spring")) {
 		Principal principal = request.getUserPrincipal();
 		int ownerId = this.ownerService.findOwnerByUserName(principal.getName()).getId();
-		Collection<Reservation> reservations = this.reservationService.findResrvationsByOwnerId(ownerId);
+		Collection<Reservation> reservations = this.reservationService.findReservationsByOwnerAndRoomId(ownerId,roomId);
 		model.addAttribute("myReservations", reservations);
 		}
-		
-		mav.addObject(this.roomService.findRoomById(roomId).get());
+		model.put("room", this.roomService.findRoomById(roomId));
+		mav.addObject(this.roomService.findRoomById(roomId));
 		return mav;
 	}
 	
-	@ModelAttribute("hasPermiss")
-	public Boolean hasPermiss(HttpServletRequest request) {
-		Boolean res = false;
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		for(GrantedAuthority a:auth.getAuthorities()) {
-			res  = a.getAuthority().equals("admin");
-		}
-		return res;
-	}
 }
