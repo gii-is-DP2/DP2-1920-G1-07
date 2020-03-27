@@ -95,7 +95,7 @@ public class CauseController {
 	}
 
 	@GetMapping(path = "/PendingCauses")
-	public String showPedingCausesList(final ModelMap model) {
+	public String showPendingCausesList(final ModelMap model) {
 		Collection<Cause> myCauses = this.causeService.findPendingCauses();
 		model.addAttribute("cause", myCauses);
 		return "causes/pendingCauses";
