@@ -28,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Diagnosis;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
-import org.springframework.samples.petclinic.model.Vets;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.stereotype.Controller;
@@ -59,30 +58,30 @@ public class VetController {
 		this.vetService = clinicService;
 	}
 
-	@GetMapping(value = {
-		"/vets"
-	})
-	public String showVetList(final Map<String, Object> model, @RequestParam("petId") final int petId) {
-		// Here we are returning an object of type 'Vets' rather than a collection of Vet
-		// objects
-		// so it is simpler for Object-Xml mapping
-		Vets vets = new Vets();
-		vets.getVetList().addAll(this.vetService.findVets());
-		model.put("vets", vets);
-		model.put("petId", petId);
-		return "vets/vetList";
-	}
-
-	@GetMapping(value = "/vets/admin")
-	public String showVetListForAdmin(final Map<String, Object> model) {
-		// Here we are returning an object of type 'Vets' rather than a collection of Vet
-		// objects
-		// so it is simpler for Object-Xml mapping
-		Vets vets = new Vets();
-		vets.getVetList().addAll(this.vetService.findVets());
-		model.put("vets", vets);
-		return "vets/vetListAdmin";
-	}
+	//	@GetMapping(value = {
+	//		"/vets"
+	//	})
+	//	public String showVetList(final Map<String, Object> model, @RequestParam("petId") final int petId) {
+	//		// Here we are returning an object of type 'Vets' rather than a collection of Vet
+	//		// objects
+	//		// so it is simpler for Object-Xml mapping
+	//		Vets vets = new Vets();
+	//		vets.getVetList().addAll(this.vetService.findVets());
+	//		model.put("vets", vets);
+	//		model.put("petId", petId);
+	//		return "vets/vetList";
+	//	}
+	//
+	//	@GetMapping(value = "/vets/admin")
+	//	public String showVetListForAdmin(final Map<String, Object> model) {
+	//		// Here we are returning an object of type 'Vets' rather than a collection of Vet
+	//		// objects
+	//		// so it is simpler for Object-Xml mapping
+	//		Vets vets = new Vets();
+	//		vets.getVetList().addAll(this.vetService.findVets());
+	//		model.put("vets", vets);
+	//		return "vets/vetListAdmin";
+	//	}
 
 	@GetMapping(value = "/vets/create")
 	public String initCreationForm(final ModelMap model) {
@@ -94,6 +93,9 @@ public class VetController {
 
 	@PostMapping(value = "/vets/create")
 	public String processCreationForm(@Valid final Vet vet, final BindingResult result, @RequestParam(required = false) final int[] specialties) {
+		//		Vet vet2 = this.vetService.findVetById(vet.getId());
+		//		String r = vet2.getFirstName();
+		//		String t = vet2.getLastName();
 		if (result.hasErrors()) {
 			return VetController.VIEWS_VET_CREATE_FORM;
 		} else {
@@ -113,11 +115,6 @@ public class VetController {
 	public Collection<Specialty> populateSpecialties() {
 		return this.vetService.findSpecialties();
 	}
-
-	//	@ModelAttribute("visits")
-	//	public Collection<Visit> populateVisits() {
-	//		return this.vetService.findVisits();
-	//	}
 
 	@GetMapping(value = "/vets/mySpace")
 	public String visitList(final Map<String, Object> model, final HttpServletRequest request) {

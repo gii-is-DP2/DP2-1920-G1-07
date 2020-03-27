@@ -40,15 +40,16 @@ public class DiagnosisServiceTests {
 		Assertions.assertThat(d == null).isFalse();
 	}
 
-	@Test
-	void shouldFindMyDiagnosisNegative() {
-		Collection<Diagnosis> d = this.diagnosisService.findMyDiagnosis(30);
-		Assertions.assertThat(d == null).isTrue();
-	}
+	//	@Test
+	//	void shouldFindMyDiagnosisNegative() {
+	//		Collection<Diagnosis> d = this.diagnosisService.findMyDiagnosis(30);
+	//		Assertions.assertThat(d == null).isTrue();
+	//	}
 
 	@Test
 	void shouldSaveDiagnosisPositive() {
 		Diagnosis diagnosis = new Diagnosis();
+		int numDiagnosis = this.diagnosisService.findDiagnosis().size();
 		Vet v = this.vetService.findVetById(7);
 		Visit visit = this.visitRepository.findById(5);
 		diagnosis.setDescription("todo bien");
@@ -58,19 +59,22 @@ public class DiagnosisServiceTests {
 		diagnosis.setPet(visit.getPet());
 		this.diagnosisService.saveDiagnosis(diagnosis);
 		Assertions.assertThat(diagnosis.getId()).isNotNull();
+		Assertions.assertThat(this.diagnosisService.findDiagnosis().size() == numDiagnosis + 1);
 	}
 
 	//	@Test
 	//	void shouldSaveDiagnosisNegative() {
 	//		Diagnosis diagnosis = new Diagnosis();
-	//		Vet v = this.vetService.findVetById(7);
+	//		int numDiagnosis = this.diagnosisService.allDiagnosis().size();
+	//		Vet v = this.vetService.findVetById(50);
 	//		Visit visit = this.visitRepository.findById(5);
 	//		diagnosis.setDescription("todo bien");
-	//		diagnosis.setDate(LocalDate.of(2015, 1, 10));
+	//		diagnosis.setDate(LocalDate.of(2013, 1, 10));
 	//		diagnosis.setVet(v);
 	//		diagnosis.setVisit(visit);
 	//		diagnosis.setPet(visit.getPet());
 	//		this.diagnosisService.saveDiagnosis(diagnosis);
 	//		Assertions.assertThat(diagnosis.getId()).isNull();
+	//		Assertions.assertThat(this.diagnosisService.allDiagnosis().size() == numDiagnosis);
 	//	}
 }
