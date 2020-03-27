@@ -66,6 +66,9 @@ public class RequestController {
 
 	@PostMapping(value = "/request/new")
 	public String processCreationForm(final HttpServletRequest request, @Valid final Request requestEntity, final BindingResult result, final ModelMap model) {
+		if (requestEntity.getType() == null) {
+			result.rejectValue("type", "type", "Required");
+		}
 		Principal principal = request.getUserPrincipal();
 		User user = this.userService.findUserByUserName(principal.getName());
 		if (result.hasErrors()) {
