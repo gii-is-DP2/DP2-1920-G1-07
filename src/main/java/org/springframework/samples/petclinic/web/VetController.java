@@ -104,7 +104,9 @@ public class VetController {
 				vet.addSpecialty(s);
 			}
 			//			this.authService.saveAuthorities(vet.getUser().getUsername(), "veterinarian");
+			if(vet.getUser() != null) {
 			vet.getUser().setEnabled(true);
+			}
 			this.vetService.saveVet(vet);
 		}
 

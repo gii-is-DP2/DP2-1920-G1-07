@@ -4,9 +4,7 @@ package org.springframework.samples.petclinic.web;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +24,12 @@ import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.time.LocalDate;
 
 /**
  * Test class for the {@link VetController}
@@ -76,6 +77,7 @@ class VetControllerTests {
 		Diagnosis d = new Diagnosis();
 		d.setId(1);
 		d.setDescription("bien");
+		d.setDate(LocalDate.now());
 
 		
 
@@ -88,50 +90,65 @@ class VetControllerTests {
 
 	}
 
-	//	@WithMockUser(value = "spring")
-	//	@Test
-	//	void testShowVetListHtml() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/vets")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("vets")).andExpect(MockMvcResultMatchers.view().name("vets/vetList"));
-	//	}
-	//
-	//	@WithMockUser(value = "spring")
-	//	@Test
-	//	void testShowVetListXml() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/vets.xml").accept(MediaType.APPLICATION_XML)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_XML_VALUE))
-	//			.andExpect(MockMvcResultMatchers.content().node(HasXPath.hasXPath("/vets/vetList[id=1]/id")));
-	//	}
+//		@WithMockUser(value = "spring")
+//		@Test
+//		void testShowVetListHtml() throws Exception {
+//			this.mockMvc.perform(get("/vets"))
+//			.andExpect(status().isOk())
+//			.andExpect(model().attributeExists("vets"))
+//			.andExpect(view().name("vets/vetList"));
+//		}
+//	
+//		@WithMockUser(value = "spring")
+//		@Test
+//		void testShowVetListXml() throws Exception {
+//			this.mockMvc.perform(MockMvcRequestBuilders.get("/vets.xml").accept(MediaType.APPLICATION_XML)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_XML_VALUE))
+//				.andExpect(MockMvcResultMatchers.content().node(HasXPath.hasXPath("/vets/vetList[id=1]/id")));
+//		}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitCreationForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/vets/create")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("vet")).andExpect(MockMvcResultMatchers.view().name("vets/createVet"));
+		this.mockMvc.perform(get("/vets/create"))
+		.andExpect(status().isOk())
+		.andExpect(model().attributeExists("vet"))
+		.andExpect(view().name("vets/createVet"));
 	}
 
-	//	@WithMockUser(value = "spring")
-	//	@Test
-	//	void testProcessCreationFormSuccess() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.post("/vets/create").param("id", "1").param("firstName", "Pablo").param("lastName", "Reneses").with(SecurityMockMvcRequestPostProcessors.csrf()).param("specialties", "2"))
-	//			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/vets/admin"));
-	//
-	//	}
-	//
-	//	@WithMockUser(value = "spring")
-	//	@Test
-	//	void testProcessCreationFormWithErrors() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.post("/vets/create").with(SecurityMockMvcRequestPostProcessors.csrf()).param("firstName", "Pablo")).andExpect(MockMvcResultMatchers.status().isOk())
-	//			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("vet")).andExpect(MockMvcResultMatchers.view().name("vets/admin"));
-	//	}	
+		@WithMockUser(value = "spring")
+		@Test
+		void testProcessCreationFormSuccess() throws Exception {
+			this.mockMvc.perform(post("/vets/create")
+					.param("id", "1")
+					.param("firstName", "Pablo")
+					.param("lastName", "Reneses")
+					.with(csrf())
+					.param("specialties", "1"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/vets/admin"));
+	
+		}
+	
+		@WithMockUser(value = "spring")
+		@Test
+		void testProcessCreationFormWithErrors() throws Exception {
+			this.mockMvc.perform(post("/vets/create").with(csrf())
+				.param("firstName", "Pablo"))
+				.andExpect(status().isOk())
+				.andExpect(model().attributeHasErrors("vet"))
+				.andExpect(view().name("vets/createVet"));
+		}	
 	
 	@WithMockUser(value = "spring")
 	@Test
 	void testShow() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/vets/mySpace"))
-			.andExpect(MockMvcResultMatchers.status().isOk())
+		this.mockMvc.perform(get("/vets/mySpace"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("vet"))
 			.andExpect(model().attribute("vet", hasProperty("lastName", is("Carter"))))
 			.andExpect(model().attribute("vet", hasProperty("firstName", is("James"))))
-			.andExpect(model().attribute("vet", hasProperty("specialties", is("1"))))
-			.andExpect(MockMvcResultMatchers.view().name("vets/visitList"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("vets"));
+			.andExpect(model().attribute("vet", hasProperty("specialties")))
+			.andExpect(view().name("vets/visitList"));
 	}
 	
 
