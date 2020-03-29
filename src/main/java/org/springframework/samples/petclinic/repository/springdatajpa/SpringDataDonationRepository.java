@@ -4,13 +4,12 @@ import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.samples.petclinic.model.Cause;
 import org.springframework.samples.petclinic.model.Donation;
 import org.springframework.samples.petclinic.repository.DonationRepository;
 
-public interface SpringDataDonationRepository extends DonationRepository, CrudRepository<Donation, Integer>  {
+public interface SpringDataDonationRepository extends DonationRepository, Repository<Donation, Integer>  {
 
 	@Override
 	@Query("select d from Donation d where d.causes.id=:idCause")
@@ -21,4 +20,7 @@ public interface SpringDataDonationRepository extends DonationRepository, CrudRe
 	public Collection<Donation> findMyDonations(String username) throws DataAccessException;
 	
 
+	@Override
+	@Query("select d from Donation d where d.id=:id")
+	Donation findDonationById(@Param("id") int id) throws DataAccessException;
 }
