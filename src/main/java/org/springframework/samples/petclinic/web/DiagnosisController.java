@@ -49,10 +49,10 @@ public class DiagnosisController {
 
 	@PostMapping(value = "/vet/{vetId}/diagnosis")
 	public String processCreateDiagnosis(@Valid final Diagnosis diagnosis, final BindingResult result, final ModelMap model, @PathVariable("vetId") final int vetId, @RequestParam("visitId") final int visitId) {
-		if(diagnosis.getDate() == null) {
+		if (diagnosis.getDate() == null) {
 			result.rejectValue("date", "Date must not be null");
 		}
-		
+
 		if (result.hasErrors()) {
 			model.addAttribute("message", "Diagnosis not created");
 			model.addAttribute("diagnosis", diagnosis);
@@ -68,13 +68,6 @@ public class DiagnosisController {
 		}
 		return "redirect:/vets/mySpace/";
 	}
-
-	//	@GetMapping
-	//	public String showDiagnosisList(final ModelMap modelMap) {
-	//		Collection<Diagnosis> diagnosis = this.diagnosisService.findDiagnosis();
-	//		modelMap.addAttribute("diagnosis", diagnosis);
-	//		return "vets/diagnosisList";
-	//	}
 
 	@GetMapping(path = "/diagnosis/myDiagnosis")
 	public String showMyDiagnosisList(final ModelMap model, final HttpServletRequest request, @RequestParam("petId") final int petId) {
