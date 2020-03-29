@@ -65,13 +65,6 @@ public class DiagnosisController {
 		return "redirect:/vets/mySpace/";
 	}
 
-	//	@GetMapping
-	//	public String showDiagnosisList(final ModelMap modelMap) {
-	//		Collection<Diagnosis> diagnosis = this.diagnosisService.findDiagnosis();
-	//		modelMap.addAttribute("diagnosis", diagnosis);
-	//		return "vets/diagnosisList";
-	//	}
-
 	@GetMapping(path = "/diagnosis/myDiagnosis")
 	public String showMyDiagnosisList(final ModelMap model, final HttpServletRequest request, @RequestParam("petId") final int petId) {
 		Collection<Diagnosis> myDiagnosis = this.diagnosisService.findMyDiagnosis(petId);

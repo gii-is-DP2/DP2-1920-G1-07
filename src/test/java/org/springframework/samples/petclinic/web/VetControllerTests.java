@@ -90,21 +90,6 @@ class VetControllerTests {
 
 	}
 
-//		@WithMockUser(value = "spring")
-//		@Test
-//		void testShowVetListHtml() throws Exception {
-//			this.mockMvc.perform(get("/vets"))
-//			.andExpect(status().isOk())
-//			.andExpect(model().attributeExists("vets"))
-//			.andExpect(view().name("vets/vetList"));
-//		}
-//	
-//		@WithMockUser(value = "spring")
-//		@Test
-//		void testShowVetListXml() throws Exception {
-//			this.mockMvc.perform(MockMvcRequestBuilders.get("/vets.xml").accept(MediaType.APPLICATION_XML)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_XML_VALUE))
-//				.andExpect(MockMvcResultMatchers.content().node(HasXPath.hasXPath("/vets/vetList[id=1]/id")));
-//		}
 
 	@WithMockUser(value = "spring")
 	@Test

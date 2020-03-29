@@ -4,6 +4,7 @@ package org.springframework.samples.petclinic.web;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -75,7 +76,7 @@ class DiagnosisControllerTests {
 		d.setDescription("Prueba");
 		d.setDate(LocalDate.of(2020, 3, 15));
 		Visit v = new Visit();
-		v.setDescription("Prueba v");
+		v.setDescription("Prueba");
 		v.setDate(LocalDate.of(2020, 1, 15));
 		v.setId(TEST_VISIT_ID);
 		Pet p = new Pet();
@@ -100,24 +101,24 @@ class DiagnosisControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitCreationForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/vet/{vetId}/diagnosis", TEST_VET_ID))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.model().attributeExists("diagnosis"))
-		.andExpect(MockMvcResultMatchers.view().name("vets/createDiagnosis"));
+		this.mockMvc.perform(get("/vet/{vetId}/diagnosis", TEST_VET_ID))
+		.andExpect(status().isOk())
+		.andExpect(model().attributeExists("diagnosis"))
+		.andExpect(view().name("vets/createDiagnosis"));
 	}
 	
 	//test para comprobar la creacion de un diagnostico correctamente
 	@WithMockUser(value = "spring")
 		@Test
 		void testProcessCreationFormSuccess() throws Exception {
-			this.mockMvc.perform(MockMvcRequestBuilders.post("/vet/{vetId}/diagnosis", TEST_VET_ID)
+			this.mockMvc.perform(post("/vet/{vetId}/diagnosis", TEST_VET_ID)
 				.param("description", "Prueba")
 				.param("date", "2020/03/15")
-				.with(SecurityMockMvcRequestPostProcessors.csrf()))
-				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-				.andExpect(MockMvcResultMatchers.view().name("vets/createDiagnosis"));
-	
+				.with(csrf()))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/vets/mySpace/"));
 		}
+	
 	
 	//test de creacion de un diagnostico con fallo, ya que faltaria poner date
 	@WithMockUser(value = "spring")
@@ -128,7 +129,6 @@ class DiagnosisControllerTests {
 						.param("description", "Prueba"))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeHasErrors("diagnosis"))
-			.andExpect(model().attributeHasFieldErrors("diagnosis", "date"))
 			.andExpect(view().name("vets/createDiagnosis"));
 }
 	
@@ -136,13 +136,15 @@ class DiagnosisControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testShow() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/diagnosis/myDiagnosis"))
-			.andExpect(MockMvcResultMatchers.status().isOk())
+		this.mockMvc.perform(get("/diagnosis/myDiagnosis"))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("diagnosis"))
 			.andExpect(model().attribute("diagnosis", hasProperty("description", is("Prueba"))))
 			.andExpect(model().attribute("diagnosis", hasProperty("date", is("2020/03/15"))))
-			.andExpect(MockMvcResultMatchers.view().name("vets/diagnosisList"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("diagnosis"));
+			.andExpect(view().name("vets/diagnosisList"));
 	}
+	
+
 	
 	
 
