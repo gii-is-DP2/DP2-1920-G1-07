@@ -114,13 +114,8 @@ class VetServiceTests {
 	void shouldFindDiagnosisByUserNamePositive() {
 		Collection<Diagnosis> d = this.vetService.findDiagnosis("pablo");
 		Assertions.assertThat(d == null).isFalse();
+		Assertions.assertThat(d.size()).isNotEqualTo(5);
 	}
-
-	//	@Test
-	//	void shouldFindDiagnosisByUserNameNegative() {
-	//		Collection<Diagnosis> d = this.vetService.findDiagnosis("pablor");
-	//		Assertions.assertThat(d != null).isFalse();
-	//	}
 
 	@Test
 	void shouldFindVetByIdPositive() {
@@ -142,6 +137,7 @@ class VetServiceTests {
 	void shouldFindSpecialties() {
 		Collection<Specialty> s = this.vetService.findSpecialties();
 		Assertions.assertThat(s == null).isFalse();
+		Assertions.assertThat(s.size()).isNotEqualTo(5);
 	}
 
 }

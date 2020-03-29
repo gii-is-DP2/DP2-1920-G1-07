@@ -36,7 +36,7 @@ public class DiagnosisServiceTests {
 	}
 
 	@Test
-	void shouldSaveDiagnosisPositive() {
+	void shouldSaveDiagnosis() {
 		Diagnosis diagnosis = new Diagnosis();
 		int numDiagnosis = this.diagnosisService.findDiagnosis().size();
 		Vet v = this.vetService.findVetById(7);
