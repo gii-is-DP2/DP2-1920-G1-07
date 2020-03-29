@@ -87,7 +87,7 @@ class DiagnosisControllerTests {
 		Vet james = new Vet();
 		james.setFirstName("James");
 		james.setLastName("Carter");
-		james.setId(1);
+		james.setId(TEST_VET_ID);
 		d.setVet(james);
 		d.setPet(v.getPet());
 		
@@ -116,7 +116,7 @@ class DiagnosisControllerTests {
 				.param("date", "2020/03/15")
 				.with(csrf()))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/vets/mySpace/"));
+				.andExpect(view().name("redirect:/vets/mySpace/"));
 		}
 	
 	
@@ -138,9 +138,9 @@ class DiagnosisControllerTests {
 	void testShow() throws Exception {
 		this.mockMvc.perform(get("/diagnosis/myDiagnosis"))
 			.andExpect(status().isOk())
-			.andExpect(model().attributeExists("diagnosis"))
-			.andExpect(model().attribute("diagnosis", hasProperty("description", is("Prueba"))))
-			.andExpect(model().attribute("diagnosis", hasProperty("date", is("2020/03/15"))))
+			.andExpect(model().attributeExists("myDiagnosis"))
+			.andExpect(model().attribute("myDiagnosis", hasProperty("description", is("Prueba"))))
+			.andExpect(model().attribute("myDiagnosis", hasProperty("date", is("2020/03/15"))))
 			.andExpect(view().name("vets/diagnosisList"));
 	}
 	

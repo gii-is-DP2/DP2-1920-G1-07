@@ -58,31 +58,6 @@ public class VetController {
 		this.vetService = clinicService;
 	}
 
-	//	@GetMapping(value = {
-	//		"/vets"
-	//	})
-	//	public String showVetList(final Map<String, Object> model, @RequestParam("petId") final int petId) {
-	//		// Here we are returning an object of type 'Vets' rather than a collection of Vet
-	//		// objects
-	//		// so it is simpler for Object-Xml mapping
-	//		Vets vets = new Vets();
-	//		vets.getVetList().addAll(this.vetService.findVets());
-	//		model.put("vets", vets);
-	//		model.put("petId", petId);
-	//		return "vets/vetList";
-	//	}
-	//
-	//	@GetMapping(value = "/vets/admin")
-	//	public String showVetListForAdmin(final Map<String, Object> model) {
-	//		// Here we are returning an object of type 'Vets' rather than a collection of Vet
-	//		// objects
-	//		// so it is simpler for Object-Xml mapping
-	//		Vets vets = new Vets();
-	//		vets.getVetList().addAll(this.vetService.findVets());
-	//		model.put("vets", vets);
-	//		return "vets/vetListAdmin";
-	//	}
-
 	@GetMapping(value = "/vets/create")
 	public String initCreationForm(final ModelMap model) {
 		Vet vet = new Vet();
@@ -104,8 +79,8 @@ public class VetController {
 				vet.addSpecialty(s);
 			}
 			//			this.authService.saveAuthorities(vet.getUser().getUsername(), "veterinarian");
-			if(vet.getUser() != null) {
-			vet.getUser().setEnabled(true);
+			if (vet.getUser() != null) {
+				vet.getUser().setEnabled(true);
 			}
 			this.vetService.saveVet(vet);
 		}

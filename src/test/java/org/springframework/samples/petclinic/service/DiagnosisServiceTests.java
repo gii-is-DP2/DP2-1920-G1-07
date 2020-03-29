@@ -32,19 +32,8 @@ public class DiagnosisServiceTests {
 	void shouldFindDiagnosis() {
 		Collection<Diagnosis> d = this.diagnosisService.findDiagnosis();
 		Assertions.assertThat(d == null).isFalse();
+		Assertions.assertThat(d.size()).isNotEqualTo(5);
 	}
-
-	@Test
-	void shouldFindMyDiagnosisPositive() {
-		Collection<Diagnosis> d = this.diagnosisService.findMyDiagnosis(14);
-		Assertions.assertThat(d == null).isFalse();
-	}
-
-	//	@Test
-	//	void shouldFindMyDiagnosisNegative() {
-	//		Collection<Diagnosis> d = this.diagnosisService.findMyDiagnosis(30);
-	//		Assertions.assertThat(d == null).isTrue();
-	//	}
 
 	@Test
 	void shouldSaveDiagnosisPositive() {
@@ -60,21 +49,7 @@ public class DiagnosisServiceTests {
 		this.diagnosisService.saveDiagnosis(diagnosis);
 		Assertions.assertThat(diagnosis.getId()).isNotNull();
 		Assertions.assertThat(this.diagnosisService.findDiagnosis().size() == numDiagnosis + 1);
+		Assertions.assertThat(this.diagnosisService.findDiagnosis().size() != numDiagnosis + 2);
 	}
 
-	//	@Test
-	//	void shouldSaveDiagnosisNegative() {
-	//		Diagnosis diagnosis = new Diagnosis();
-	//		int numDiagnosis = this.diagnosisService.allDiagnosis().size();
-	//		Vet v = this.vetService.findVetById(50);
-	//		Visit visit = this.visitRepository.findById(5);
-	//		diagnosis.setDescription("todo bien");
-	//		diagnosis.setDate(LocalDate.of(2013, 1, 10));
-	//		diagnosis.setVet(v);
-	//		diagnosis.setVisit(visit);
-	//		diagnosis.setPet(visit.getPet());
-	//		this.diagnosisService.saveDiagnosis(diagnosis);
-	//		Assertions.assertThat(diagnosis.getId()).isNull();
-	//		Assertions.assertThat(this.diagnosisService.allDiagnosis().size() == numDiagnosis);
-	//	}
 }
