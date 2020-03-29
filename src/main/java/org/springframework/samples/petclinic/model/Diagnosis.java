@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.core.style.ToStringCreator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -79,5 +80,12 @@ public class Diagnosis extends BaseEntity {
 	public void setVisit(final Visit visit) {
 		this.visit = visit;
 	}
-
+	@Override
+	public String toString() {
+		
+		return new ToStringCreator(this)
+				.append("id",this.id)
+				.append("capacity",this.description)
+				.append("date",this.date).toString();
+	}
 }
