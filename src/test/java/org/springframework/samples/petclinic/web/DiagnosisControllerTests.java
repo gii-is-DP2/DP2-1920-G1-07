@@ -75,15 +75,18 @@ class DiagnosisControllerTests {
 		d.setId(TEST_DIAGNOSIS_ID);
 		d.setDescription("Prueba");
 		d.setDate(LocalDate.of(2020, 3, 15));
+		
 		Visit v = new Visit();
 		v.setDescription("Prueba");
 		v.setDate(LocalDate.of(2020, 1, 15));
 		v.setId(TEST_VISIT_ID);
+		
 		Pet p = new Pet();
 		p.setId(TEST_PET_ID);
 		p.setName("Roc");
 		v.setPet(p);
 		d.setVisit(v);
+		
 		Vet james = new Vet();
 		james.setFirstName("James");
 		james.setLastName("Carter");
@@ -138,9 +141,9 @@ class DiagnosisControllerTests {
 	void testShow() throws Exception {
 		this.mockMvc.perform(get("/diagnosis/myDiagnosis"))
 			.andExpect(status().isOk())
-			.andExpect(model().attributeExists("myDiagnosis"))
-			.andExpect(model().attribute("myDiagnosis", hasProperty("description", is("Prueba"))))
-			.andExpect(model().attribute("myDiagnosis", hasProperty("date", is("2020/03/15"))))
+			.andExpect(model().attributeExists("diagnosis"))
+			.andExpect(model().attribute("diagnosis", hasProperty("description", is("Prueba"))))
+			.andExpect(model().attribute("diagnosis", hasProperty("date", is("2020/03/15"))))
 			.andExpect(view().name("vets/diagnosisList"));
 	}
 	
