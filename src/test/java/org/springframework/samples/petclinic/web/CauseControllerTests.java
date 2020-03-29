@@ -27,7 +27,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @WebMvcTest(controllers = CauseController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 public class CauseControllerTests {
 
-	private static final int	TEST_CAUSE_ID	= 1;
+	private static final int	TEST_CAUSE_ID			= 1;
+	private static final int	TEST_PENDING_STATUS_ID	= 1;
+	private static final int	TEST_ACCEPTED_STATUS_ID	= 2;
 
 	@Autowired
 	private CauseController		causeController;
@@ -53,10 +55,14 @@ public class CauseControllerTests {
 		this.c.setDescription("This is a test cause");
 		this.c.setDeadline(LocalDate.of(2020, 11, 25));
 		this.c.setMoney(10000.0);
+
 		Status p = new Status();
+		p.setId(CauseControllerTests.TEST_PENDING_STATUS_ID);
 		p.setName("PENDING");
+
 		this.c.setStatus(p);
 		this.c.setUser(prueba);
+
 		BDDMockito.given(this.causeService.findCauseById(CauseControllerTests.TEST_CAUSE_ID)).willReturn(this.c);
 	}
 
@@ -73,15 +79,32 @@ public class CauseControllerTests {
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/cause/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "Test Title").param("description", "Test Description").param("money", "10000.0").param("deadline", "2020/07/25")
-			.param("status.name", "PENDING")).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+			.param("status.name", "PENDING")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/cause"));
 	}
 
-	//No funciona
+	//Deadline pasado
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessCreationFormHasErrorsOnDate() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/cause/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "Test Title").param("description", "Test Description").param("money", "10000.0").param("deadline", "2019/07/25"))
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors("cause")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("cause", "deadline"))
+			.andExpect(MockMvcResultMatchers.view().name("causes/createOrUpdateCauseForm"));
+	}
+
+	//Dinero negativo
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessCreationFormHasErrorsOnMoney() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/cause/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "Test Title").param("description", "Test Description").param("money", "-10000.0").param("deadline", "2019/07/25"))
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors("cause")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("cause", "money"))
+			.andExpect(MockMvcResultMatchers.view().name("causes/createOrUpdateCauseForm"));
+	}
+
+	//Form vacío
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormHasErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/cause/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "Test Title")).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("cause")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("description", "cause")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("money", "cause"))
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/cause/new").with(SecurityMockMvcRequestPostProcessors.csrf())).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors("cause"))
 			.andExpect(MockMvcResultMatchers.view().name("causes/createOrUpdateCauseForm"));
 	}
 
@@ -108,18 +131,20 @@ public class CauseControllerTests {
 			.andExpect(MockMvcResultMatchers.view().name("causes/pendingCauses"));
 	}
 
-	//No funciona
-	//	@WithMockUser(value = "spring")
-	//	@Test
-	//	void testInitUpdateStatusForm() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/PendingCauses/cause/{causeId}/edit", CauseControllerTests.TEST_CAUSE_ID))
-	//		.andExpect(MockMvcResultMatchers.status().isOk())
-	//		.andExpect(MockMvcResultMatchers.model().attributeExists("cause"))
-	//			.andExpect(MockMvcResultMatchers.model().attribute("cause", Matchers.hasProperty("title", Matchers.is("Test Causa"))))
-	//			.andExpect(MockMvcResultMatchers.model().attribute("cause", Matchers.hasProperty("description", Matchers.is("This is a test causa"))))
-	//			.andExpect(MockMvcResultMatchers.model().attribute("cause", Matchers.hasProperty("status.name", Matchers.is("PENDING"))))
-	//			.andExpect(MockMvcResultMatchers.model().attribute("cause", Matchers.hasProperty("money", Matchers.is("1000.0"))))
-	//			.andExpect(MockMvcResultMatchers.view().name("causes/updatePendingCauseForm"));
-	//	}
+	//Prueba para iniciar form de actualizar causas pendientes
+	@WithMockUser(value = "spring")
+	@Test
+	void testInitUpdateStatusForm() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cause/PendingCauses/cause/{causeId}/edit", CauseControllerTests.TEST_CAUSE_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cause"))
+			.andExpect(MockMvcResultMatchers.view().name("causes/updatePendingCauseForm"));
+	}
+
+	//Prueba post form para actualizar causa
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessEditFormSuccess() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/cause/PendingCauses/cause/{causeId}/edit", CauseControllerTests.TEST_CAUSE_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("status.name", "ACCEPTED"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/cause/PendingCauses"));
+	}
 
 }

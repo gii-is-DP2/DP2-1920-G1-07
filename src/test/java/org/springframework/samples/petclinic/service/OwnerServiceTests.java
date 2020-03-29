@@ -132,4 +132,13 @@ class OwnerServiceTests {
 		Assertions.assertThat(owner.getLastName()).isEqualTo(newLastName);
 	}
 
+	@Test
+	@Transactional
+	void shouldFindOwnerByUser() {
+		Owner owner = this.ownerService.findOwnerByUser("owner");
+		Assertions.assertThat(owner == null).isFalse();
+
+		Owner ownerFalse = this.ownerService.findOwnerByUser("alvaro");
+		Assertions.assertThat(ownerFalse == null).isTrue();
+	}
 }
