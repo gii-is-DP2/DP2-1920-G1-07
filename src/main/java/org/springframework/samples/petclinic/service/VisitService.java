@@ -18,4 +18,9 @@ public class VisitService {
 	public Iterable<Visit> visitFind() {
 		return this.visitRepo.findAll();
 	}
+
+	public Visit findById(final int visitId) {
+		// TODO Auto-generated method stub
+		return this.visitRepo.findById(visitId);
+	}
 }

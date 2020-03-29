@@ -1,7 +1,6 @@
 
 package org.springframework.samples.petclinic.web;
 
-import java.security.Principal;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Diagnosis;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.samples.petclinic.service.DiagnosisService;
 import org.springframework.samples.petclinic.service.VetService;
+import org.springframework.samples.petclinic.service.VisitService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -28,17 +27,17 @@ public class DiagnosisController {
 	private static final String		VIEWS_DIAGNOSIS_CREATE_FORM	= "vets/createDiagnosis";
 
 	private final DiagnosisService	diagnosisService;
-	
-	private final VetService vetService;
-	
-	private final VisitRepository visitRepository;
+
+	private final VetService		vetService;
+
+	private final VisitService		visitService;
 
 
 	@Autowired
-	public DiagnosisController(final DiagnosisService clinicService, VetService vetService,VisitRepository visitRepository) {
+	public DiagnosisController(final DiagnosisService clinicService, final VetService vetService, final VisitService visitService) {
 		this.diagnosisService = clinicService;
 		this.vetService = vetService;
-		this.visitRepository = visitRepository;
+		this.visitService = visitService;
 	}
 
 	@GetMapping(value = "/vet/{vetId}/diagnosis")
@@ -49,14 +48,14 @@ public class DiagnosisController {
 	}
 
 	@PostMapping(value = "/vet/{vetId}/diagnosis")
-	public String processCreateDiagnosis(@Valid final Diagnosis diagnosis, final BindingResult result, final ModelMap model,@PathVariable("vetId") int vetId,@RequestParam("visitId") int visitId) {
+	public String processCreateDiagnosis(@Valid final Diagnosis diagnosis, final BindingResult result, final ModelMap model, @PathVariable("vetId") final int vetId, @RequestParam("visitId") final int visitId) {
 		if (result.hasErrors()) {
 			model.addAttribute("message", "Diagnosis not created");
 			model.addAttribute("diagnosis", diagnosis);
 			return DiagnosisController.VIEWS_DIAGNOSIS_CREATE_FORM;
 		} else {
 			Vet v = this.vetService.findVetById(vetId);
-			Visit visit = this.visitRepository.findById(visitId);
+			Visit visit = this.visitService.findById(visitId);
 			diagnosis.setVet(v);
 			diagnosis.setVisit(visit);
 			diagnosis.setPet(visit.getPet());
@@ -74,7 +73,7 @@ public class DiagnosisController {
 	//	}
 
 	@GetMapping(path = "/diagnosis/myDiagnosis")
-	public String showMyDiagnosisList(final ModelMap model, final HttpServletRequest request,@RequestParam("petId") int petId) {
+	public String showMyDiagnosisList(final ModelMap model, final HttpServletRequest request, @RequestParam("petId") final int petId) {
 		Collection<Diagnosis> myDiagnosis = this.diagnosisService.findMyDiagnosis(petId);
 		model.addAttribute("diagnosis", myDiagnosis);
 		return "vets/diagnosisList";
