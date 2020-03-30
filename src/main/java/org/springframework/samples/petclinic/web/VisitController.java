@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,23 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.web;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Pet;
+import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.VetService;
+import org.springframework.samples.petclinic.service.VisitService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-
-/**
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+ /*
  * @author Juergen Hoeller
  * @author Ken Krebs
  * @author Arjen Poutsma
@@ -37,16 +47,24 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 public class VisitController {
-
+	
+	@Autowired
 	private final PetService petService;
+	
+	@Autowired
+	private VisitService visitService;
+	
+	@Autowired
+	private VetService vetService;
+
 
 	@Autowired
-	public VisitController(PetService petService) {
+	public VisitController(final PetService petService) {
 		this.petService = petService;
 	}
 
 	@InitBinder
-	public void setAllowedFields(WebDataBinder dataBinder) {
+	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
 
@@ -59,7 +77,7 @@ public class VisitController {
 	 * @return Pet
 	 */
 	@ModelAttribute("visit")
-	public Visit loadPetWithVisit(@PathVariable("petId") int petId) {
+	public Visit loadPetWithVisit(@PathVariable("petId") final int petId) {
 		Pet pet = this.petService.findPetById(petId);
 		Visit visit = new Visit();
 		pet.addVisit(visit);
@@ -67,27 +85,43 @@ public class VisitController {
 	}
 
 	// Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is called
-	@GetMapping(value = "/owners/*/pets/{petId}/visits/new")
-	public String initNewVisitForm(@PathVariable("petId") int petId, Map<String, Object> model) {
+	@GetMapping(value = "/owner/pets/{petId}/visits/new")
+	public String initNewVisitForm(@PathVariable("petId") final int petId, final Map<String, Object> model) {
+		Collection<Vet> vets = this.vetService.findVets();
+		model.put("allVets", vets);
 		return "pets/createOrUpdateVisitForm";
 	}
 
 	// Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is called
-	@PostMapping(value = "/owners/{ownerId}/pets/{petId}/visits/new")
-	public String processNewVisitForm(@Valid Visit visit, BindingResult result) {
+	@PostMapping(value = "/owner/pets/{petId}/visits/new")
+	public String processNewVisitForm(@Valid final Visit visit, final BindingResult result,@RequestParam("vetId") int vetId) {
+		
+		
 		if (result.hasErrors()) {
 			return "pets/createOrUpdateVisitForm";
-		}
-		else {
+		} else {
+			Vet v = this.vetService.findVetById(vetId);
+			visit.setVet(v);
 			this.petService.saveVisit(visit);
-			return "redirect:/owners/{ownerId}";
+			return "redirect:/owner/pets";
 		}
 	}
 
 	@GetMapping(value = "/owners/*/pets/{petId}/visits")
-	public String showVisits(@PathVariable int petId, Map<String, Object> model) {
+	public String showVisits(@PathVariable final int petId, final Map<String, Object> model) {
 		model.put("visits", this.petService.findPetById(petId).getVisits());
 		return "visitList";
+	}
+
+
+
+
+	@GetMapping(value="/visits")
+	public String listadoVisitas(final ModelMap model) {
+		String vista = "visits/listadoVisitas";
+		Iterable<Visit> visits = this.visitService.visitFind();
+		model.addAttribute("visits", visits);
+		return vista;
 	}
 
 }

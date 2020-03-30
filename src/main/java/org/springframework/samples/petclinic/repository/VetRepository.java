@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,12 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Diagnosis;
+import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
+import org.springframework.samples.petclinic.model.Visit;
 
 /**
  * Repository class for <code>Vet</code> domain objects All method names are compliant
@@ -35,8 +40,25 @@ public interface VetRepository {
 
 	/**
 	 * Retrieve all <code>Vet</code>s from the data store.
+	 *
 	 * @return a <code>Collection</code> of <code>Vet</code>s
 	 */
 	Collection<Vet> findAll() throws DataAccessException;
+
+	void save(Vet vet) throws DataAccessException;
+
+	List<Specialty> findSpecialties() throws DataAccessException;
+
+	List<Visit> findVisits(String userName) throws DataAccessException;
+
+	void save(List<Specialty> specialties) throws DataAccessException;
+
+	void saveVetSpecialty(int idVet, int idSpecialty) throws DataAccessException;
+
+	Vet findById(int id) throws DataAccessException;
+
+	Vet findVetByUserName(String username);
+
+	List<Diagnosis> findDiagnosis(String userName) throws DataAccessException;
 
 }

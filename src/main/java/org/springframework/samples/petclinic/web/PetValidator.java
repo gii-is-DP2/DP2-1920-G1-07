@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.web;
+
+import java.time.LocalDate;
 
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.util.StringUtils;
@@ -34,23 +37,29 @@ public class PetValidator implements Validator {
 
 	private static final String REQUIRED = "required";
 
+
 	@Override
-	public void validate(Object obj, Errors errors) {
+	public void validate(final Object obj, final Errors errors) {
 		Pet pet = (Pet) obj;
 		String name = pet.getName();
 		// name validation
-		if (!StringUtils.hasLength(name) || name.length()>50 || name.length()<3) {
-			errors.rejectValue("name", REQUIRED+" and between 3 and 50 characters", REQUIRED+" and between 3 and 50 character");
+		if (!StringUtils.hasLength(name) || name.length() > 50 || name.length() < 3) {
+			errors.rejectValue("name", PetValidator.REQUIRED + " and between 3 and 50 characters", PetValidator.REQUIRED + " and between 3 and 50 character");
 		}
 
 		// type validation
 		if (pet.isNew() && pet.getType() == null) {
-			errors.rejectValue("type", REQUIRED, REQUIRED);
+			errors.rejectValue("type", PetValidator.REQUIRED, PetValidator.REQUIRED);
 		}
 
 		// birth date validation
 		if (pet.getBirthDate() == null) {
-			errors.rejectValue("birthDate", REQUIRED, REQUIRED);
+			errors.rejectValue("birthDate", PetValidator.REQUIRED, PetValidator.REQUIRED);
+		} else {
+
+			if (pet.getBirthDate().isAfter(LocalDate.now())) {
+				errors.rejectValue("birthDate", "La fecha no puede ser futuro", "La fecha no puede ser futuro");
+			}
 		}
 	}
 
@@ -58,7 +67,7 @@ public class PetValidator implements Validator {
 	 * This Validator validates *just* Pet instances
 	 */
 	@Override
-	public boolean supports(Class<?> clazz) {
+	public boolean supports(final Class<?> clazz) {
 		return Pet.class.isAssignableFrom(clazz);
 	}
 

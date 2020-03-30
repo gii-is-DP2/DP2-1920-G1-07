@@ -37,9 +37,11 @@
                     <c:choose>
                         <c:when test="${pet['new']}">
                             <button class="btn btn-default" type="submit">Add Pet</button>
+                        	<input class="btn btn-default" type="button" onclick="history.back()" name="volver atrás" value="Return">
                         </c:when>
                         <c:otherwise>
                             <button class="btn btn-default" type="submit">Update Pet</button>
+                            <input class="btn btn-default" type="button" onclick="history.back()" name="volver atrás" value="Return">
                         </c:otherwise>
                     </c:choose>
                 </div>

@@ -5,7 +5,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
 <%@ attribute name="name" required="true" rtexprvalue="true"
-	description="Name of the active menu: home, owners, vets or error"%>
+	description="Name of the active menu: home, owners, vets, causes or error"%>
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
@@ -28,24 +28,65 @@
 					<span>Home</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
-					title="find owners">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Find owners</span>
+        		<sec:authorize access="hasAnyAuthority('admin', 'owner','sitter')">
+				<petclinic:menuItem active="${name eq 'room'}" url="/rooms"
+					title="room">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Rooms</span>
+        		</petclinic:menuItem>
+				</sec:authorize>
+				<sec:authorize access="hasAnyAuthority('veterinarian')">
+				<petclinic:menuItem active="${name eq 'vets'}" url="/vets/mySpace"
+					title="veterinarians">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>My Space</span>
+				</petclinic:menuItem>
+				</sec:authorize>
+		<%-- 		<sec:authorize access="hasAnyAuthority('owner')">
+				 <petclinic:menuItem active="${name eq 'owners'}" url="/owners/profile"
+					title="My profile">
+					<span class="glyphicon glyphicon-visits-list" aria-hidden="true"></span>
+					<span>My profile</span>
+				</petclinic:menuItem> 
+				</sec:authorize>
+				 --%>
+
+				<sec:authorize access="hasAnyAuthority('owner')">
+				<petclinic:menuItem url="/owner/pets" active="${name eq 'Pets'}" title="My pets">
+					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+					<span>My pets</span>
+				</petclinic:menuItem>
+				
+				<petclinic:menuItem active="${name eq 'cause'}" url="/cause"
+					title="causes">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Causes</span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'vets'}" url="/vets"
-					title="veterinarians">
+				</sec:authorize>
+				<sec:authorize access="hasAnyAuthority('owner')">
+				<petclinic:menuItem url="/request/new" active="${name eq 'Sitter'}" title="Send Request">
+					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+					<span>Become sitter</span>
+				</petclinic:menuItem>
+				</sec:authorize>
+				
+				<sec:authorize access="hasAnyAuthority('admin')">
+				<petclinic:menuItem url="/admin/request" active="${name eq 'Requests'}" title="List of request">
+					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+					<span>List of request</span>
+				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'cause'}" url="/cause"
+					title="causes">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>Causes</span>
+				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'vet'}" url="/vets/admin"
+					title="newVet">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span>Veterinarians</span>
 				</petclinic:menuItem>
-
-				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
-					title="trigger a RuntimeException to see how it is handled">
-					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-					<span>Error</span>
-				</petclinic:menuItem>
-
+				</sec:authorize>
 			</ul>
 
 
@@ -58,7 +99,7 @@
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
@@ -84,6 +125,7 @@
 								</div>
 							</li>
 							<li class="divider"></li>
+							
 <!-- 							
                             <li> 
 								<div class="navbar-login navbar-login-session">
