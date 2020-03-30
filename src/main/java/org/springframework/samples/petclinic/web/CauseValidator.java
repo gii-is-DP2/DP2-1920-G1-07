@@ -48,7 +48,7 @@ public class CauseValidator implements Validator {
 	 * This Validator validates *just* Pet instances
 	 */
 	@Override
-	public boolean supports(final Class<?> clazz) {
+	public boolean supports(Class<?> clazz) {
 		return Cause.class.isAssignableFrom(clazz);
 	}
 

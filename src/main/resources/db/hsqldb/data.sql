@@ -86,7 +86,14 @@ INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (10, 'Mulligan', '2
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (11, 'Freddy', '2010-03-09', 5, 9);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (12, 'Lucky', '2010-06-24', 2, 10);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (13, 'Sly', '2012-06-08', 1, 10);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (14, 'Lena', '2017-05-11', 2, 13);
+
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (18, 'Lena', '2017-05-11', 2, 13);
+
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (14, 'Pet Cat', '2012-06-08', 1, 11);
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (15, 'Pet Snake', '2018-07-08', 4, 11);
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (16, 'Pet Dog', '2017-06-18', 2, 12);
+INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (17, 'Pet Bird', '2012-06-28', 5, 12);
+
 
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (1, 7, '2013-01-01', 'rabies shot');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02', 'rabies shot');
@@ -105,4 +112,11 @@ INSERT INTO donation VALUES (1, 'true',5000.0,NULL,3,'admin1');
 INSERT INTO donation VALUES (2, 'false',2000.0,NULL,3,'admin1');
 INSERT INTO donation VALUES (3, 'true',1000.0,NULL,3,'admin1');
 
+
 INSERT INTO diagnosis(id, description, date, vet_id, pet_id, visit_id) VALUES (1, 'Todo bien', '2013-01-10', 7, 14, 5)
+
+INSERT INTO reservation VALUES (1,'2020-05-12','2020-06-20','15',11,1,1);
+INSERT INTO reservation VALUES (2,'2020-05-20','2020-06-22','16',12,2,2);
+INSERT INTO reservation VALUES (3,'2020-05-22','2020-06-20','14',11,3,1);
+INSERT INTO reservation VALUES (4,'2020-05-02','2020-06-22','17',12,4,3);
+

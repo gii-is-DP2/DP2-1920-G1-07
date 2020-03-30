@@ -100,6 +100,7 @@ class VetControllerTests {
 		.andExpect(view().name("vets/createVet"));
 	}
 
+
 		@WithMockUser(value = "spring")
 		@Test
 		void testProcessCreationFormSuccess() throws Exception {
@@ -134,6 +135,7 @@ class VetControllerTests {
 			.andExpect(model().attribute("vet", hasProperty("firstName", is("James"))))
 			.andExpect(model().attribute("vet", hasProperty("specialties")))
 			.andExpect(view().name("vets/visitList"));
+
 	}
 	
 

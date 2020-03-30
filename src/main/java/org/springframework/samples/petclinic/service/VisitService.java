@@ -19,8 +19,9 @@ public class VisitService {
 		return this.visitRepo.findAll();
 	}
 
-	public Visit findById(final int visitId) {
-		// TODO Auto-generated method stub
-		return this.visitRepo.findById(visitId);
+	
+	public Visit findVisitById(int idVisit) {
+		return this.visitRepo.findById(idVisit);
+
 	}
 }
