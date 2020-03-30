@@ -32,7 +32,6 @@
                 </td>
                 <td>
                         <c:out value="${room.type} "/>
-                    <c:if test="${room.type == null}">none</c:if>
                 </td>
             </tr>
         </c:forEach>

@@ -82,7 +82,9 @@ class OwnerControllerTests {
 	@WithMockUser(value = "spring")
         @Test
 	void testProcessCreationFormSuccess() throws Exception {
-		mockMvc.perform(post("/owners/new").param("firstName", "Joe").param("lastName", "Bloggs")
+		mockMvc.perform(post("/owners/new")
+							.param("firstName", "Joe")
+							.param("lastName", "Bloggs")
 							.with(csrf())
 							.param("address", "123 Caramel Street")
 							.param("city", "London")
