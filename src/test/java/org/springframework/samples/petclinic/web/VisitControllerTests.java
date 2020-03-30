@@ -120,7 +120,7 @@ class VisitControllerTests {
 		visit.setVet(vet);
 
 		BDDMockito.given(this.clinicService.findPetById(VisitControllerTests.TEST_PET_ID)).willReturn(this.pet);
-		BDDMockito.given(this.visitService.findVisitById(VisitControllerTests.TEST_VISIT_ID)).willReturn(this.visit);
+		BDDMockito.given(this.visitService.findById(VisitControllerTests.TEST_VISIT_ID)).willReturn(this.visit);
 
 	}
 
