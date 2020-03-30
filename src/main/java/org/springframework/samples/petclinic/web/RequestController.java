@@ -66,13 +66,18 @@ public class RequestController {
 
 	@PostMapping(value = "/request/new")
 	public String processCreationForm(final HttpServletRequest request, @Valid final Request requestEntity, final BindingResult result, final ModelMap model) {
+		if (requestEntity.getType() == null) {
+			result.rejectValue("type", "type", "Required");
+		}
 		Principal principal = request.getUserPrincipal();
 		User user = this.userService.findUserByUserName(principal.getName());
 		if (result.hasErrors()) {
 			return RequestController.VIEWS_REQUEST_CREATE_FORM;
 		} else {
-			if (this.requestService.findRequestByUser(user.getUsername()) != null) {
-				result.rejectValue("address", "duplicate", "You already sent a request");
+			Request r = this.requestService.findRequestByUser(user.getUsername());
+			if (r != null) {
+
+				result.rejectValue("address", "address", "You already sent a request");
 				return RequestController.VIEWS_REQUEST_CREATE_FORM;
 			} else {
 				requestEntity.setUser(user);
