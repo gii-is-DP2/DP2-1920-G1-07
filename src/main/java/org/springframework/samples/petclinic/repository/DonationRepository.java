@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Cause;
 import org.springframework.samples.petclinic.model.Donation;
 
 public interface DonationRepository {
@@ -20,4 +21,5 @@ public interface DonationRepository {
 	
 	Collection<Donation> findMyDonations(String username) throws DataAccessException;
 	
+	Donation findDonationById(int id) throws DataAccessException;
 }
