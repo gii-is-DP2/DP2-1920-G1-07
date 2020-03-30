@@ -49,13 +49,19 @@ public class DiagnosisController {
 
 	@PostMapping(value = "/vet/{vetId}/diagnosis")
 	public String processCreateDiagnosis(@Valid final Diagnosis diagnosis, final BindingResult result, final ModelMap model, @PathVariable("vetId") final int vetId, @RequestParam("visitId") final int visitId) {
+		if (diagnosis.getDate() == null) {
+			result.rejectValue("date", "Date must not be null");
+		}
+
 		if (result.hasErrors()) {
 			model.put("message", "Diagnosis not created");
 			model.put("diagnosis", diagnosis);
 			return DiagnosisController.VIEWS_DIAGNOSIS_CREATE_FORM;
 		} else {
 			Vet v = this.vetService.findVetById(vetId);
-			Visit visit = this.visitService.findVisitById(visitId);
+
+			Visit visit = this.visitService.findById(visitId);
+
 			diagnosis.setVet(v);
 			diagnosis.setVisit(visit);
 			diagnosis.setPet(visit.getPet());
