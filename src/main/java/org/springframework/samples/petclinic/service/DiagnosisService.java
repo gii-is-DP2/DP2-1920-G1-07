@@ -22,17 +22,22 @@ public class DiagnosisService {
 		this.diagnosisRepository = diagnosisRepository;
 	}
 
+	//	@Transactional
+	//	public Collection<Diagnosis> allDiagnosis() throws DataAccessException {
+	//		return this.diagnosisRepository.findAll();
+	//	}
+
 	@Transactional
 	public void saveDiagnosis(final Diagnosis diagnosis) throws DataAccessException {
 		this.diagnosisRepository.save(diagnosis);
 
 	}
-	
+
 	@Transactional
-	public Collection<Diagnosis> findDiagnosis() {
+	public Collection<Diagnosis> findDiagnosis() throws DataAccessException {
 		return this.diagnosisRepository.findDiagnosis();
 	}
-	
+
 	@Transactional
 	public Collection<Diagnosis> findMyDiagnosis(final int petId) {
 		return this.diagnosisRepository.findMyDiagnosis(petId);

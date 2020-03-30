@@ -19,4 +19,5 @@ public interface SpringDataDiagnosisRepository extends DiagnosisRepository, Repo
 	@Override
 	@Query("select d from Diagnosis d where d.pet.id LIKE :petId")
 	Collection<Diagnosis> findMyDiagnosis(@Param(value = "petId") int petId) throws DataAccessException;
+
 }

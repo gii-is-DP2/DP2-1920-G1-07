@@ -1,3 +1,4 @@
+
 package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDate;
@@ -38,6 +39,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @WebMvcTest(controllers = VisitController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class VisitControllerTests {
 
+
 	private static final int TEST_PET_ID = 1;
 	private static final int TEST_VISIT_ID = 1;
 	private static final int TEST_VET_ID = 1;
@@ -47,8 +49,9 @@ class VisitControllerTests {
 //	@Autowired
 //	private VisitController visitController;
 
+
 	@MockBean
-	private PetService clinicService;
+	private PetService			clinicService;
 
 	@MockBean
 	private VisitService visitService;
@@ -60,7 +63,8 @@ class VisitControllerTests {
 	private VetService vetService;
 
 	@Autowired
-	private MockMvc mockMvc;
+	private MockMvc				mockMvc;
+
 
 	private Visit visit;
 
