@@ -29,6 +29,10 @@ public class CauseService {
 		this.causeRepository.save(cause);
 	}
 
+	public Collection<Cause> findAllCauses() throws DataAccessException {
+		return this.causeRepository.findAllCauses();
+	}
+
 	@Transactional
 	public Collection<Cause> findAcceptedCauses() throws DataAccessException {
 		return this.causeRepository.findAcceptedCauses();

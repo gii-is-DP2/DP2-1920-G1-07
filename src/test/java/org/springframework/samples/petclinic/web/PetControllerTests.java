@@ -1,8 +1,4 @@
 
-
-package org.springframework.samples.petclinic.web;
-
-
 package org.springframework.samples.petclinic.web;
 
 import org.assertj.core.util.Lists;

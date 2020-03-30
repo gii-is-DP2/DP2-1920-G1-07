@@ -11,7 +11,6 @@ public class CauseValidator implements Validator {
 
 	@Override
 	public void validate(final Object obj, final Errors errors) {
-		//title, description, money,
 		Cause cause = (Cause) obj;
 		String title = cause.getTitle();
 		String description = cause.getDescription();

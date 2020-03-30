@@ -21,6 +21,7 @@ import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.PetService;
+
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.samples.petclinic.service.VisitService;
@@ -62,9 +63,9 @@ class VisitControllerTests {
 	@MockBean
 	private VetService vetService;
 
+
 	@Autowired
 	private MockMvc				mockMvc;
-
 
 	private Visit visit;
 
@@ -154,4 +155,5 @@ class VisitControllerTests {
 				.andExpect(MockMvcResultMatchers.view().name("pets/createOrUpdateVisitForm"));
 
 	}
+
 }
