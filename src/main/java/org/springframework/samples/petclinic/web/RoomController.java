@@ -14,6 +14,7 @@ import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.samples.petclinic.model.Authorities;
+import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Reservation;
@@ -169,7 +170,6 @@ public class RoomController {
 		model.addAttribute("notHaveReservations", numReservationsAccepted==0);
 		}
 		//Para mostrar las reservas de cada usuario por cada habitacion, siempre y cuando no sea admin, ya que el admin las ve todas.
-		String  p = request.getUserPrincipal().getName();
 		if(!request.getUserPrincipal().getName().equals("admin1") && !request.getUserPrincipal().getName().equals("spring")) {
 		Principal principal = request.getUserPrincipal();
 		int ownerId = this.ownerService.findOwnerByUserName(principal.getName()).getId();
