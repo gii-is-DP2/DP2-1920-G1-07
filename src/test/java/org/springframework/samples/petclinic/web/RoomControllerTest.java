@@ -49,9 +49,11 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 class RoomControllerTest {
 	
 	public static final int TEST_ROOM_ID = 1;
-	public static final int TEST_OWNER_ID = 1;
+	public static final int TEST_OWNER_ID = 2;
+	private static final int TEST_SPRING_ID = 1;
 	public static final int TEST_ROOM_WITHRESERVATION_ID = 2;
 	public static final int TEST_RESERVATION_ID = 1;
+	
 	
 	@Autowired
 	private RoomController roomController;
@@ -88,14 +90,28 @@ class RoomControllerTest {
 		user.setPassword("password");
 		user.setEnabled(true);
 		
+		Owner spring = new Owner();
+		spring.setId(TEST_SPRING_ID);
+		spring.setFirstName("spring");
+		spring.setCity("Ejemplo");
+		spring.setAddress("C/Ejemplo");
+		spring.setLastName("spring");
+		spring.setTelephone("671262689");
+		spring.setUser(user);
+		
+		User userOwner = new User();
+		userOwner.setUsername("owner");
+		userOwner.setPassword("password");
+		userOwner.setEnabled(true);
+		
 		Owner owner = new Owner();
-		owner.setId(1);
+		owner.setId(TEST_OWNER_ID);
 		owner.setFirstName("spring");
 		owner.setCity("Ejemplo");
 		owner.setAddress("C/Ejemplo");
 		owner.setLastName("spring");
 		owner.setTelephone("671262689");
-		owner.setUser(user);
+		owner.setUser(userOwner);
 		
 		Status status = new Status();
 		status.setId(1);
@@ -124,9 +140,10 @@ class RoomControllerTest {
 		room.setReservations(reservationsEmpty);
 		room2.setReservations(reservations);
 		
-
+		
 		BDDMockito.given(this.reservationService.findReservationsById(TEST_RESERVATION_ID)).willReturn(res);
-		BDDMockito.given(this.ownerService.findOwnerById(TEST_OWNER_ID)).willReturn(owner);
+		BDDMockito.given(this.ownerService.findOwnerById(TEST_SPRING_ID)).willReturn(spring);
+		BDDMockito.given(this.ownerService.findOwnerByUserName("owner")).willReturn(owner);
 		BDDMockito.given(this.petService.findPetTypes()).willReturn(Lists.newArrayList(dogType));
 		BDDMockito.given(this.roomService.findRoomById(TEST_ROOM_ID)).willReturn(room);
 		BDDMockito.given(this.roomService.findRoomById(TEST_ROOM_WITHRESERVATION_ID)).willReturn(room2);
@@ -178,10 +195,10 @@ class RoomControllerTest {
 		mockMvc.perform(post("/rooms/new")
 				.with(csrf())
 				.param("id", "1")
-				.param("name","Bad Room")
-				.param("capacity", "3"))
+				.param("name","Bad Room"))
 		.andExpect(status().isOk())
 		.andExpect(model().attributeDoesNotExist("type"))
+		.andExpect(model().attributeHasFieldErrors("room", "capacity","type"))
 		.andExpect(view().name("rooms/createOrUpdateRoomForm"));
 	}
 	
@@ -222,6 +239,20 @@ class RoomControllerTest {
 	
 	@WithMockUser(value = "spring")
 	@Test
+	void testProcessUpdateRoomFormHasErrorsOnCapacityNull() throws Exception {
+		mockMvc.perform(post("/rooms/{roomId}/edit",TEST_ROOM_ID)
+						.with(csrf())
+						.param("name", "Failed Room")
+						.param("type", "dog")
+						.param("capacity","0"))
+			   .andExpect(status().isOk())
+			   .andExpect(model().attributeHasErrors("room"))
+			   .andExpect(model().attributeHasFieldErrors("room","capacity"))
+			   .andExpect(view().name("/rooms/createOrUpdateRoomForm"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
 	void testShowRoomsWithouthReservations() throws Exception { 
 		mockMvc.perform(get("/rooms/{roomId}",TEST_ROOM_ID))
 			.andExpect(status().isOk())
@@ -243,10 +274,31 @@ class RoomControllerTest {
 			   .andExpect(view().name("rooms/roomDetails"));
 	}
 	
+	@WithMockUser(value="owner")
+	@Test
+	void testShowRoomsWithReservationsAndOwner() throws Exception { 
+		mockMvc.perform(get("/rooms/{roomId}",TEST_ROOM_WITHRESERVATION_ID))
+			   .andExpect(status().isOk())
+			   .andExpect(model().attribute("room", hasProperty("name", is("Room with Reser"))))
+			   .andExpect(model().attribute("room", hasProperty("capacity",is(3))))
+			   .andExpect(model().attribute("room", hasProperty("type")))
+			   .andExpect(model().attribute("room", hasProperty("reservations")))
+			   .andExpect(model().attributeExists("myReservations"))
+			   .andExpect(view().name("rooms/roomDetails"));
+	}
+	
+	
 	@WithMockUser(value="spring")
 	@Test
 	void testProcessDeleteRoom() throws Exception {
 		mockMvc.perform(get("/rooms/delete/{roomId}",TEST_ROOM_ID))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/rooms/"));
+	}
+	@WithMockUser(value="spring")
+	@Test
+	void testProcessDeleteRoomWithResercations() throws Exception {
+		mockMvc.perform(get("/rooms/delete/{roomId}",TEST_ROOM_WITHRESERVATION_ID))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/rooms/"));
 	}
