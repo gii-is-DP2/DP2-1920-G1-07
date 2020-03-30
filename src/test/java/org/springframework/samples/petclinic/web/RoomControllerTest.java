@@ -195,10 +195,10 @@ class RoomControllerTest {
 		mockMvc.perform(post("/rooms/new")
 				.with(csrf())
 				.param("id", "1")
-				.param("name","Bad Room")
-				.param("capacity", "3"))
+				.param("name","Bad Room"))
 		.andExpect(status().isOk())
 		.andExpect(model().attributeDoesNotExist("type"))
+		.andExpect(model().attributeHasFieldErrors("room", "capacity","type"))
 		.andExpect(view().name("rooms/createOrUpdateRoomForm"));
 	}
 	
@@ -231,6 +231,20 @@ class RoomControllerTest {
 						.with(csrf())
 						.param("name", "Failed Room")
 						.param("type", "dog"))
+			   .andExpect(status().isOk())
+			   .andExpect(model().attributeHasErrors("room"))
+			   .andExpect(model().attributeHasFieldErrors("room","capacity"))
+			   .andExpect(view().name("/rooms/createOrUpdateRoomForm"));
+	}
+	
+	@WithMockUser(value = "spring")
+	@Test
+	void testProcessUpdateRoomFormHasErrorsOnCapacityNull() throws Exception {
+		mockMvc.perform(post("/rooms/{roomId}/edit",TEST_ROOM_ID)
+						.with(csrf())
+						.param("name", "Failed Room")
+						.param("type", "dog")
+						.param("capacity","0"))
 			   .andExpect(status().isOk())
 			   .andExpect(model().attributeHasErrors("room"))
 			   .andExpect(model().attributeHasFieldErrors("room","capacity"))
@@ -278,6 +292,13 @@ class RoomControllerTest {
 	@Test
 	void testProcessDeleteRoom() throws Exception {
 		mockMvc.perform(get("/rooms/delete/{roomId}",TEST_ROOM_ID))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/rooms/"));
+	}
+	@WithMockUser(value="spring")
+	@Test
+	void testProcessDeleteRoomWithResercations() throws Exception {
+		mockMvc.perform(get("/rooms/delete/{roomId}",TEST_ROOM_WITHRESERVATION_ID))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/rooms/"));
 	}
