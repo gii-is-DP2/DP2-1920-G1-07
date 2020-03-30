@@ -2,7 +2,6 @@
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.Collection;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
@@ -18,6 +17,6 @@ public interface SpringDataRoomRepository extends RoomRepository, Repository<Roo
 
 	@Override
 	@Query("SELECT r from Room r where r.id =:roomId")
-	Optional<Room> findById(@Param("roomId") int roomId);
+	Room findById(@Param("roomId") int roomId);
 
 }

@@ -95,7 +95,7 @@ class DiagnosisControllerTests {
 		d.setPet(v.getPet());
 		
 		BDDMockito.given(this.vetService.findVetById(TEST_VET_ID)).willReturn(james);
-		BDDMockito.given(this.visitService.findById(TEST_VISIT_ID)).willReturn(v);
+		BDDMockito.given(this.visitService.findVisitById(TEST_VISIT_ID)).willReturn(v);
 		BDDMockito.given(this.clinicService.findMyDiagnosis(TEST_PET_ID)).willReturn(Lists.newArrayList(d));
 
 	}

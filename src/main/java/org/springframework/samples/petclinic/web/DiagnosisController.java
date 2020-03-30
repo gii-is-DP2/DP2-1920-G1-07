@@ -55,7 +55,7 @@ public class DiagnosisController {
 			return DiagnosisController.VIEWS_DIAGNOSIS_CREATE_FORM;
 		} else {
 			Vet v = this.vetService.findVetById(vetId);
-			Visit visit = this.visitService.findById(visitId);
+			Visit visit = this.visitService.findVisitById(visitId);
 			diagnosis.setVet(v);
 			diagnosis.setVisit(visit);
 			diagnosis.setPet(visit.getPet());

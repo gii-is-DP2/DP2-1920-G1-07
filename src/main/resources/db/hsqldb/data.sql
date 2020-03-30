@@ -113,7 +113,7 @@ INSERT INTO donation VALUES (2, 'false',2000.0,NULL,3,'admin1');
 INSERT INTO donation VALUES (3, 'true',1000.0,NULL,3,'admin1');
 
 
-INSERT INTO diagnosis(id, description, date, vet_id, pet_id, visit_id) VALUES (1, 'Todo bien', '2013-01-10', 7, 14, 5)
+INSERT INTO diagnosis(id, description, date, vet_id, pet_id, visit_id) VALUES (1, 'Todo bien', '2013-01-10', 7, 14, 5);
 
 INSERT INTO reservation VALUES (1,'2020-05-12','2020-06-20','15',11,1,1);
 INSERT INTO reservation VALUES (2,'2020-05-20','2020-06-22','16',12,2,2);

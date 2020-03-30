@@ -18,8 +18,8 @@ public interface SpringDataReservationRepository extends ReservationRepository, 
 	List<Reservation> findByRoomId(@Param("roomId") int id);
 
 	@Override
-	@Query("SELECT r FROM Reservation r WHERE r.owner.id =:ownerId")
-	Collection<Reservation> findByOwnerId(@Param("ownerId") int ownerId);
+	@Query("SELECT r FROM Reservation r WHERE r.owner.id =:ownerId AND r.room.id =:roomId")
+	Collection<Reservation> findByOwnerId(@Param("ownerId") int ownerId, @Param("roomId") int roomId);
 
 	@Override
 	@Query("SELECT r FROM Reservation r WHERE r.id=:reservationId")
