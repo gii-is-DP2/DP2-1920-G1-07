@@ -22,5 +22,6 @@ public class VisitService {
 	public Visit findById(final int visitId) {
 		// TODO Auto-generated method stub
 		return this.visitRepo.findById(visitId);
+
 	}
 }

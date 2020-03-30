@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,34 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Owner;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.model.Diagnosis;
+import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.model.Authorities;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Integration test of the Service and the Repository layer.
@@ -76,18 +64,80 @@ import org.springframework.transaction.annotation.Transactional;
 class VetServiceTests {
 
 	@Autowired
-	protected VetService vetService;	
+	protected VetService vetService;
+
 
 	@Test
 	void shouldFindVets() {
 		Collection<Vet> vets = this.vetService.findVets();
 
 		Vet vet = EntityUtils.getById(vets, Vet.class, 3);
-		assertThat(vet.getLastName()).isEqualTo("Douglas");
-		assertThat(vet.getNrOfSpecialties()).isEqualTo(2);
-		assertThat(vet.getSpecialties().get(0).getName()).isEqualTo("dentistry");
-		assertThat(vet.getSpecialties().get(1).getName()).isEqualTo("surgery");
+		Assertions.assertThat(vet.getLastName()).isEqualTo("Douglas");
+		Assertions.assertThat(vet.getNrOfSpecialties()).isEqualTo(2);
+		Assertions.assertThat(vet.getSpecialties().get(0).getName()).isEqualTo("dentistry");
+		Assertions.assertThat(vet.getSpecialties().get(1).getName()).isEqualTo("surgery");
 	}
 
+	@Test
+	void shouldFindVisits() {
+		Collection<Visit> v = this.vetService.findVisits("pablo");
+		Assertions.assertThat(v == null).isFalse();
+	}
+
+	@Test
+	void shouldFindVetByUserNamePositive() {
+		Vet v = this.vetService.findVetByUserName("vet2");
+		Assertions.assertThat(v.getFirstName()).isEqualTo("Vet2");
+		Assertions.assertThat(v.getLastName()).isEqualTo("vet2");
+	}
+
+	@Test
+	void shouldFindVetByUserNameNegative() {
+		Vet v = this.vetService.findVetByUserName("vet2");
+		Assertions.assertThat(v.getFirstName()).isNotEqualTo("Vet5");
+		Assertions.assertThat(v.getLastName()).isNotEqualTo("vet5");
+	}
+
+	@Test
+	void shouldFindSpecialtiesByIdPositive() {
+		Specialty s = this.vetService.findSpecialiesById(1);
+		Assertions.assertThat(s.getName()).isEqualTo("radiology");
+	}
+
+	@Test
+	void shouldFindSpecialtiesByIdNegative() {
+		Specialty s = this.vetService.findSpecialiesById(1);
+		Assertions.assertThat(s.getName()).isNotEqualTo("surgery");
+	}
+
+	@Test
+	void shouldFindDiagnosisByUserNamePositive() {
+		Collection<Diagnosis> d = this.vetService.findDiagnosis("pablo");
+		Assertions.assertThat(d == null).isFalse();
+		Assertions.assertThat(d.size()).isNotEqualTo(5);
+	}
+
+	@Test
+	void shouldFindVetByIdPositive() {
+		Vet v = this.vetService.findVetById(7);
+		Assertions.assertThat(v.getFirstName()).isEqualTo("Vet2");
+		Assertions.assertThat(v.getLastName()).isEqualTo("vet2");
+		Assertions.assertThat(v.getNrOfSpecialties()).isEqualTo(1);
+	}
+
+	@Test
+	void shouldFindVetByIdNegative() {
+		Vet v = this.vetService.findVetById(7);
+		Assertions.assertThat(v.getFirstName()).isNotEqualTo("vet2");
+		Assertions.assertThat(v.getLastName()).isNotEqualTo("Vet2");
+		Assertions.assertThat(v.getNrOfSpecialties()).isNotEqualTo(3);
+	}
+
+	@Test
+	void shouldFindSpecialties() {
+		Collection<Specialty> s = this.vetService.findSpecialties();
+		Assertions.assertThat(s == null).isFalse();
+		Assertions.assertThat(s.size()).isNotEqualTo(5);
+	}
 
 }

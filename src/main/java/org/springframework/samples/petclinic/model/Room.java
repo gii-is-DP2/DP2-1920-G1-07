@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
@@ -25,10 +27,11 @@ import org.springframework.core.style.ToStringCreator;
 @Table(name = "room")
 public class Room extends NamedEntity {
 	
-
+	
 	@Column(name = "capacity")
 	private Integer capacity;
 	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "type_id")
 	private PetType type;
@@ -111,7 +114,8 @@ public class Room extends NamedEntity {
 	public String toString() {
 		return new ToStringCreator(this)
 				.append("id",this.id)
-				.append("capacity",this.capacity).toString();
+				.append("capacity",this.capacity)
+				.append("type",this.type).toString();
 	}
 	
 	

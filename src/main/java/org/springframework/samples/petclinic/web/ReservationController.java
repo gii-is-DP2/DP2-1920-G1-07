@@ -28,6 +28,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -40,12 +41,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ReservationController {
 
 	private final ReservationService reservationService;
-
+	
+	@Autowired
 	private final PetService petService;
 
 	private final OwnerService ownerService;
 
 	private final RoomService roomService;
+	
+	private ReservationValidator resValidator;
 	
 	@InitBinder("room")
 	public void initRoomBinder(WebDataBinder dataBinder) {
@@ -58,9 +62,14 @@ public class ReservationController {
 		dataBinder.setDisallowedFields("id");
 	}
 	
+	@InitBinder
+	public void setAllowedFields(final WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id");
+	}
+	
 	@InitBinder("reservation")
-	public void initPetBinder(WebDataBinder dataBinder) {
-		dataBinder.setValidator(new ReservationValidator());
+	public void initReservationBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(resValidator);
 	}
 
 	@Autowired
@@ -94,7 +103,7 @@ public class ReservationController {
 		Collection<Status> s = this.reservationService.findAllStatus();
 		model.addAttribute("status", s);
 		model.addAttribute("statusPending", this.reservationService.findPendingStatus());
-		return "reservations/createOrUpdateReservationForm";
+		return "reservations/createReservationForm";
 	}
 	
 //	public Boolean validaciones(Optional<Room> r,Optional<Pet> p,LocalDate d,BindingResult result) {
@@ -118,43 +127,39 @@ public class ReservationController {
 	@PostMapping(value = "/rooms/{roomId}/reservations/new")
 	public String processNewResevationForm(@PathVariable("roomId") int roomId, @Valid Reservation reservation,
 			BindingResult result, HttpServletRequest request, Model model) {
-		
 		model.addAttribute("statusPending", this.reservationService.findPendingStatus());
 		if(reservation.getPet() == null) {
-			return "reservations/createOrUpdateReservationForm";
+			result.rejectValue("pet", "This field is required");
+			return "reservations/createReservationForm";
 		}else {
-		if(result.hasErrors()) {
-			return "reservations/createOrUpdateReservationForm";
-		}
-		// Si el pet no es nulo entonces realizamos lo siguiente.
-		Pet p = this.petService.findPetById(Integer.parseInt(reservation.getPet()));
-		Room r = this.roomService.findRoomById(roomId).get();
-		if(r.getType() != p.getType()) {
-			FieldError petTypeError = new FieldError("reservation","pet", "This room cannot accommodate "+p.getType().getName().toUpperCase()+"S, it can only accommodate "+r.getType().getName().toUpperCase()+"S.");
-			result.addError(petTypeError);
-			return "reservations/createOrUpdateReservationForm";
-		}else {
-			
+			int petId = Integer.parseInt(reservation.getPet()); 
 			Owner o = this.findOwner(request);
-			reservation.setStatus(this.reservationService.findPendingStatus());
-			reservation.setOwner(o);
+			Pet p = this.petService.findPetById(petId);
+			Room r = this.roomService.findRoomById(roomId);
 			reservation.setRoom(r);
-			reservation.setPet(p.getName());
+			reservation.setOwner(o);
+			ReservationValidator reservationValidator = new ReservationValidator(this.petService);
+			reservationValidator.validate(reservation, result);
+			if(result.hasErrors()) {
+				return "reservations/createReservationForm";
+			}else {
+				reservation.setPet(p.getName());
 			// Restricciones
-			this.reservationService.saveReservation(reservation);
-			return "redirect:/rooms/{roomId}";
-		}
+				this.reservationService.saveReservation(reservation);
+				return "redirect:/rooms/{roomId}";
+			}
 		}
 	}
 	@GetMapping(value = "/rooms/{roomId}/{ownerId}/reservation/{reservationId}/edit")
 	public String processInitUpdateForm(@PathVariable("roomId") int roomId, @PathVariable("ownerId") int ownerId,
 			@PathVariable("reservationId") int reservationId, Model model) {
-		
-		Room r = this.roomService.findRoomById(roomId).get();
+		Boolean completedRoom = false;
+		Room r = this.roomService.findRoomById(roomId);
+		if(r.getReservations()!= null) {
 		Integer numReservationsAccepted = (int) r.getReservations().stream().filter(x->x.getStatus().getName().equals("ACCEPTED")).count();
-		Boolean completedRoom = numReservationsAccepted == r.getCapacity();
+		completedRoom = numReservationsAccepted == r.getCapacity();
 		model.addAttribute("completedRoom", numReservationsAccepted == r.getCapacity());
-		
+		}
 		Reservation reservation = this.reservationService.findReservationsById(reservationId);
 		Collection<Status> s = this.reservationService.findAllStatus();
 		if(completedRoom) {
@@ -164,43 +169,38 @@ public class ReservationController {
 		}else {
 			model.addAttribute("status", s);
 		}
-		model.addAttribute(reservation);
-		return "reservations/createOrUpdateReservationForm";
+		model.addAttribute("editreservation",reservation);
+		return "reservations/updateReservationForm";
 	}
 
 	@PostMapping(value = "/rooms/{roomId}/{ownerId}/reservation/{reservationId}/edit")
-	public String processUpdateRoom(@Valid Reservation reservation, @PathVariable("roomId") int roomId,@PathVariable("ownerId") int ownerId,
+	public String processUpdateReservationForm(@Valid Reservation reservation, @PathVariable("roomId") int roomId,@PathVariable("ownerId") int ownerId,
 			@PathVariable("reservationId") int reservationId,BindingResult result, ModelMap modelMap) {
-		
-		if(reservation.getPet() == null) {
-			return "reservations/createOrUpdateReservationForm";
+		Reservation captReservation = this.reservationService.findReservationsById(reservationId);
+		Pet p = this.petService.findPetById(Integer.parseInt(reservation.getPet()));
+		reservation.setRoom(this.roomService.findRoomById(roomId));
+		reservation.setOwner(this.ownerService.findOwnerById(ownerId));
+		ReservationValidator reservaValidator = new ReservationValidator(this.petService);
+		reservaValidator.validate(reservation, result);
+		if(result.hasErrors()) {
+			modelMap.addAttribute("editreservation", captReservation);
+			modelMap.addAttribute("completedRoom", false);
+			modelMap.addAttribute("status", this.reservationService.findAllStatus());
+			return "reservations/updateReservationForm";
 		}else {
-			Pet p = this.petService.findPetById(Integer.parseInt(reservation.getPet()));
-			Room r = this.roomService.findRoomById(roomId).get();
-			if(r.getType() != p.getType()) {
-				FieldError petTypeError = new FieldError("reservation","pet", "This room cannot accommodate "+p.getType().getName().toUpperCase()+"S, it can only accommodate "+r.getType().getName().toUpperCase()+"S.");
-				result.addError(petTypeError);
-				return "reservations/createOrUpdateReservationForm";
-		}else {
-			Reservation capturedReservation = this.reservationService.findReservationsById(reservationId);
-//			reservation.setId(reservationId);
-			//Mantener el Room y el Owner porque sino se pierde el id
-			capturedReservation.setRoom(this.roomService.findRoomById(roomId).get());
-			capturedReservation.setOwner(this.ownerService.findOwnerById(ownerId));
-			Status s = this.reservationService.findStatusById(reservation.getStatus().getId());
-			capturedReservation.setStatus(this.reservationService.findStatusById(s.getId()));
-			//Imprimir el nombre de la mascota en vez de el id
-			capturedReservation.setPet(p.getName());
-			
-			this.reservationService.saveReservation(capturedReservation);
+			captReservation.setRoom(this.roomService.findRoomById(roomId));
+			captReservation.setOwner(this.ownerService.findOwnerById(ownerId));
+			captReservation.setPet(p.getName());
+			this.reservationService.saveReservation(captReservation);
 			return "redirect:/rooms/{roomId}";
-		}
 		}
 		
 	}
-	
-	public Boolean fechaValida(LocalDate date) {
-		return date.isBefore(LocalDate.now());
+	@GetMapping(value = "/rooms/{roomId}/reservation/{reservationId}/delete")
+	public String processDeleteReservation(@PathVariable("roomId") int roomId, @PathVariable("reservationId") int reservationId, ModelMap model) {
+		Reservation reservation = this.reservationService.findReservationsById(reservationId);
+		this.reservationService.deleteReservation(reservation);
+		return "redirect:/rooms/{roomId}";
 	}
 
 }

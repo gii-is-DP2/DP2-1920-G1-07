@@ -54,17 +54,19 @@ public class DiagnosisController {
 		}
 
 		if (result.hasErrors()) {
-			model.addAttribute("message", "Diagnosis not created");
-			model.addAttribute("diagnosis", diagnosis);
+			model.put("message", "Diagnosis not created");
+			model.put("diagnosis", diagnosis);
 			return DiagnosisController.VIEWS_DIAGNOSIS_CREATE_FORM;
 		} else {
 			Vet v = this.vetService.findVetById(vetId);
+
 			Visit visit = this.visitService.findById(visitId);
+
 			diagnosis.setVet(v);
 			diagnosis.setVisit(visit);
 			diagnosis.setPet(visit.getPet());
 			this.diagnosisService.saveDiagnosis(diagnosis);
-			model.addAttribute("message", "Diagnosis succesfully created");
+			model.put("message", "Diagnosis succesfully created");
 		}
 		return "redirect:/vets/mySpace/";
 	}
@@ -72,7 +74,7 @@ public class DiagnosisController {
 	@GetMapping(path = "/diagnosis/myDiagnosis")
 	public String showMyDiagnosisList(final ModelMap model, final HttpServletRequest request, @RequestParam("petId") final int petId) {
 		Collection<Diagnosis> myDiagnosis = this.diagnosisService.findMyDiagnosis(petId);
-		model.addAttribute("diagnosis", myDiagnosis);
+		model.put("diagnosis", myDiagnosis);
 		return "vets/diagnosisList";
 	}
 

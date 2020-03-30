@@ -11,7 +11,6 @@ public class CauseValidator implements Validator {
 
 	@Override
 	public void validate(final Object obj, final Errors errors) {
-		//title, description, money,
 		Cause cause = (Cause) obj;
 		String title = cause.getTitle();
 		String description = cause.getDescription();
@@ -48,7 +47,7 @@ public class CauseValidator implements Validator {
 	 * This Validator validates *just* Pet instances
 	 */
 	@Override
-	public boolean supports(final Class<?> clazz) {
+	public boolean supports(Class<?> clazz) {
 		return Cause.class.isAssignableFrom(clazz);
 	}
 

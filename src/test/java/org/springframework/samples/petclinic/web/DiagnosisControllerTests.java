@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import org.assertj.core.util.Lists;
 import org.hamcrest.Matchers;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -22,6 +23,7 @@ import org.springframework.samples.petclinic.service.DiagnosisService;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.samples.petclinic.service.VisitService;
 import static org.hamcrest.Matchers.hasProperty;
+
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -32,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = DiagnosisController.class, 
 	excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 	excludeAutoConfiguration = SecurityConfiguration.class)
+
 class DiagnosisControllerTests {
 
 	private static final int	TEST_VET_ID			= 1;
@@ -42,10 +45,12 @@ class DiagnosisControllerTests {
 
 	private static final int	TEST_PET_ID			= 1;
 
+
 	@Autowired
 	public DiagnosisController	diagnosisController;
 
 	@MockBean
+
 	public DiagnosisService		clinicService;
 
 	@MockBean
@@ -90,6 +95,7 @@ class DiagnosisControllerTests {
 		BDDMockito.given(this.clinicService.findMyDiagnosis(DiagnosisControllerTests.TEST_PET_ID)).willReturn(Lists.newArrayList(this.d));
 
 	}
+
 
 	//test para que te lleve al formulario de creación de diagnositico
 	@WithMockUser(value = "spring")
@@ -136,5 +142,6 @@ class DiagnosisControllerTests {
 			.andExpect(model().size(1))
 			.andExpect(view().name("vets/diagnosisList"));
 	}
+
 
 }

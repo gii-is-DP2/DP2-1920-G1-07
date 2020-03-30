@@ -50,4 +50,8 @@ public class DonationService {
 	public Collection<Donation> findMyDonations(final String userName) throws DataAccessException {
 		return this.donationRepository.findMyDonations(userName);
 	}
+	
+	public Donation findDonationByIdNotOptional(int donationId) {
+		return donationRepository.findDonationById(donationId);
+	}
 }
