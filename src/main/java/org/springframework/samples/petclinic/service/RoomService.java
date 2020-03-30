@@ -23,9 +23,10 @@ public class RoomService {
 //			return (int) roomRepo.count();
 //	}
 //	
+	
 	@Transactional
-	public Iterable<Room> allRooms() throws DataAccessException{
-		return roomRepo.findAllRooms();
+	public Collection<Room> allRooms() throws DataAccessException{
+		return roomRepo.findAll();
 	}
 	@Transactional
 	public void saveRoom(@Valid Room room) throws DataAccessException {
@@ -39,7 +40,7 @@ public class RoomService {
 	}
 	
 	@Transactional
-	public Optional<Room> findRoomById(int roomId) throws DataAccessException{
+	public Room findRoomById(int roomId) throws DataAccessException{
 		return roomRepo.findById(roomId);
 	}
 }

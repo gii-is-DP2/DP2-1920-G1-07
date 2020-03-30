@@ -148,5 +148,6 @@ class VisitControllerTests {
 				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("visit"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.view().name("pets/createOrUpdateVisitForm"));
+
 	}
 }

@@ -49,8 +49,8 @@ public class ReservationService {
 			return reservationRepo.findStatus(id);
 		}
 
-		public Collection<Reservation> findResrvationsByOwnerId(int ownerId) {
-			return reservationRepo.findByOwnerId(ownerId);
+		public Collection<Reservation> findReservationsByOwnerAndRoomId(int ownerId, int roomId) {
+			return reservationRepo.findByOwnerId(ownerId,roomId);
 		}
 		
 }

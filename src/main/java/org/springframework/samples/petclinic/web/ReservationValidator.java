@@ -26,6 +26,9 @@ public class ReservationValidator implements Validator{
 	@Autowired
 	private RoomService roomService;
 	
+	public ReservationValidator(PetService petService) {
+		this.petService = petService;
+	}
 	
 	@Override
 	public void validate(Object obj, Errors errors) {
@@ -34,6 +37,7 @@ public class ReservationValidator implements Validator{
 		LocalDate entryDate=reser.getEntryDate();
 		LocalDate exitDate= reser.getExitDate();
 		String pet = reser.getPet();
+		Pet p = this.petService.findPetById(Integer.parseInt(pet));
 		//DATE VALIDATION
 		Boolean ambasNull = entryDate == null || exitDate == null;
 		if(entryDate == null) {
@@ -54,7 +58,9 @@ public class ReservationValidator implements Validator{
 	
 		if(pet == null) {
 			errors.rejectValue("pet",REQUIERED,REQUIERED);
-		
+		}
+		if(reser.getRoom().getType() != p.getType()) {
+			errors.rejectValue("pet","This room cannot accommodate "+p.getType().getName().toUpperCase()+"S, it can only accommodate "+reser.getRoom().getType().getName().toUpperCase()+"S.","This room cannot accommodate "+p.getType().getName().toUpperCase()+"S, it can only accommodate "+reser.getRoom().getType().getName().toUpperCase()+"S.");
 		}
 		
 		
