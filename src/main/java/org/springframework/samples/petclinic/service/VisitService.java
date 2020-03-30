@@ -18,4 +18,10 @@ public class VisitService {
 	public Iterable<Visit> visitFind() {
 		return this.visitRepo.findAll();
 	}
+
+	
+	public Visit findVisitById(int idVisit) {
+		return this.visitRepo.findById(idVisit);
+
+	}
 }

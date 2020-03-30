@@ -33,7 +33,7 @@ public class Reservation extends BaseEntity{
 	private Status status;
 	
 	@NotEmpty
-	@JoinColumn(name="pet_name")
+	@Column(name="pet")
 	private String pet;
 	
 	@ManyToOne

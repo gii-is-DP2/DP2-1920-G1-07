@@ -131,8 +131,6 @@ public class PetController {
 		model.put("pet", pet);
 		return PetController.VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 	}
-	
-	
 
 	/**
 	 *
@@ -146,6 +144,8 @@ public class PetController {
 	 */
 	@PostMapping(value = "/pets/{petId}/edit")
 	public String processUpdateForm(@Valid final Pet pet, final BindingResult result, final Owner owner, @PathVariable("petId") final int petId, final ModelMap model) {
+		PetValidator v = new PetValidator();
+		v.validate(pet, result);
 		if (result.hasErrors()) {
 			model.put("pet", pet);
 			return PetController.VIEWS_PETS_CREATE_OR_UPDATE_FORM;

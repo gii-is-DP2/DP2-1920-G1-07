@@ -9,14 +9,13 @@ import org.springframework.samples.petclinic.model.Room;
 
 public interface RoomRepository {
 
-	Collection<Room> findAllRooms() throws DataAccessException;
-	
 	void save(Room room) throws DataAccessException;
 	
 	void delete(Room room) throws DataAccessException;
 	
-	Optional<Room> findById(int roomId) throws DataAccessException;
+	Room findById(int roomId) throws DataAccessException;
 	
+	Collection<Room> findAll() throws DataAccessException;
 	
 	
 }

@@ -63,9 +63,11 @@
             <th>Exit Date</th>
             <th>Pet Name</th>
             <th>Status</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
+        <!-- En el siguiente FOREACH EL ADMIN VE TODAS LAS RESERVAS -->
         <sec:authorize access="hasAnyAuthority('admin')">
         <c:forEach var="reservation" items="${room.reservations}">
         <tr>
@@ -81,7 +83,6 @@
                 <td>
                 	<petclinic:localDate date="${reservation.exitDate}" pattern="yyyy/MM/dd"/>
                 </td>
-                
                 <td> 
                     <c:out value="${reservation.pet}"/> 
                 </td>
@@ -95,10 +96,17 @@
                 <a href="${fn:escapeXml(editUrl)}"><c:out value="${reservation.status}"/></a>
                 </td>
                 </sec:authorize>
-                
+                <td>
+                <spring:url value="/rooms/{roomId}/reservation/{reservationId}/delete" var="deleteResUrl">
+                	<spring:param name="roomId" value="${reservation.room.id}"/>
+                	<spring:param name="reservationId" value="${reservation.id}"/>
+                </spring:url>
+                <a href="${fn:escapeXml(deleteResUrl)}">Delete</a>
+                </td>
             </tr>
         </c:forEach>
         </sec:authorize>
+        <!-- En el siguiente FOREACH EL OWNER VE SOLO SUS RESERVAS -->
         <sec:authorize access="hasAnyAuthority('owner')">
         <c:forEach var="reservation" items="${myReservations}">
         <tr>
@@ -118,26 +126,21 @@
                 <td> 
                     <c:out value="${reservation.pet}"/> 
                 </td>
-                <sec:authorize access="hasAnyAuthority('admin')">
-                <td>
-                <spring:url value="/rooms/{roomId}/{ownerId}/reservation/{reservationId}/edit" var="editUrl">
-                		<spring:param name="roomId" value="${reservation.room.id}"/>
-                		<spring:param name="reservationId" value="${reservation.id}"/>  
-                		<spring:param name="ownerId" value="${reservation.owner.id}"/>    
-                </spring:url>
-                <a href="${fn:escapeXml(editUrl)}"><c:out value="${reservation.status}"/></a>
-                </td>
-                </sec:authorize>
                 <sec:authorize access="hasAnyAuthority('owner')">
                 	<td>
                 		<c:out value="${reservation.status}"/>
                 	</td>
                 </sec:authorize>
+                <td>
+                <spring:url value="/rooms/{roomId}/reservation/{reservationId}/delete" var="deleteResUrl">
+                	<spring:param name="roomId" value="${reservation.room.id}"/>
+                	<spring:param name="reservationId" value="${reservation.id}"/>
+                </spring:url>
+                <a href="${fn:escapeXml(deleteResUrl)}">Delete</a>
+                </td>
             </tr>
         </c:forEach>
         </sec:authorize>
- 		
         </tbody>
      </table>
-
 </petclinic:layout>

@@ -26,5 +26,5 @@ public interface ReservationRepository {
 
 	Status findStatus(int statusId) throws DataAccessException;
 
-	Collection<Reservation> findByOwnerId(int ownerId) throws DataAccessException;
+	Collection<Reservation> findByOwnerId(int ownerId,int roomId) throws DataAccessException;
 }

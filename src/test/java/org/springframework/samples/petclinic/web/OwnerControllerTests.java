@@ -76,9 +76,14 @@ class OwnerControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(
-			MockMvcRequestBuilders.post("/owners/new").param("firstName", "Joe").param("lastName", "Bloggs").with(SecurityMockMvcRequestPostProcessors.csrf()).param("address", "123 Caramel Street").param("city", "London").param("telephone", "01316761638"))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		mockMvc.perform(post("/owners/new")
+							.param("firstName", "Joe")
+							.param("lastName", "Bloggs")
+							.with(csrf())
+							.param("address", "123 Caramel Street")
+							.param("city", "London")
+							.param("telephone", "01316761638"))
+				.andExpect(status().is3xxRedirection());
 	}
 
 	@WithMockUser(value = "spring")
