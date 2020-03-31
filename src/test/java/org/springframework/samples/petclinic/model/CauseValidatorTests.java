@@ -46,4 +46,29 @@ public class CauseValidatorTests {
 
 	}
 
+	@Test
+	void shouldNotValidateMoney() {
+		LocaleContextHolder.setLocale(Locale.ENGLISH);
+		Cause cause = new Cause();
+		cause.setTitle("dsafs");
+		cause.setDescription("dsafg");
+		cause.setMoney(null);
+		cause.setDeadline(LocalDate.of(2020, 11, 25));
+		Status s = new Status();
+		s.setName("PENDING");
+		cause.setStatus(s);
+
+		Validator validator = this.createValidator();
+		Set<ConstraintViolation<Cause>> constraintViolations = validator.validate(cause);
+
+		Assertions.assertThat(constraintViolations.size()).isEqualTo(1);
+		ConstraintViolation<Cause> violation = constraintViolations.iterator().next();
+		Assertions.assertThat(violation.getPropertyPath().toString()).isEqualTo("money");
+		Assertions.assertThat(violation.getMessage()).isEqualTo("must not be null");
+
+		//		Assertions.assertThat(violation.getPropertyPath().toString()).isEqualTo("description");
+		//		Assertions.assertThat(violation.getMessage()).isEqualTo("must not be empty");
+
+	}
+
 }
