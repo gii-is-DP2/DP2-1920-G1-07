@@ -114,9 +114,6 @@ public class VetController {
 	
 	@GetMapping(value = "/vets/admin")
 	public String vestShow(final Map<String, Object> model, final HttpServletRequest request) {
-		Principal principal = request.getUserPrincipal();
-		String userName = principal.getName();
-		model.put("userName", userName);
 
 		Collection<Vet> vet = this.vetService.findVets();
 		model.put("vets", vet);
