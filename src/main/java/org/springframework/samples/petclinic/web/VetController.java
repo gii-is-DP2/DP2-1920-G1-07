@@ -49,6 +49,7 @@ public class VetController {
 
 	private static final String	VIEWS_VET_CREATE_FORM	= "vets/createVet";
 	private static final String	VIEWS_VET_LIST			= "vets/visitList";
+	private static final String VIEWS_VET_ADMIN_LIST    = "vets/vetListAdmin";
 
 	private final VetService	vetService;
 
@@ -110,5 +111,19 @@ public class VetController {
 
 		return VetController.VIEWS_VET_LIST;
 	}
+	
+	@GetMapping(value = "/vets/admin")
+	public String vestShow(final Map<String, Object> model, final HttpServletRequest request) {
+		Principal principal = request.getUserPrincipal();
+		String userName = principal.getName();
+		model.put("userName", userName);
+
+		Collection<Vet> vet = this.vetService.findVets();
+		model.put("vets", vet);
+
+		return VetController.VIEWS_VET_ADMIN_LIST;
+	}
+	
+	
 
 }
