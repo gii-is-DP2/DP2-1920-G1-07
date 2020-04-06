@@ -2,6 +2,8 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,7 +56,14 @@ public class CauseController {
 	@GetMapping
 	public String showCausesList(final ModelMap modelMap) {
 		Collection<Cause> causes = this.causeService.findAcceptedCauses();
-		modelMap.addAttribute("cause", causes);
+		Collection<Cause> causasValidas = new ArrayList<Cause>();
+		LocalDate now = LocalDate.now();
+		for (Cause c : causes) {
+			if (c.getDeadline().isAfter(now)) {
+				causasValidas.add(c);
+			}
+		}
+		modelMap.addAttribute("cause", causasValidas);
 		return "causes/causesList";
 	}
 

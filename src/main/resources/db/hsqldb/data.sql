@@ -107,7 +107,6 @@ INSERT INTO cause(id, title, description, deadline, money, status_id, username) 
 INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (3, 'Third Cause', 'This is my third cause', '2020-10-30', 10000.00, 2, 'owner1');
 INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (4, 'Prueba Cause', 'This is my third cause', '2020-10-30', 10000.00, 2, 'admin1');
 
-
 INSERT INTO donation VALUES (1, 'true',5000.0,NULL,3,'admin1');
 INSERT INTO donation VALUES (2, 'false',2000.0,NULL,3,'admin1');
 INSERT INTO donation VALUES (3, 'true',1000.0,NULL,3,'admin1');
