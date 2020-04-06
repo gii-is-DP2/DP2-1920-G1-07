@@ -89,30 +89,4 @@ public class CauseValidatorTests {
 		Assertions.assertThat(violation4.getMessage()).isEqualTo("must be a future date");
 	}
 
-	@Test
-	void shouldNotValidateDeadline() {
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		Cause cause = new Cause();
-		String title = "Test title";
-		String description = "Test Description";
-		LocalDate deadline = LocalDate.of(2019, 11, 25);
-		Status s = new Status();
-		s.setName("PENDING");
-
-		cause.setTitle(title);
-		cause.setDescription(description);
-		cause.setMoney(10000.0);
-		cause.setDeadline(deadline);
-		cause.setStatus(s);
-
-		Validator validator = this.createValidator();
-		Set<ConstraintViolation<Cause>> constraintViolations = validator.validate(cause);
-
-		Assertions.assertThat(constraintViolations.size()).isEqualTo(1);
-		ConstraintViolation<Cause> violation = constraintViolations.iterator().next();
-		Assertions.assertThat(violation.getPropertyPath().toString()).isEqualTo("deadline");
-		Assertions.assertThat(violation.getMessage()).isEqualTo("must be a future date");
-
-	}
-
 }
