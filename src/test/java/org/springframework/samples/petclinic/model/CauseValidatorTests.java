@@ -30,10 +30,10 @@ public class CauseValidatorTests {
 		Status s = new Status();
 		s.setName("PENDING");
 
-		//Title y description vacías
+		//Title vacía
 		Cause cause1 = new Cause();
 		cause1.setTitle("");
-		cause1.setDescription("");
+		cause1.setDescription(description);
 		cause1.setMoney(10000.0);
 		cause1.setDeadline(deadline);
 		cause1.setStatus(s);
@@ -41,9 +41,9 @@ public class CauseValidatorTests {
 		Validator validator = this.createValidator();
 		Set<ConstraintViolation<Cause>> constraintViolations = validator.validate(cause1);
 
-		Assertions.assertThat(constraintViolations.size()).isEqualTo(2);
+		Assertions.assertThat(constraintViolations.size()).isEqualTo(1);
 		ConstraintViolation<Cause> violation = constraintViolations.iterator().next();
-		Assertions.assertThat(violation.getPropertyPath().toString()).isEqualTo("title", "description");
+		Assertions.assertThat(violation.getPropertyPath().toString()).isEqualTo("title");
 		Assertions.assertThat(violation.getMessage()).isEqualTo("must not be empty");
 
 		//Money null
@@ -87,6 +87,23 @@ public class CauseValidatorTests {
 		ConstraintViolation<Cause> violation4 = constraintViolations4.iterator().next();
 		Assertions.assertThat(violation4.getPropertyPath().toString()).isEqualTo("deadline");
 		Assertions.assertThat(violation4.getMessage()).isEqualTo("must be a future date");
+
+		//Description vacía
+		Cause cause5 = new Cause();
+		cause5.setTitle(title);
+		cause5.setDescription("");
+		cause5.setMoney(10000.0);
+		cause5.setDeadline(deadline);
+		cause5.setStatus(s);
+
+		Validator validator5 = this.createValidator();
+		Set<ConstraintViolation<Cause>> constraintViolations5 = validator5.validate(cause5);
+
+		Assertions.assertThat(constraintViolations5.size()).isEqualTo(1);
+		ConstraintViolation<Cause> violation5 = constraintViolations5.iterator().next();
+		Assertions.assertThat(violation5.getPropertyPath().toString()).isEqualTo("description");
+		Assertions.assertThat(violation5.getMessage()).isEqualTo("must not be empty");
+
 	}
 
 }
