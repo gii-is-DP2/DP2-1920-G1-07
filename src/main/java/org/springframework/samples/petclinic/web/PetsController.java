@@ -22,14 +22,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/owner")
 public class PetsController {
 
 	private static final String	VIEWS_PETS_CREATE_OR_UPDATE_FORM	= "pets/createOrUpdatePetForm";
+	private static final String	VIEWS_PETS_LIST_ADMIN				= "pets/petListAdmin";
 
 	private final PetService	petService;
 	private final OwnerService	ownerService;
@@ -46,7 +45,14 @@ public class PetsController {
 		return this.petService.findPetTypes();
 	}
 
-	@GetMapping(value = "/pets")
+	@GetMapping(value = "/admin/pets")
+	public String showPetsAdmin(final HttpServletRequest request, final ModelMap model) {
+		Collection<Pet> pets = this.petService.findAll();
+		model.put("pets", pets);
+		return PetsController.VIEWS_PETS_LIST_ADMIN;
+	}
+
+	@GetMapping(value = "/owner/pets")
 	public ModelAndView showPets(final HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();
 		ModelAndView mav = new ModelAndView("pets/petList");
@@ -54,7 +60,7 @@ public class PetsController {
 		return mav;
 	}
 
-	@GetMapping(value = "/pets/new")
+	@GetMapping(value = "/owner/pets/new")
 	public String initCreationForm(final HttpServletRequest request, final ModelMap model) {
 		Principal principal = request.getUserPrincipal();
 		Owner owner = this.ownerService.findOwnerByUser(principal.getName());
@@ -64,7 +70,7 @@ public class PetsController {
 		return PetsController.VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/pets/new")
+	@PostMapping(value = "/owner/pets/new")
 	public String processCreationForm(final HttpServletRequest request, @Valid final Pet pet, final BindingResult result, final ModelMap model) {
 		Principal principal = request.getUserPrincipal();
 		Owner owner = this.ownerService.findOwnerByUser(principal.getName());
@@ -85,7 +91,7 @@ public class PetsController {
 		}
 	}
 
-	@GetMapping(value = "/pets/{petId}/edit")
+	@GetMapping(value = "/owner/pets/{petId}/edit")
 	public String initUpdateForm(@PathVariable("petId") final int petId, final ModelMap model) {
 		Pet pet = this.petService.findPetById(petId);
 		model.put("pet", pet);
@@ -102,7 +108,7 @@ public class PetsController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value = "/pets/{petId}/edit")
+	@PostMapping(value = "/owner/pets/{petId}/edit")
 	public String processUpdateForm(@Valid final Pet pet, final BindingResult result, final Owner owner, @PathVariable("petId") final int petId, final ModelMap model) {
 		PetValidator v = new PetValidator();
 		v.validate(pet, result);
@@ -122,7 +128,7 @@ public class PetsController {
 		}
 	}
 
-	@GetMapping(value = "/pets/{petId}/delete")
+	@GetMapping(value = "/owner/pets/{petId}/delete")
 	public String initDelete(@PathVariable("petId") final int petId, final ModelMap model) {
 		Pet pet = this.petService.findPetById(petId);
 		this.petService.deletePet(pet);

@@ -65,8 +65,8 @@ public class PetService {
 		return this.petRepository.findById(id);
 	}
 	@Transactional
-	public Collection<Pet> findPetsByOwnerName(String name) throws DataAccessException{
-		return petRepository.findPetsByOwnerName(name);
+	public Collection<Pet> findPetsByOwnerName(final String name) throws DataAccessException {
+		return this.petRepository.findPetsByOwnerName(name);
 	}
 
 	@Transactional(rollbackFor = DuplicatedPetNameException.class)
@@ -87,6 +87,10 @@ public class PetService {
 	public void deletePet(final Pet pet) {
 		this.petRepository.delete(pet);
 
+	}
+
+	public Collection<Pet> findAll() {
+		return this.petRepository.findAll();
 	}
 
 }
