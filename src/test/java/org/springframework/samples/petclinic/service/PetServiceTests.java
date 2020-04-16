@@ -97,6 +97,16 @@ class PetServiceTests {
 	}
 
 	@Test
+	void shouldFindAllPets() {
+		Collection<Pet> pets = this.petService.findAll();
+
+		Pet pet1 = EntityUtils.getById(pets, Pet.class, 1);
+		assertThat(pet1.getName()).isEqualTo("Leo");
+		Pet pet4 = EntityUtils.getById(pets, Pet.class, 4);
+		assertThat(pet4.getName()).isEqualTo("Jewel");
+	}
+	
+	@Test
 	@Transactional
 	public void shouldInsertPetIntoDatabaseAndGenerateId() {
 		Owner owner6 = this.ownerService.findOwnerById(6);

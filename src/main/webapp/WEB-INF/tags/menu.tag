@@ -84,7 +84,12 @@
 				<petclinic:menuItem active="${name eq 'vet'}" url="/vets/admin"
 					title="newVet">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Veterinarians</span>
+					<span>Vets</span>
+				</petclinic:menuItem>
+				<petclinic:menuItem active="${name eq 'pets'}" url="/admin/pets"
+					title="Pets">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span>All pets</span>
 				</petclinic:menuItem>
 				</sec:authorize>
 			</ul>
