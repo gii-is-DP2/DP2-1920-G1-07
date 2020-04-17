@@ -31,11 +31,6 @@ INSERT IGNORE INTO room VALUES (2,'Room2',1,2);
 INSERT IGNORE INTO room VALUES (3,'Room3',3,1);
 INSERT IGNORE INTO room VALUES (4,'Room4',4,5);
 
-INSERT IGNORE INTO reservation VALUES (1,'2020-05-12','2020-06-20','15',11,1,1);
-INSERT IGNORE INTO reservation VALUES (2,'2020-05-20','2020-06-22','16',12,2,2);
-INSERT IGNORE INTO reservation VALUES (3,'2020-05-22','2020-06-20','14',11,3,1);
-INSERT IGNORE INTO reservation VALUES (4,'2020-05-02','2020-06-22','17',12,4,3);
-
 INSERT IGNORE INTO owners VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023');
 INSERT IGNORE INTO owners VALUES (2, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sun Prairie', '6085551749');
 INSERT IGNORE INTO owners VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'McFarland', '6085558763');
