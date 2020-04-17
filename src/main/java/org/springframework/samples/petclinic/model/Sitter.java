@@ -1,5 +1,5 @@
-package org.springframework.samples.petclinic.model;
 
+package org.springframework.samples.petclinic.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,7 +10,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
-
 
 @Entity
 @Table(name = "sitters")
@@ -45,16 +44,15 @@ public class Sitter extends Person {
 	}
 
 	public String getTelephone() {
-		return telephone;
+		return this.telephone;
 	}
 
-	public void setTelephone(String telephone) {
-		 this.telephone = telephone;
+	public void setTelephone(final String telephone) {
+		this.telephone = telephone;
 	}
-
 
 	public PetType getType() {
-		return type;
+		return this.type;
 	}
 
 	public void setType(final PetType type) {
@@ -67,6 +65,11 @@ public class Sitter extends Person {
 
 	public void setUser(final User user) {
 		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return this.getUser().getUsername();
 	}
 
 }

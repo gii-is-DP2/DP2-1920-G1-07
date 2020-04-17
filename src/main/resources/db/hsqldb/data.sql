@@ -5,6 +5,9 @@ INSERT INTO authorities VALUES ('admin1','admin');
 INSERT INTO users(username,password,enabled) VALUES ('owner1','0wn3r',TRUE);
 INSERT INTO authorities VALUES ('owner1','owner');
 
+INSERT INTO users(username,password,enabled) VALUES ('sitter1','sitter',TRUE);
+INSERT INTO authorities VALUES ('sitter1','sitter');
+
 INSERT INTO users(username,password,enabled) VALUES ('amine','12345',TRUE);
 INSERT INTO authorities VALUES ('amine','owner');
 
@@ -52,10 +55,10 @@ INSERT INTO status VALUES (1, 'PENDING');
 INSERT INTO status VALUES (2, 'ACCEPTED');
 INSERT INTO status VALUES (3, 'REJECTED');
 
-INSERT INTO room VALUES(1,'Room1',2,4);
-INSERT INTO room VALUES(2,'Room2',1,2);
-INSERT INTO room VALUES(3,'Room3',3,1);
-INSERT INTO room VALUES(4,'Room4',4,5);
+INSERT INTO room VALUES(1,'Room1',2,null,4);
+INSERT INTO room VALUES(2,'Room2',1,null,2);
+INSERT INTO room VALUES(3,'Room3',3,null,1);
+INSERT INTO room VALUES(4,'Room4',4,null,5);
 
 
 INSERT INTO owners VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023', 'owner1');
@@ -72,6 +75,7 @@ INSERT INTO owners VALUES (11, 'Amine', 'Chaghir', 'C/San Francisco n3', 'Zalame
 INSERT INTO owners VALUES (12, 'Prueba', 'Prueba', '110 W. Liberty St.', 'Madison', '666666666', 'owner');
 INSERT INTO owners VALUES (13, 'Pablo', 'Reneses', '110 W. Liberty St.', 'Sevilla', '666665432', 'pablo');
 
+INSERT INTO sitters VALUES (14, 'Carlos', 'Estaban', '2335 Independence La.', '6085555487', 2, 'sitter1');
 
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (2, 'Basil', '2012-08-06', 6, 2);
