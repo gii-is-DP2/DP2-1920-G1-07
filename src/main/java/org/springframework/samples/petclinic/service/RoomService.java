@@ -43,4 +43,9 @@ public class RoomService {
 	public Room findRoomById(int roomId) throws DataAccessException{
 		return roomRepo.findById(roomId);
 	}
+	
+	@Transactional
+	public Collection<String> findAllRoomsName() throws DataAccessException {
+		return roomRepo.findAllRoomsNames();
+	}
 }

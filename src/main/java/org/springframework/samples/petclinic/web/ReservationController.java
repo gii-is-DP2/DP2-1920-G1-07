@@ -167,7 +167,7 @@ public class ReservationController {
 		Reservation reservation = this.reservationService.findReservationsById(reservationId);
 		Collection<Status> s = this.reservationService.findAllStatus();
 		if(completedRoom) {
-			Status accepted = this.reservationService.findStatusById(1);
+			Status accepted = this.reservationService.findStatusById(2); 
 			s.remove(accepted);
 			model.addAttribute("statusWithouthAccepted", s);
 		}else {
@@ -201,7 +201,6 @@ public class ReservationController {
 			this.reservationService.saveReservation(reservation);
 			return "redirect:/rooms/{roomId}";
 		}
-		
 	}
 	@GetMapping(value = "/rooms/{roomId}/reservation/{reservationId}/delete")
 	public String processDeleteReservation(@PathVariable("roomId") int roomId, @PathVariable("reservationId") int reservationId, ModelMap model) {
