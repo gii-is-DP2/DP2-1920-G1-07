@@ -52,6 +52,20 @@ public class AcceptReservationWhenRoomIsCompletedUITest {
 	    driver.findElement(By.xpath("//button[@type='submit']")).click();
 	    driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
 	    driver.findElement(By.linkText("Room2")).click();
+	    driver.findElement(By.linkText("PENDING")).click();
+	    new Select(driver.findElement(By.id("status"))).selectByVisibleText("ACCEPTED");
+	    driver.findElement(By.xpath("//option[@value='ACCEPTED']")).click();
+	    driver.findElement(By.id("pet")).click();
+	    new Select(driver.findElement(By.id("pet"))).selectByVisibleText("Pet Dog");
+	    driver.findElement(By.xpath("//option[@value='16']")).click();
+	    driver.findElement(By.xpath("//button[@type='submit']")).click();
+	    assertEquals("ESTA HABITACION TIENE LAS RESERVAS AGOTADAS", driver.findElement(By.xpath("//h3")).getText());
+	    driver.findElement(By.linkText("PENDING")).click();
+	    assertEquals("ESTA HABITACION TIENE LAS RESERVAS AGOTADAS", driver.findElement(By.xpath("//form[@id='add-editreservation-form']/div/div[5]/div/div/div/h3")).getText());
+	    driver.findElement(By.id("pet")).click();
+	    new Select(driver.findElement(By.id("pet"))).selectByVisibleText("Pet Dog");
+	    driver.findElement(By.xpath("//option[@value='16']")).click();
+	    driver.findElement(By.xpath("//button[@type='submit']")).click();
 	    assertEquals("ESTA HABITACION TIENE LAS RESERVAS AGOTADAS", driver.findElement(By.xpath("//h3")).getText());
 	  }
 

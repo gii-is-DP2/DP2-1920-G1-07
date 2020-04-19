@@ -55,17 +55,17 @@ public class CreateReservationWhenIsOwnerUITest {
 	    driver.findElement(By.id("entryDate")).click();
 	    driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
 	    driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
-	    driver.findElement(By.linkText("26")).click();
+	    driver.findElement(By.linkText("19")).click();
 	    driver.findElement(By.id("exitDate")).click();
 	    driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
 	    driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
-	    driver.findElement(By.linkText("30")).click();
+	    driver.findElement(By.linkText("27")).click();
 	    new Select(driver.findElement(By.id("pet"))).selectByVisibleText("Pet Bird");
 	    driver.findElement(By.xpath("//option[@value='17']")).click();
 	    driver.findElement(By.xpath("//button[@type='submit']")).click();
-	    assertEquals("2020/06/26", driver.findElement(By.xpath("//td[3]")).getText());
-	    assertEquals("2020/06/30", driver.findElement(By.xpath("//td[4]")).getText());
-	    assertEquals("Pet Bird", driver.findElement(By.xpath("//td[5]")).getText());
+	    assertEquals("2020/06/19", driver.findElement(By.xpath("//tr[2]/td[3]")).getText());
+	    assertEquals("2020/06/27", driver.findElement(By.xpath("//tr[2]/td[4]")).getText());
+	    assertEquals("Pet Bird", driver.findElement(By.xpath("//tr[2]/td[5]")).getText());
 	  }
 
 	  @AfterEach
