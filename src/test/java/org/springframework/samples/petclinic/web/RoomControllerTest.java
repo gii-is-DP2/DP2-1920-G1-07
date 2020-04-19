@@ -1,4 +1,5 @@
 package org.springframework.samples.petclinic.web;
+import org.assertj.core.util.Arrays;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,8 @@ import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.ModelMap;
+
+import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
@@ -36,6 +39,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;import java.awt.print.Printable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -139,8 +143,11 @@ class RoomControllerTest {
 		
 		room.setReservations(reservationsEmpty);
 		room2.setReservations(reservations);
+		Collection<String> roomNames = new ArrayList<String>();
+		roomNames.add(room.getName());
+		roomNames.add(room2.getName());
 		
-		
+		BDDMockito.given(this.roomService.findAllRoomsName()).willReturn(roomNames);
 		BDDMockito.given(this.reservationService.findReservationsById(TEST_RESERVATION_ID)).willReturn(res);
 		BDDMockito.given(this.ownerService.findOwnerById(TEST_SPRING_ID)).willReturn(spring);
 		BDDMockito.given(this.ownerService.findOwnerByUserName("owner")).willReturn(owner);
@@ -169,7 +176,7 @@ class RoomControllerTest {
 	void testProcessCreationFormSuccess() throws Exception { 
 		mockMvc.perform(post("/rooms/new").param("id", "1")
 								.with(csrf())
-								.param("name", "Test Room")
+								.param("name", "Test Room2")
 								.param("capacity", "2")
 								.param("type", "dog"))
 		.andExpect(status().is3xxRedirection());
@@ -177,16 +184,16 @@ class RoomControllerTest {
 	
 	@WithMockUser(value="spring")
 	@Test
-	void testProcessCreationFormHasErrorsOnCapacity() throws Exception {
+	void testProcessCreationFormHasErrorsOnCapacityAndName() throws Exception {
 		mockMvc.perform(post("/rooms/new")
 				.with(csrf())
 				.param("id", "1")
-				.param("name","Bad Room")
+				.param("name","Test Room")
 				.param("capacity", "0")
 				.param("type","dog"))
 		.andExpect(status().isOk())
 		.andExpect(model().attributeHasErrors("room"))
-		.andExpect(model().attributeHasFieldErrors("room","capacity"))
+		.andExpect(model().attributeHasFieldErrors("room","capacity","name"))
 		.andExpect(view().name("rooms/createOrUpdateRoomForm"));
 	}
 	@WithMockUser(value="spring")

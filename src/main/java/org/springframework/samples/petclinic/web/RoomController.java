@@ -62,6 +62,34 @@ public class RoomController {
 	@Autowired
 	private final ReservationService reservationService;
 	
+	private RoomValidator roomValidator;
+	
+	@InitBinder("pet")
+	public void initPetBinder(WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id");
+	}
+	
+	
+	@InitBinder("owner")
+	public void initOwnerBinder(WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id");
+	}
+	
+	@InitBinder("reservation")
+	public void initReservationBinder(WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id");
+	}
+	
+	
+	@InitBinder
+	public void setAllowedFields(final WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id");
+	}
+	
+	@InitBinder("room")
+	public void initRoomBinder(WebDataBinder dataBinder) {
+		dataBinder.setValidator(roomValidator);
+	}
 	
 	@Autowired
 	public RoomController(final RoomService roomService,final PetService petService, final OwnerService ownerService, final ReservationService reservationService) {
@@ -96,16 +124,8 @@ public class RoomController {
 	
 	@PostMapping(value="/rooms/new")
 	public String processSaveRoom(@Valid Room room, BindingResult result, ModelMap model) {
-		
-		if(room.getCapacity() != null && room.getCapacity() == 0) {
-			FieldError err = new FieldError("room", "capacity", "The value 0 is not valid");
-			result.addError(err);
-		}
-		if(room.getCapacity() == null) {
-			FieldError err = new FieldError("room", "capacity", "This field is required");
-			result.addError(err);
-		}
-		
+		RoomValidator roomValidator = new RoomValidator(roomService);
+		roomValidator.validate(room, result);
 		if(result.hasErrors()) {
 			model.addAttribute("message", "Room not created");
 			model.addAttribute("room", room);
@@ -120,13 +140,20 @@ public class RoomController {
 	public String processDeleteRoom(@PathVariable("roomId") int roomId,Model model) {
 		String view = "redirect:/rooms/";
 		Room room = this.roomService.findRoomById(roomId);
-		if(room != null && room.getReservations().isEmpty()) {
+		if(room != null && !room.getReservations().isEmpty()) {
+			for(Reservation r : room.getReservations()) {
+				if(!r.getStatus().getName().equals("ACCEPTED")) {
+					roomService.delete(room);
+					model.addAttribute("message", "Event Successfuly deleted");
+				}
+			}
+		}else if(room != null && room.getReservations().isEmpty()){
 			roomService.delete(room);
-			model.addAttribute("message", "Event Successfuly deleted");
-		}else { 
+		}else {
+			
 			model.addAttribute("roomNotDeleted", "The room named "+room.getName()+" cannot be removed because it has reservations");
 		}
-		return view;
+		return view; 
 	}
 	
 	@GetMapping(value = "/rooms/{roomId}/edit")
@@ -138,15 +165,8 @@ public class RoomController {
 	
 	@PostMapping(value = "/rooms/{roomId}/edit")
 	public String processUpdateRoom(@Valid Room room, @PathVariable("roomId") int roomId,BindingResult result, ModelMap modelMap) {
-		
-		if(room.getCapacity() != null && room.getCapacity() == 0) {
-			FieldError err = new FieldError("room", "capacity", "The value 0 is not valid");
-			result.addError(err);
-		}
-		if(room.getCapacity() == null){
-			FieldError err = new FieldError("room", "capacity", "This field is required");
-			result.addError(err);
-		}
+		RoomValidator roomValidator = new RoomValidator(roomService,roomId);
+		roomValidator.validate(room, result);
 		
 		if(result.hasErrors()) {
 			return RoomController.VIEWS_ROOM_CREATE_OR_UPDATE_FORM;
