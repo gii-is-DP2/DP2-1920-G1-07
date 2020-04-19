@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Diagnosis;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
+import org.springframework.samples.petclinic.model.Vets;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.stereotype.Controller;
@@ -110,6 +111,18 @@ public class VetController {
 		model.put("diagnosis", d);
 
 		return VetController.VIEWS_VET_LIST;
+	}
+	@GetMapping(value = "/vets")
+	public String showVetList(final Map<String, Object> model,@RequestParam("ownerId") int ownerId,@RequestParam("petId") int petId) {
+		// Here we are returning an object of type 'Vets' rather than a collection of Vet
+		// objects
+		// so it is simpler for Object-Xml mapping
+		Vets vets = new Vets();
+		vets.getVetList().addAll(this.vetService.findVets());
+		model.put("vets", vets);
+		model.put("petId", petId);
+		model.put("ownerId",ownerId);
+		return "vets/vetList";
 	}
 	
 	@GetMapping(value = "/vets/admin")
