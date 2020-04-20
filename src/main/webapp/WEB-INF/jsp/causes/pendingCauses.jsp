@@ -14,6 +14,7 @@
 				<th>Description</th>
 				<th>Deadline</th>
 				<th>Money</th>
+				<th>Status</th>
 				<th>Actions</th>
 			</tr>
 		</thead>
@@ -32,6 +33,9 @@
 					</td>
 					<td>
 						<c:out value="${cause.money}"></c:out>
+					</td>
+					<td>
+						<c:out value="${cause.status.name}"></c:out>
 					</td>
 					 <td>
                      	<spring:url value="/cause/PendingCauses/cause/{causeId}/edit" var="causeEditUrl">
