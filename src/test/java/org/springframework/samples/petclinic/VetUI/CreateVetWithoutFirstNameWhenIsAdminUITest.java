@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.ReservationUI;
+package org.springframework.samples.petclinic.VetUI;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,14 +14,14 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AcceptReservationWhenIsAdminUITest {
+
+public class CreateVetWithoutFirstNameWhenIsAdminUITest {
 
 	private WebDriver		driver;
 	private String			baseUrl;
@@ -33,8 +33,8 @@ public class AcceptReservationWhenIsAdminUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		//		String pathToGeckoDriver = "C:\\Users\\mediamarkt\\Downloads";
-		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		String pathToGeckoDriver = "C:\\Users\\mediamarkt\\Downloads";
+		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		//		driver = new FirefoxDriver();
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
@@ -42,33 +42,8 @@ public class AcceptReservationWhenIsAdminUITest {
 	}
 
 	@Test
-	public void testAcceptReservationWhenIsAdminUI() throws Exception {
+	public void testCreateVetWithoutFirstNameWhenIsAdminUI() throws Exception {
 		this.driver.get("http://localhost:" + this.port);
-		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
-		this.driver.findElement(By.id("username")).click();
-		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("owner");
-		this.driver.findElement(By.id("password")).click();
-		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("owner");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
-		this.driver.findElement(By.linkText("Room2")).click();
-		this.driver.findElement(By.linkText("Add New Reservation")).click();
-		this.driver.findElement(By.id("entryDate")).click();
-		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
-		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
-		this.driver.findElement(By.linkText("26")).click();
-		this.driver.findElement(By.id("exitDate")).click();
-		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
-		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
-		this.driver.findElement(By.linkText("30")).click();
-		new Select(this.driver.findElement(By.id("pet"))).selectByVisibleText("Pet Dog");
-		this.driver.findElement(By.xpath("//option[@value='16']")).click();
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
-		this.driver.findElement(By.linkText("Logout")).click();
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		this.driver.findElement(By.id("username")).click();
 		this.driver.findElement(By.id("username")).clear();
@@ -77,11 +52,19 @@ public class AcceptReservationWhenIsAdminUITest {
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("4dm1n");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
-		this.driver.findElement(By.linkText("Room2")).click();
-		this.driver.findElement(By.linkText("PENDING")).click();
-		new Select(this.driver.findElement(By.id("status"))).selectByVisibleText("ACCEPTED");
-		this.driver.findElement(By.xpath("//option[@value='ACCEPTED']")).click();
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[5]/a/span[2]")).click();
+		this.driver.findElement(By.linkText("Create Vet")).click();
+		this.driver.findElement(By.id("lastName")).click();
+		this.driver.findElement(By.id("lastName")).clear();
+		this.driver.findElement(By.id("lastName")).sendKeys("dsaads");
+		// ERROR: Caught exception [ERROR: Unsupported command [addSelection | id=specialties | label=dentistry]]
+		this.driver.findElement(By.xpath("//option[@value='3']")).click();
+		this.driver.findElement(By.id("user.username")).click();
+		this.driver.findElement(By.id("user.username")).clear();
+		this.driver.findElement(By.id("user.username")).sendKeys("sdadsa");
+		this.driver.findElement(By.id("user.password")).click();
+		this.driver.findElement(By.id("user.password")).clear();
+		this.driver.findElement(By.id("user.password")).sendKeys("dsadsa");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 	}
 
@@ -126,5 +109,4 @@ public class AcceptReservationWhenIsAdminUITest {
 			this.acceptNextAlert = true;
 		}
 	}
-
 }

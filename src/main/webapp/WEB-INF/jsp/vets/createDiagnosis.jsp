@@ -19,7 +19,7 @@
     <h2>
         <c:if test="${diagnosis['new']}">New </c:if> Diagnosis
     </h2>
-    <form:form modelAttribute="diagnosis" class="form-horizontal" id="add-vet-form">
+    <form:form modelAttribute="diagnosis" class="form-horizontal" id="add-diagnosis-form">
         <div class="form-group has-feedback">
             <petclinic:inputField label="Description" name="description"/>
             <petclinic:inputField label="Date" name="date"/>

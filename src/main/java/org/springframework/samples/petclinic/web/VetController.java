@@ -50,7 +50,7 @@ public class VetController {
 
 	private static final String	VIEWS_VET_CREATE_FORM	= "vets/createVet";
 	private static final String	VIEWS_VET_LIST			= "vets/visitList";
-	private static final String VIEWS_VET_ADMIN_LIST    = "vets/vetListAdmin";
+	private static final String	VIEWS_VET_ADMIN_LIST	= "vets/vetListAdmin";
 
 	private final VetService	vetService;
 
@@ -112,8 +112,9 @@ public class VetController {
 
 		return VetController.VIEWS_VET_LIST;
 	}
+
 	@GetMapping(value = "/vets")
-	public String showVetList(final Map<String, Object> model,@RequestParam("ownerId") int ownerId,@RequestParam("petId") int petId) {
+	public String showVetList(final Map<String, Object> model, @RequestParam("ownerId") final int ownerId, @RequestParam("petId") final int petId) {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects
 		// so it is simpler for Object-Xml mapping
@@ -121,10 +122,10 @@ public class VetController {
 		vets.getVetList().addAll(this.vetService.findVets());
 		model.put("vets", vets);
 		model.put("petId", petId);
-		model.put("ownerId",ownerId);
+		model.put("ownerId", ownerId);
 		return "vets/vetList";
 	}
-	
+
 	@GetMapping(value = "/vets/admin")
 	public String vestShow(final Map<String, Object> model, final HttpServletRequest request) {
 
@@ -133,7 +134,5 @@ public class VetController {
 
 		return VetController.VIEWS_VET_ADMIN_LIST;
 	}
-	
-	
 
 }

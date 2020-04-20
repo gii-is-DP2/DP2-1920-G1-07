@@ -1,64 +1,72 @@
+
 package org.springframework.samples.petclinic.RoomUI;
 
-import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-import org.openqa.selenium.*;
+import org.junit.Assert;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ShowRoomListRoomsWhenIsOwnerUITest {
-	private WebDriver driver;
-	private String baseUrl;
-	private boolean acceptNextAlert = true;
-	private StringBuffer verificationErrors = new StringBuffer();
+
+	private WebDriver		driver;
+	private String			baseUrl;
+	private boolean			acceptNextAlert		= true;
+	private StringBuffer	verificationErrors	= new StringBuffer();
 	@LocalServerPort
-	private int port;
+	private int				port;
+
+
 	@BeforeEach
 	public void setUp() throws Exception {
-//		String pathToGeckoDriver = "C:\\Users\\amine\\Downloads";
-//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
-		driver = new FirefoxDriver();
-		baseUrl = "https://www.google.com/";
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		//		String pathToGeckoDriver = "C:\\Users\\mediamarkt\\Downloads";
+		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		//		driver = new FirefoxDriver();
+		this.driver = new FirefoxDriver();
+		this.baseUrl = "https://www.google.com/";
+		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
-
 	@Test
 	public void testShowRoomListRoomsUI() throws Exception {
-		driver.get("http://localhost:"+port);
-		driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
-		driver.findElement(By.id("username")).click();
-		driver.findElement(By.id("username")).clear();
-		driver.findElement(By.id("username")).sendKeys("owner");
-		driver.findElement(By.id("password")).click();
-		driver.findElement(By.id("password")).clear();
-		driver.findElement(By.id("password")).sendKeys("owner");
-		driver.findElement(By.xpath("//button[@type='submit']")).click();
-		driver.findElement(By.xpath("//li[2]/a/span[2]")).click();
-		driver.findElement(By.xpath("//h2")).click();
-		assertEquals("Rooms", driver.findElement(By.xpath("//h2")).getText());
+		this.driver.get("http://localhost:" + this.port);
+		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
+		this.driver.findElement(By.id("username")).click();
+		this.driver.findElement(By.id("username")).clear();
+		this.driver.findElement(By.id("username")).sendKeys("owner");
+		this.driver.findElement(By.id("password")).click();
+		this.driver.findElement(By.id("password")).clear();
+		this.driver.findElement(By.id("password")).sendKeys("owner");
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		this.driver.findElement(By.xpath("//li[2]/a/span[2]")).click();
+		this.driver.findElement(By.xpath("//h2")).click();
+		Assert.assertEquals("Rooms", this.driver.findElement(By.xpath("//h2")).getText());
 	}
 
 	@AfterEach
 	public void tearDown() throws Exception {
-		driver.quit();
-		String verificationErrorString = verificationErrors.toString();
+		this.driver.quit();
+		String verificationErrorString = this.verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
-			fail(verificationErrorString);
+			Assert.fail(verificationErrorString);
 		}
 	}
 
-	private boolean isElementPresent(By by) {
+	private boolean isElementPresent(final By by) {
 		try {
-			driver.findElement(by);
+			this.driver.findElement(by);
 			return true;
 		} catch (NoSuchElementException e) {
 			return false;
@@ -67,7 +75,7 @@ public class ShowRoomListRoomsWhenIsOwnerUITest {
 
 	private boolean isAlertPresent() {
 		try {
-			driver.switchTo().alert();
+			this.driver.switchTo().alert();
 			return true;
 		} catch (NoAlertPresentException e) {
 			return false;
@@ -76,16 +84,16 @@ public class ShowRoomListRoomsWhenIsOwnerUITest {
 
 	private String closeAlertAndGetItsText() {
 		try {
-			Alert alert = driver.switchTo().alert();
+			Alert alert = this.driver.switchTo().alert();
 			String alertText = alert.getText();
-			if (acceptNextAlert) {
+			if (this.acceptNextAlert) {
 				alert.accept();
 			} else {
 				alert.dismiss();
 			}
 			return alertText;
 		} finally {
-			acceptNextAlert = true;
+			this.acceptNextAlert = true;
 		}
 	}
 }
