@@ -53,7 +53,7 @@ public class AcceptReservationWhenIsAdminUITest {
 		this.driver.findElement(By.id("password")).sendKeys("owner");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
-		this.driver.findElement(By.linkText("Room2")).click();
+		this.driver.findElement(By.linkText("Room4")).click();
 		this.driver.findElement(By.linkText("Add New Reservation")).click();
 		this.driver.findElement(By.id("entryDate")).click();
 		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
@@ -63,8 +63,8 @@ public class AcceptReservationWhenIsAdminUITest {
 		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
 		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
 		this.driver.findElement(By.linkText("30")).click();
-		new Select(this.driver.findElement(By.id("pet"))).selectByVisibleText("Pet Dog");
-		this.driver.findElement(By.xpath("//option[@value='16']")).click();
+		new Select(this.driver.findElement(By.id("pet"))).selectByVisibleText("Pet Bird");
+		this.driver.findElement(By.xpath("//option[@value='17']")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
 		this.driver.findElement(By.linkText("Logout")).click();
@@ -78,7 +78,7 @@ public class AcceptReservationWhenIsAdminUITest {
 		this.driver.findElement(By.id("password")).sendKeys("4dm1n");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
-		this.driver.findElement(By.linkText("Room2")).click();
+		this.driver.findElement(By.linkText("Room4")).click();
 		this.driver.findElement(By.linkText("PENDING")).click();
 		new Select(this.driver.findElement(By.id("status"))).selectByVisibleText("ACCEPTED");
 		this.driver.findElement(By.xpath("//option[@value='ACCEPTED']")).click();

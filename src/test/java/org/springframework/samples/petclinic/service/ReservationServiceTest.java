@@ -1,6 +1,8 @@
 
 package org.springframework.samples.petclinic.service;
 
+import static org.junit.Assert.assertThat;
+
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -41,7 +43,7 @@ public class ReservationServiceTest {
 		 * El owner 12 tiene una reserva en la room 2 y la 4
 		 */
 		reservations = this.reservationService.findReservationsByOwnerAndRoomId(12, 2);
-		assertThat(reservations.size()).isEqualTo(2);
+		Assertions.assertThat(reservations.size()).isEqualTo(2);
 		/*
 		 * El owner 11 NO tiene una reserva en la room 2
 		 * por lo tanto la busqueda debe devolver un conjunto vacío.

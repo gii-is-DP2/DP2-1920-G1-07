@@ -33,8 +33,8 @@ public class CreateDiagnosisWhenIsVetUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		String pathToGeckoDriver = "C:\\Users\\mediamarkt\\Downloads";
-		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+//		String pathToGeckoDriver = "C:\\Users\\mediamarkt\\Downloads";
+//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		//		driver = new FirefoxDriver();
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
