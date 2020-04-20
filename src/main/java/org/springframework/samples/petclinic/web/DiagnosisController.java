@@ -49,9 +49,11 @@ public class DiagnosisController {
 
 	@PostMapping(value = "/vet/{vetId}/diagnosis")
 	public String processCreateDiagnosis(@Valid final Diagnosis diagnosis, final BindingResult result, final ModelMap model, @PathVariable("vetId") final int vetId, @RequestParam("visitId") final int visitId) {
-		if (diagnosis.getDate() == null) {
-			result.rejectValue("date", "Date must not be null");
-		}
+		DiagnosisValidator diagnosisValidator = new DiagnosisValidator(this.diagnosisService);
+		diagnosisValidator.validate(diagnosis, result);
+		//		if (diagnosis.getDate() == null) {
+		//			result.rejectValue("date", "Date must not be null");
+		//		}
 
 		if (result.hasErrors()) {
 			model.put("message", "Diagnosis not created");

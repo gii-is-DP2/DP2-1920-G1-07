@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Diagnosis;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
+import org.springframework.samples.petclinic.model.Vets;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.stereotype.Controller;
@@ -49,7 +50,7 @@ public class VetController {
 
 	private static final String	VIEWS_VET_CREATE_FORM	= "vets/createVet";
 	private static final String	VIEWS_VET_LIST			= "vets/visitList";
-	private static final String VIEWS_VET_ADMIN_LIST    = "vets/vetListAdmin";
+	private static final String	VIEWS_VET_ADMIN_LIST	= "vets/vetListAdmin";
 
 	private final VetService	vetService;
 
@@ -111,7 +112,20 @@ public class VetController {
 
 		return VetController.VIEWS_VET_LIST;
 	}
-	
+
+	@GetMapping(value = "/vets")
+	public String showVetList(final Map<String, Object> model, @RequestParam("ownerId") final int ownerId, @RequestParam("petId") final int petId) {
+		// Here we are returning an object of type 'Vets' rather than a collection of Vet
+		// objects
+		// so it is simpler for Object-Xml mapping
+		Vets vets = new Vets();
+		vets.getVetList().addAll(this.vetService.findVets());
+		model.put("vets", vets);
+		model.put("petId", petId);
+		model.put("ownerId", ownerId);
+		return "vets/vetList";
+	}
+
 	@GetMapping(value = "/vets/admin")
 	public String vestShow(final Map<String, Object> model, final HttpServletRequest request) {
 
@@ -120,7 +134,5 @@ public class VetController {
 
 		return VetController.VIEWS_VET_ADMIN_LIST;
 	}
-	
-	
 
 }

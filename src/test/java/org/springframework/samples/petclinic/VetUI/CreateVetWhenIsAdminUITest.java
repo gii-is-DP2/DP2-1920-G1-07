@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.RoomUI;
+package org.springframework.samples.petclinic.VetUI;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,14 +14,14 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CreateRoomWhenIsAdminUITest {
+
+public class CreateVetWhenIsAdminUITest {
 
 	private WebDriver		driver;
 	private String			baseUrl;
@@ -42,7 +42,7 @@ public class CreateRoomWhenIsAdminUITest {
 	}
 
 	@Test
-	public void testCreateRoomWhereIsAdminUI() throws Exception {
+	public void testCreateVetWhenIsAdminUI() throws Exception {
 		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		this.driver.findElement(By.id("username")).click();
@@ -52,21 +52,24 @@ public class CreateRoomWhenIsAdminUITest {
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("4dm1n");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
-		Assert.assertEquals("Add New Room", this.driver.findElement(By.linkText("Add New Room")).getText());
-		this.driver.findElement(By.linkText("Add New Room")).click();
-		this.driver.findElement(By.xpath("//h2")).click();
-		Assert.assertEquals("New Room", this.driver.findElement(By.xpath("//h2")).getText());
-		this.driver.findElement(By.id("name")).click();
-		this.driver.findElement(By.id("name")).clear();
-		this.driver.findElement(By.id("name")).sendKeys("Room5");
-		this.driver.findElement(By.id("capacity")).click();
-		this.driver.findElement(By.id("capacity")).clear();
-		this.driver.findElement(By.id("capacity")).sendKeys("3");
-		new Select(this.driver.findElement(By.id("type"))).selectByVisibleText("bird");
-		this.driver.findElement(By.xpath("//option[@value='bird']")).click();
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Assert.assertEquals("Room5", this.driver.findElement(By.linkText("Room5")).getText());
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[5]/a/span[2]")).click();
+		this.driver.findElement(By.linkText("Create Vet")).click();
+		this.driver.findElement(By.id("firstName")).click();
+		this.driver.findElement(By.id("firstName")).clear();
+		this.driver.findElement(By.id("firstName")).sendKeys("Vet5");
+		this.driver.findElement(By.id("lastName")).clear();
+		this.driver.findElement(By.id("lastName")).sendKeys("vet5");
+		// ERROR: Caught exception [ERROR: Unsupported command [addSelection | id=specialties | label=dentistry]]
+		this.driver.findElement(By.xpath("//option[@value='3']")).click();
+		// ERROR: Caught exception [ERROR: Unsupported command [removeSelection | id=specialties | label=dentistry]]
+		// ERROR: Caught exception [ERROR: Unsupported command [addSelection | id=specialties | label=radiology]]
+		this.driver.findElement(By.xpath("//option[@value='1']")).click();
+		this.driver.findElement(By.id("user.username")).click();
+		this.driver.findElement(By.id("user.username")).clear();
+		this.driver.findElement(By.id("user.username")).sendKeys("vet");
+		this.driver.findElement(By.id("user.password")).clear();
+		this.driver.findElement(By.id("user.password")).sendKeys("vet");
+		this.driver.findElement(By.id("add-vet-form")).submit();
 	}
 
 	@AfterEach

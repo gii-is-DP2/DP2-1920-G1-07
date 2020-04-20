@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.RoomUI;
+package org.springframework.samples.petclinic.DiagnosisUI;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,14 +14,14 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CreateRoomWhenIsAdminUITest {
+
+public class CreateDiagnosisWhenIsVetUITest {
 
 	private WebDriver		driver;
 	private String			baseUrl;
@@ -42,31 +42,48 @@ public class CreateRoomWhenIsAdminUITest {
 	}
 
 	@Test
-	public void testCreateRoomWhereIsAdminUI() throws Exception {
+	public void testCreateDiagnosisWhenIsVetUI() throws Exception {
 		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		this.driver.findElement(By.id("username")).click();
 		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("admin1");
+		this.driver.findElement(By.id("username")).sendKeys("owner");
 		this.driver.findElement(By.id("password")).click();
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("4dm1n");
+		this.driver.findElement(By.id("password")).sendKeys("owner");
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/a/span[2]")).click();
+		this.driver.findElement(By.linkText("Add Visit")).click();
+		this.driver.findElement(By.xpath("(//a[contains(text(),'Add Visit')])[7]")).click();
+		this.driver.findElement(By.xpath("//form[@id='visit']/div")).click();
+		this.driver.findElement(By.id("description")).click();
+		this.driver.findElement(By.id("description")).clear();
+		this.driver.findElement(By.id("description")).sendKeys("revision");
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[1]/a/span[2]")).click();
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
+		this.driver.findElement(By.linkText("Logout")).click();
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
+		this.driver.findElement(By.id("username")).click();
+		this.driver.findElement(By.id("username")).clear();
+		this.driver.findElement(By.id("username")).sendKeys("vet2");
+		this.driver.findElement(By.id("password")).click();
+		this.driver.findElement(By.id("password")).clear();
+		this.driver.findElement(By.id("password")).sendKeys("12345");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
-		Assert.assertEquals("Add New Room", this.driver.findElement(By.linkText("Add New Room")).getText());
-		this.driver.findElement(By.linkText("Add New Room")).click();
-		this.driver.findElement(By.xpath("//h2")).click();
-		Assert.assertEquals("New Room", this.driver.findElement(By.xpath("//h2")).getText());
-		this.driver.findElement(By.id("name")).click();
-		this.driver.findElement(By.id("name")).clear();
-		this.driver.findElement(By.id("name")).sendKeys("Room5");
-		this.driver.findElement(By.id("capacity")).click();
-		this.driver.findElement(By.id("capacity")).clear();
-		this.driver.findElement(By.id("capacity")).sendKeys("3");
-		new Select(this.driver.findElement(By.id("type"))).selectByVisibleText("bird");
-		this.driver.findElement(By.xpath("//option[@value='bird']")).click();
+		this.driver.findElement(By.linkText("Add diagnosis")).click();
+		this.driver.findElement(By.id("description")).click();
+		this.driver.findElement(By.id("description")).clear();
+		this.driver.findElement(By.id("description")).sendKeys("Todo bien");
+		this.driver.findElement(By.id("date")).click();
+		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
+		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
+		this.driver.findElement(By.linkText("20")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Assert.assertEquals("Room5", this.driver.findElement(By.linkText("Room5")).getText());
 	}
 
 	@AfterEach
