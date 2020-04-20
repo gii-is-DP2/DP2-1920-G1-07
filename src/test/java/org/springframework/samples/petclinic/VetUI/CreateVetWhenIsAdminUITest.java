@@ -69,7 +69,8 @@ public class CreateVetWhenIsAdminUITest {
 		this.driver.findElement(By.id("user.username")).sendKeys("vet");
 		this.driver.findElement(By.id("user.password")).clear();
 		this.driver.findElement(By.id("user.password")).sendKeys("vet");
-		this.driver.findElement(By.id("add-vet-form")).submit();
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		//		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[5]/a/span[2]")).click();
 	}
 
 	@AfterEach
