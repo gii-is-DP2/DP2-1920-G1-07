@@ -83,8 +83,15 @@
                 <td>
                 	<petclinic:localDate date="${reservation.exitDate}" pattern="yyyy/MM/dd"/>
                 </td>
-                <td> 
-                    <c:out value="${reservation.pet}"/> 
+                 <td>
+                <c:if test="${reservation.pet != '14' && reservation.pet != '15' && reservation.pet != '16' && reservation.pet != '17'}">
+                 		<c:out value="${reservation.pet}"/>
+                </c:if>
+				<c:if test="${reservation.pet == '14'}">Pet Cat</c:if>
+                <c:if test="${reservation.pet == '15'}">Pet Snake</c:if>
+                <c:if test="${reservation.pet == '16'}">Pet Dog</c:if>	
+                <c:if test="${reservation.pet == '17'}">Pet Bird</c:if>
+                
                 </td>
                  <sec:authorize access="hasAnyAuthority('admin')">
                 <td>
@@ -123,8 +130,15 @@
                 	<petclinic:localDate date="${reservation.exitDate}" pattern="yyyy/MM/dd"/>
                 </td>
                 
-                <td> 
-                    <c:out value="${reservation.pet}"/> 
+                <td>
+                <c:if test="${reservation.pet != '14' && reservation.pet != '15' && reservation.pet != '16' && reservation.pet != '17'}">
+                 		<c:out value="${reservation.pet}"/>
+                </c:if>
+				<c:if test="${reservation.pet == '14'}">Pet Cat</c:if>
+                <c:if test="${reservation.pet == '15'}">Pet Snake</c:if>
+                <c:if test="${reservation.pet == '16'}">Pet Dog</c:if>	
+                <c:if test="${reservation.pet == '17'}">Pet Bird</c:if>
+                
                 </td>
                 <sec:authorize access="hasAnyAuthority('owner')">
                 	<td>
