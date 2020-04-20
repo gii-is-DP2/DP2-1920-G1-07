@@ -81,7 +81,7 @@ public class CreateDiagnosisWithPastDateWhenIsVetUITest {
 		this.driver.findElement(By.id("date")).click();
 		this.driver.findElement(By.linkText("1")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Assert.assertEquals("The date must be after the current date", this.driver.findElement(By.xpath("//form[@id='add-diagnosis-form']/div/div/div/span[2]")).getText());
+		Assert.assertEquals("The date is before the current date", this.driver.findElement(By.xpath("//form[@id='add-diagnosis-form']/div/div/div/span[2]")).getText());
 	}
 
 	@AfterEach
