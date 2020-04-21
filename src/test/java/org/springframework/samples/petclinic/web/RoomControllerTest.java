@@ -1,4 +1,3 @@
-
 package org.springframework.samples.petclinic.web;
 
 import java.time.LocalDate;
@@ -28,6 +27,8 @@ import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.ModelMap;
 
@@ -49,6 +50,7 @@ import org.springframework.samples.petclinic.service.RoomService;
 import org.springframework.samples.petclinic.service.SitterService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -191,6 +193,7 @@ class RoomControllerTest {
 	void testInitChangeSitterForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{roomId}/sitter", RoomControllerTest.TEST_ROOM_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("sitters"))
 			.andExpect(MockMvcResultMatchers.view().name("rooms/selectSitter"));
+	}
 
   @WithMockUser(value = "spring")
 	@Test
@@ -203,12 +206,6 @@ class RoomControllerTest {
 		.andExpect(status().is3xxRedirection());
 	}
 
-	@WithMockUser(value = "spring")
-	@Test
-	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/rooms/new").param("id", "1").with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Test Room").param("capacity", "2").param("type", "dog"))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
-	}
 
 	@WithMockUser(value = "spring")
 	@Test
