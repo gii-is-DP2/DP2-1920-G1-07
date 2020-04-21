@@ -19,7 +19,7 @@ public class CreateDonationUITest {
 
   @BeforeEach
   public void setUp() throws Exception {
-//	String pathToGeckoDriver = "C:\\Users\\Capi\\AppData\\Local\\Temp";
+//	String pathToGeckoDriver = "C:\\Users\\Capi\\AppData\\Local\\Temp"; 
 //	System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
     driver = new FirefoxDriver();
     baseUrl = "https://www.google.com/";
