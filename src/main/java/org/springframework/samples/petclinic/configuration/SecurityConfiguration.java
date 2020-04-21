@@ -37,8 +37,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/owners/**").hasAnyAuthority("owner", "admin").antMatchers("/owner/**").hasAnyAuthority("owner", "admin").antMatchers("/owner/pets/**").hasAnyAuthority("owner").antMatchers("/cause/donations").hasAnyAuthority("owner", "admin")
 			.antMatchers("/cause/donations/**").hasAnyAuthority("owner", "admin").antMatchers("/donations/**").hasAnyAuthority("admin", "owner").antMatchers("/cause").permitAll().antMatchers("/cause/**").hasAnyAuthority("admin", "owner", "veterinarian")
 			.antMatchers("/myCauses").hasAnyAuthority("admin", "owner", "veterinarian").antMatchers("/causes/PendingCauses").hasAnyAuthority("admin").antMatchers("/vets/**").authenticated().antMatchers("/request/**").authenticated()
-			.antMatchers("/rooms/**").hasAnyAuthority("admin", "owner", "veterinarian", "sitter").antMatchers("/vets/create").hasAnyAuthority("admin").antMatchers("/vets/visit").hasAnyAuthority("veterinarian").antMatchers("/vet/{vetId}/diagnosis")
-			.hasAnyAuthority("veterinarian").antMatchers("/diagnosis/myDiagnosis").hasAnyAuthority("owner").antMatchers("/visits").permitAll().antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
+			.antMatchers("/rooms/**").hasAnyAuthority("admin", "owner", "veterinarian", "sitter").antMatchers("/sitter/**").hasAnyAuthority("sitter").antMatchers("/vets/create").hasAnyAuthority("admin").antMatchers("/vets/visit")
+			.hasAnyAuthority("veterinarian").antMatchers("/vet/{vetId}/diagnosis").hasAnyAuthority("veterinarian").antMatchers("/diagnosis/myDiagnosis").hasAnyAuthority("owner").antMatchers("/visits").permitAll().antMatchers("/vets/**").authenticated()
+			.anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
 			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
 		// Configuración para que funcione la consola de administración

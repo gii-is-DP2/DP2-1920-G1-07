@@ -19,7 +19,11 @@ public interface SpringDataRoomRepository extends RoomRepository, Repository<Roo
 	@Override
 	@Query("SELECT r from Room r where r.id =:roomId")
 	Room findById(@Param("roomId") int roomId);
-	
+
+	@Override
+	@Query("SELECT r from Room r where r.sitter.user.username = :name")
+	Iterable<Room> findRoomsBySitterUserName(@Param("name") String name);
+
 	@Query("SELECT r.name from Room r")
 	Collection<String> findAllRoomsNames();
 }

@@ -20,4 +20,6 @@ public interface RoomRepository {
 	
 	Collection<String> findAllRoomsNames() throws DataAccessException;
 
+	Iterable<Room> findRoomsBySitterUserName(String name) throws DataAccessException;
+
 }
