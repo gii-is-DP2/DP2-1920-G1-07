@@ -47,4 +47,9 @@ public class RoomService {
 	public Iterable<Room> findRoomsBySitterUserName(final String name) {
 		return this.roomRepo.findRoomsBySitterUserName(name);
 	}
+	
+	@Transactional
+	public Collection<String> findAllRoomsName() throws DataAccessException {
+		return roomRepo.findAllRoomsNames();
+	}
 }

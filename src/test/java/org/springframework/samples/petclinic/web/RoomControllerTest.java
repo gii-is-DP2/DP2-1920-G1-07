@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.assertj.core.util.Arrays;
+
 import org.assertj.core.util.Lists;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +24,24 @@ import org.springframework.samples.petclinic.model.Reservation;
 import org.springframework.samples.petclinic.model.Room;
 import org.springframework.samples.petclinic.model.Status;
 import org.springframework.samples.petclinic.model.User;
+
+import org.springframework.samples.petclinic.service.VetService;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.ui.ModelMap;
+
+import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
+
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import org.mockito.BDDMockito;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
+
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.ReservationService;
@@ -29,10 +49,17 @@ import org.springframework.samples.petclinic.service.RoomService;
 import org.springframework.samples.petclinic.service.SitterService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;import java.awt.print.Printable;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @WebMvcTest(controllers = RoomController.class, includeFilters = @ComponentScan.Filter(value = PetTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE),
 	excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
@@ -133,8 +160,13 @@ class RoomControllerTest {
 		room.setReservations(reservationsEmpty);
 		room2.setReservations(reservations);
 
-		BDDMockito.given(this.reservationService.findReservationsById(RoomControllerTest.TEST_RESERVATION_ID)).willReturn(res);
-		BDDMockito.given(this.ownerService.findOwnerById(RoomControllerTest.TEST_SPRING_ID)).willReturn(spring);
+		Collection<String> roomNames = new ArrayList<String>();
+		roomNames.add(room.getName());
+		roomNames.add(room2.getName());
+		
+		BDDMockito.given(this.roomService.findAllRoomsName()).willReturn(roomNames);
+		BDDMockito.given(this.reservationService.findReservationsById(TEST_RESERVATION_ID)).willReturn(res);
+		BDDMockito.given(this.ownerService.findOwnerById(TEST_SPRING_ID)).willReturn(spring);
 		BDDMockito.given(this.ownerService.findOwnerByUserName("owner")).willReturn(owner);
 		BDDMockito.given(this.petService.findPetTypes()).willReturn(Lists.newArrayList(dogType));
 		BDDMockito.given(this.roomService.findRoomById(RoomControllerTest.TEST_ROOM_ID)).willReturn(room);
@@ -159,6 +191,16 @@ class RoomControllerTest {
 	void testInitChangeSitterForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{roomId}/sitter", RoomControllerTest.TEST_ROOM_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("sitters"))
 			.andExpect(MockMvcResultMatchers.view().name("rooms/selectSitter"));
+
+  @WithMockUser(value = "spring")
+	@Test
+	void testProcessCreationFormSuccess() throws Exception { 
+		mockMvc.perform(post("/rooms/new").param("id", "1")
+								.with(csrf())
+								.param("name", "Test Room2")
+								.param("capacity", "2")
+								.param("type", "dog"))
+		.andExpect(status().is3xxRedirection());
 	}
 
 	@WithMockUser(value = "spring")
@@ -170,10 +212,18 @@ class RoomControllerTest {
 
 	@WithMockUser(value = "spring")
 	@Test
-	void testProcessCreationFormHasErrorsOnCapacity() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/rooms/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("id", "1").param("name", "Bad Room").param("capacity", "0").param("type", "dog"))
-			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors("room")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("room", "capacity"))
-			.andExpect(MockMvcResultMatchers.view().name("rooms/createOrUpdateRoomForm"));
+
+	void testProcessCreationFormHasErrorsOnCapacityAndName() throws Exception {
+		mockMvc.perform(post("/rooms/new")
+				.with(csrf())
+				.param("id", "1")
+				.param("name","Test Room")
+				.param("capacity", "0")
+				.param("type","dog"))
+		.andExpect(status().isOk())
+		.andExpect(model().attributeHasErrors("room"))
+		.andExpect(model().attributeHasFieldErrors("room","capacity","name"))
+		.andExpect(view().name("rooms/createOrUpdateRoomForm"));
 	}
 	@WithMockUser(value = "spring")
 	@Test
