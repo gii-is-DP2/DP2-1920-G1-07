@@ -33,8 +33,9 @@ public class CreateVetWhenIsAdminUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-//		String pathToGeckoDriver = "C:\\Users\\mediamarkt\\Downloads";
-//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
+		//		String pathToGeckoDriver = "C:\\Users\\mediamarkt\\Downloads";
+		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		//		driver = new FirefoxDriver();
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";

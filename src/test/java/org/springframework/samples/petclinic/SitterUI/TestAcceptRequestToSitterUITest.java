@@ -15,7 +15,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 
-public class TestAcceptRequestToSitter {
+public class TestAcceptRequestToSitterUITest {
 
 	private WebDriver		driver;
 	private String			baseUrl;
@@ -25,6 +25,7 @@ public class TestAcceptRequestToSitter {
 
 	@BeforeEach
 	public void setUp() throws Exception {
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
 		//		String pathToGeckoDriver = "C:\\gecko";
 		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();

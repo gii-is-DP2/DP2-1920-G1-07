@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.SitterUI;
+package org.springframework.samples.petclinic.PetUI;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,8 +13,9 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 
-public class TestSitterAccessRoom {
+public class TestCreatePetUITest {
 
 	private WebDriver		driver;
 	private String			baseUrl;
@@ -24,37 +25,38 @@ public class TestSitterAccessRoom {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		//	String pathToGeckoDriver = "C:\\gecko";
-		//	System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
+		//		String pathToGeckoDriver = "C:\\gecko";
+		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testSitterAccessRoom() throws Exception {
+	public void testCreatePet() throws Exception {
 		this.driver.get("http://localhost:8080/");
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("sitter");
+		this.driver.findElement(By.id("password")).sendKeys("0wn3r");
 		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("sitter1");
+		this.driver.findElement(By.id("username")).sendKeys("owner1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
-		this.driver.findElement(By.linkText("Room1")).click();
+		this.driver.findElement(By.xpath("//a[contains(@href, '/owner/pets')]")).click();
+		this.driver.findElement(By.linkText("Add New Pet")).click();
+		this.driver.findElement(By.id("name")).click();
+		this.driver.findElement(By.id("name")).clear();
+		this.driver.findElement(By.id("name")).sendKeys("oleeeeee");
+		this.driver.findElement(By.id("birthDate")).click();
+		this.driver.findElement(By.linkText("1")).click();
+		new Select(this.driver.findElement(By.id("type"))).selectByVisibleText("cat");
+		this.driver.findElement(By.xpath("//option[@value='cat']")).click();
+		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		try {
-			Assert.assertEquals("Room1", this.driver.findElement(By.xpath("//b")).getText());
+			Assert.assertEquals("oleeeeee", this.driver.findElement(By.xpath("//tr[2]/td/dl/dd")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}
-		try {
-			Assert.assertEquals("sitter1", this.driver.findElement(By.xpath("//tr[4]/td")).getText());
-		} catch (Error e) {
-			this.verificationErrors.append(e.toString());
-		}
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
-		this.driver.findElement(By.linkText("Logout")).click();
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 	}
 
 	@AfterEach

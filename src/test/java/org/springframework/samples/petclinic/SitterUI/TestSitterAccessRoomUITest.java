@@ -13,9 +13,8 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 
-public class TestSelectSitterToRoom {
+public class TestSitterAccessRoomUITest {
 
 	private WebDriver		driver;
 	private String			baseUrl;
@@ -25,35 +24,37 @@ public class TestSelectSitterToRoom {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		//		String pathToGeckoDriver = "C:\\gecko";
-		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
+		//	String pathToGeckoDriver = "C:\\gecko";
+		//	System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testSelectSitterToRoom() throws Exception {
+	public void testSitterAccessRoom() throws Exception {
 		this.driver.get("http://localhost:8080/");
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("4dm1n");
+		this.driver.findElement(By.id("password")).sendKeys("sitter");
 		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("admin1");
+		this.driver.findElement(By.id("username")).sendKeys("sitter1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//a[contains(@href, '/rooms')]")).click();
-		this.driver.findElement(By.linkText("Room3")).click();
-		this.driver.findElement(By.linkText("Change Sitter")).click();
-		new Select(this.driver.findElement(By.id("sitter"))).selectByVisibleText("14");
-		this.driver.findElement(By.xpath("//option[@value='14']")).click();
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
+		this.driver.findElement(By.linkText("Room1")).click();
+		try {
+			Assert.assertEquals("Room1", this.driver.findElement(By.xpath("//b")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
 		try {
 			Assert.assertEquals("sitter1", this.driver.findElement(By.xpath("//tr[4]/td")).getText());
 		} catch (Error e) {
 			this.verificationErrors.append(e.toString());
 		}
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
-		this.driver.findElement(By.xpath("//a[contains(@href, '/logout')]")).click();
+		this.driver.findElement(By.linkText("Logout")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 	}
 
