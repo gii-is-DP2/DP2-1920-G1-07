@@ -38,7 +38,7 @@
 						<c:out value="${cause.status.name}"></c:out>
 					</td>
 					 <td>
-                     	<spring:url value="/cause/PendingCauses/cause/{causeId}/edit" var="causeEditUrl">
+                     	<spring:url value="/causes/PendingCauses/cause/{causeId}/edit" var="causeEditUrl">
                         	<spring:param name="causeId" value="${cause.id}"/>
                         </spring:url>
                             <a href="${fn:escapeXml(causeEditUrl)}">Edit Status</a>

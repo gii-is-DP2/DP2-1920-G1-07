@@ -9,7 +9,6 @@
 
 <petclinic:layout pageName="cause">
 	<h2>Causes</h2>
-	
 	<table id="causesTable" class="table table-striped">
 		<thead>
 			<tr>
@@ -54,11 +53,11 @@
     <spring:url value="/cause/new" var="addCause"/>
     <a href="${fn:escapeXml(addCause)}" class="btn btn-default">Add New Cause</a>
     
-    <spring:url value="/cause/myCauses" var="myCauses"/>
+    <spring:url value="/cause/myCauses/${userName}" var="myCauses"/>
     <a href="${fn:escapeXml(myCauses)}" class="btn btn-default">See My Causes</a>
     
    <sec:authorize access="hasAnyAuthority('admin')"> 
-    <spring:url value="/cause/PendingCauses" var="pending"/>
+    <spring:url value="/causes/PendingCauses" var="pending"/>
     <a href="${fn:escapeXml(pending)}" class="btn btn-default">See Pending Causes</a>
    </sec:authorize>
 	

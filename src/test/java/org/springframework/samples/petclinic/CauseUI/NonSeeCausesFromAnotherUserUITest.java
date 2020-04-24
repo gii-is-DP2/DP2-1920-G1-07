@@ -20,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CrearCausaFallidaUITest {
+public class NonSeeCausesFromAnotherUserUITest {
 
 	@LocalServerPort
 	private int				port;
@@ -32,15 +32,16 @@ public class CrearCausaFallidaUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		String pathToGeckoDriver = "C:\\Users\\alvar";
-		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
+		//		String pathToGeckoDriver = "C:\\Users\\alvar";
+		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testCrearCausaFallida() throws Exception {
+	public void testNonSeeCausesFromAnotherUserUI() throws Exception {
 		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		this.driver.findElement(By.id("password")).clear();
@@ -49,9 +50,9 @@ public class CrearCausaFallidaUITest {
 		this.driver.findElement(By.id("username")).sendKeys("owner1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/cause')]")).click();
-		this.driver.findElement(By.xpath("//a[contains(@href, '/cause/new')]")).click();
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Assert.assertEquals("The title is empty", this.driver.findElement(By.xpath("//form[@id='add-cause-form']/div/div/div/span[2]")).getText());
+		this.driver.findElement(By.xpath("//a[contains(@href, '/cause/myCauses/owner1')]")).click();
+		this.driver.get("http://localhost:8080/cause/myCauses/admin1");
+		//		Assert.assertEquals("No puedes ver las causas que ha realizado otra persona", this.driver.findElement(By.cssSelector("#mensaje")).getText());
 	}
 
 	@AfterEach

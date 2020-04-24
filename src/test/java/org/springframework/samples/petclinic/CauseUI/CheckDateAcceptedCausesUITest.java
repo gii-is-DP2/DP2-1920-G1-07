@@ -1,6 +1,7 @@
 
 package org.springframework.samples.petclinic.CauseUI;
 
+import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -20,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class VerCausasPendientesSoloAdminUITest {
+public class CheckDateAcceptedCausesUITest {
 
 	@LocalServerPort
 	private int				port;
@@ -28,30 +29,37 @@ public class VerCausasPendientesSoloAdminUITest {
 	private String			baseUrl;
 	private boolean			acceptNextAlert		= true;
 	private StringBuffer	verificationErrors	= new StringBuffer();
+	private LocalDate		fechaActual;
 
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		String pathToGeckoDriver = "C:\\Users\\alvar";
-		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
+		//		String pathToGeckoDriver = "C:\\Users\\alvar";
+		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		this.fechaActual = LocalDate.now();
 	}
 
 	@Test
-	public void testVerCausasPendientesSoloAdmin() throws Exception {
+	public void testCheckDateAcceptedCausesUI() throws Exception {
 		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("4dm1n");
+		this.driver.findElement(By.id("password")).sendKeys("0wn3r");
 		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("admin1");
+		this.driver.findElement(By.id("username")).sendKeys("owner1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[4]/a/span[2]")).click();
-		this.driver.findElement(By.linkText("See Pending Causes")).click();
-		Assert.assertEquals("ADMIN1", this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).getText());
-		Assert.assertEquals("PENDING", this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr/td[5]")).getText());
+		this.driver.findElement(By.xpath("//a[contains(@href, '/cause')]")).click();
+
+		String fechaCausa1 = this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr/td[3]")).getText();
+		LocalDate fecha1 = LocalDate.parse(fechaCausa1);
+		String fechaCausa2 = this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr[2]/td[3]")).getText();
+		LocalDate fecha2 = LocalDate.parse(fechaCausa2);
+		Assert.assertEquals(true, fecha1.isAfter(this.fechaActual));
+		Assert.assertEquals(true, fecha2.isAfter(this.fechaActual));
 	}
 
 	@AfterEach

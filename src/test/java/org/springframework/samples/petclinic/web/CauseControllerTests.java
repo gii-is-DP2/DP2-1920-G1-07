@@ -29,7 +29,6 @@ public class CauseControllerTests {
 
 	private static final int	TEST_CAUSE_ID			= 1;
 	private static final int	TEST_PENDING_STATUS_ID	= 1;
-	private static final int	TEST_ACCEPTED_STATUS_ID	= 2;
 
 	@Autowired
 	private CauseController		causeController;
@@ -119,7 +118,7 @@ public class CauseControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testFormMyCauses() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/cause/myCauses")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("causes"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/cause/myCauses/owner1")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("causes"))
 			.andExpect(MockMvcResultMatchers.view().name("causes/myCausesList"));
 	}
 
@@ -127,7 +126,7 @@ public class CauseControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testFormPendingCauses() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/cause/PendingCauses")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cause"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/causes/PendingCauses")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cause"))
 			.andExpect(MockMvcResultMatchers.view().name("causes/pendingCauses"));
 	}
 
@@ -135,7 +134,7 @@ public class CauseControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitUpdateStatusForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/cause/PendingCauses/cause/{causeId}/edit", CauseControllerTests.TEST_CAUSE_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cause"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/causes/PendingCauses/cause/{causeId}/edit", CauseControllerTests.TEST_CAUSE_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("cause"))
 			.andExpect(MockMvcResultMatchers.view().name("causes/updatePendingCauseForm"));
 	}
 
@@ -143,8 +142,8 @@ public class CauseControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessEditFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/cause/PendingCauses/cause/{causeId}/edit", CauseControllerTests.TEST_CAUSE_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("status.name", "ACCEPTED"))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/cause/PendingCauses"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/causes/PendingCauses/cause/{causeId}/edit", CauseControllerTests.TEST_CAUSE_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("status.name", "ACCEPTED"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/causes/PendingCauses"));
 	}
 
 }

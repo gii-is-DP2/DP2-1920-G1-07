@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class VerCausasAceptadasUITest {
+public class SeeAcceptedCausesUITest {
 
 	@LocalServerPort
 	private int				port;
@@ -33,8 +33,9 @@ public class VerCausasAceptadasUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		String pathToGeckoDriver = "C:\\Users\\alvar";
-		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
+		//		String pathToGeckoDriver = "C:\\Users\\alvar";
+		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -53,6 +54,12 @@ public class VerCausasAceptadasUITest {
 		this.driver.findElement(By.linkText("Causes")).click();
 		Assert.assertEquals("ACCEPTED", this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr/td[5]")).getText());
 		Assert.assertEquals("ACCEPTED", this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr[2]/td[5]")).getText());
+
+		String status1 = this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr/td[5]")).getText();
+		String status2 = this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr[2]/td[5]")).getText();
+		Assert.assertEquals(true, status1.equals("ACCEPTED"));
+		Assert.assertEquals(true, status2.equals("ACCEPTED"));
+
 	}
 
 	@AfterEach
