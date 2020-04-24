@@ -20,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CrearCausaFallidaUITest {
+public class NonAppearPendingOrRejectedCausesUITest {
 
 	@LocalServerPort
 	private int				port;
@@ -28,19 +28,24 @@ public class CrearCausaFallidaUITest {
 	private String			baseUrl;
 	private boolean			acceptNextAlert		= true;
 	private StringBuffer	verificationErrors	= new StringBuffer();
+	private String			pending;
+	private String			rejected;
 
 
 	@BeforeEach
 	public void setUp() throws Exception {
-//		String pathToGeckoDriver = "C:\\Users\\alvar";
-//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
+		//		String pathToGeckoDriver = "C:\\Users\\alvar";
+		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		this.pending = "PENDING";
+		this.rejected = "REJECTED";
 	}
 
 	@Test
-	public void testCrearCausaFallida() throws Exception {
+	public void testNonAppearPendingOrRejectedCausesUI() throws Exception {
 		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		this.driver.findElement(By.id("password")).clear();
@@ -49,9 +54,14 @@ public class CrearCausaFallidaUITest {
 		this.driver.findElement(By.id("username")).sendKeys("owner1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/cause')]")).click();
-		this.driver.findElement(By.xpath("//a[contains(@href, '/cause/new')]")).click();
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Assert.assertEquals("The title is empty", this.driver.findElement(By.xpath("//form[@id='add-cause-form']/div/div/div/span[2]")).getText());
+		Assert.assertEquals("ACCEPTED", this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr/td[5]")).getText());
+		Assert.assertEquals("ACCEPTED", this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr[2]/td[5]")).getText());
+
+		String status1 = this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr/td[5]")).getText();
+		String status2 = this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr[2]/td[5]")).getText();
+
+		Assert.assertEquals(true, !status1.equals(this.pending) && !status1.equals(this.rejected));
+		Assert.assertEquals(true, !status2.equals(this.pending) && !status2.equals(this.rejected));
 	}
 
 	@AfterEach

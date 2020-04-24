@@ -20,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CrearCausasPorOwnerUITest {
+public class NonSeePendingCausesByOwnerUITest {
 
 	@LocalServerPort
 	private int				port;
@@ -32,44 +32,25 @@ public class CrearCausasPorOwnerUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-//		String pathToGeckoDriver = "C:\\Users\\alvar";
-//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
+		//		String pathToGeckoDriver = "C:\\Users\\alvar";
+		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testUntitledTestCase() throws Exception {
+	public void testNonSeePendingCausesByOwnerUI() throws Exception {
 		this.driver.get("http://localhost:" + this.port);
-		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
+		this.driver.findElement(By.xpath("//a[contains(text(),'Login')]")).click();
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("0wn3r");
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("owner1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[4]/a/span[2]")).click();
-		this.driver.findElement(By.linkText("Add New Cause")).click();
-		this.driver.findElement(By.id("title")).click();
-		this.driver.findElement(By.id("title")).clear();
-		this.driver.findElement(By.id("title")).sendKeys("Causa Prueba");
-		this.driver.findElement(By.id("description")).click();
-		this.driver.findElement(By.id("description")).clear();
-		this.driver.findElement(By.id("description")).sendKeys("Causa descripcion");
-		this.driver.findElement(By.id("money")).click();
-		this.driver.findElement(By.id("money")).clear();
-		this.driver.findElement(By.id("money")).sendKeys("10000");
-		this.driver.findElement(By.id("deadline")).click();
-		this.driver.findElement(By.id("deadline")).clear();
-		this.driver.findElement(By.id("deadline")).sendKeys("2020/11/25");
-		this.driver.findElement(By.id("money")).click();
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.linkText("See My Causes")).click();
-		try {
-			Assert.assertEquals("Causa Prueba", this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr[4]/td[2]")).getText());
-		} catch (Error e) {
-			this.verificationErrors.append(e.toString());
-		}
+		this.driver.findElement(By.xpath("//a[contains(@href, '/cause')]")).click();
+		Assert.assertEquals(false, this.isElementPresent(By.linkText("See Pending Causes")));
 	}
 
 	@AfterEach

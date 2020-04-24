@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -20,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class VerMisCausasUITest {
+public class SeeAcceptedCausesUITest {
 
 	@LocalServerPort
 	private int				port;
@@ -32,30 +33,33 @@ public class VerMisCausasUITest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-//		String pathToGeckoDriver = "C:\\Users\\alvar";
-//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
+		//		String pathToGeckoDriver = "C:\\Users\\alvar";
+		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testVerMisCausas() throws Exception {
+	public void testVerCausasAceptadas() throws Exception {
 		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
-		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("0wn3r");
+		this.driver.findElement(By.id("username")).click();
 		this.driver.findElement(By.id("username")).clear();
 		this.driver.findElement(By.id("username")).sendKeys("owner1");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//a[contains(@href, '/cause')]")).click();
-		this.driver.findElement(By.xpath("//a[contains(@href, '/cause/myCauses')]")).click();
-		try {
-			Assert.assertEquals("OWNER1", this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).getText());
-		} catch (Error e) {
-			this.verificationErrors.append(e.toString());
-		}
-		Assert.assertEquals("PetClinic :: a Spring Framework demonstration", this.driver.getTitle());
+		this.driver.findElement(By.id("password")).clear();
+		this.driver.findElement(By.id("password")).sendKeys("0wn3r");
+		this.driver.findElement(By.id("password")).sendKeys(Keys.ENTER);
+		this.driver.findElement(By.linkText("Causes")).click();
+		Assert.assertEquals("ACCEPTED", this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr/td[5]")).getText());
+		Assert.assertEquals("ACCEPTED", this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr[2]/td[5]")).getText());
+
+		String status1 = this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr/td[5]")).getText();
+		String status2 = this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr[2]/td[5]")).getText();
+		Assert.assertEquals(true, status1.equals("ACCEPTED"));
+		Assert.assertEquals(true, status2.equals("ACCEPTED"));
+
 	}
 
 	@AfterEach

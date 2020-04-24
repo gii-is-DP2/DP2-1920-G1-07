@@ -21,6 +21,9 @@
 		</thead>
 
 		<tbody>
+			<div id="mensaje" class="mensaje">
+				<c:out value="${mensaje}"></c:out>
+			</div>
 			<c:forEach items="${causes}" var="causes">
 				<tr>
 					<td>
