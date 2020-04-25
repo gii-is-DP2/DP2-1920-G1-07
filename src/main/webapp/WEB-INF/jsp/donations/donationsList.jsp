@@ -1,3 +1,5 @@
+<%@page import="org.springframework.samples.petclinic.model.PayPalClient"%>
+<%@page import="org.springframework.samples.petclinic.web.PaypalController"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page session="false" trimDirectiveWhitespaces="true"%>
@@ -21,7 +23,7 @@
 				<sec:authorize access="hasAnyAuthority('admin')">
 					<th>Actions</th>
 				</sec:authorize>
-
+				<th>Finish Transaction</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -46,23 +48,29 @@
 								<spring:param name="donationId" value="${donation.id}" />
 								<spring:param name="causeId" value="${donation.causes.id}" />
 							</spring:url> <a href="${fn:escapeXml(donationUrl)}">Delete</a></td>
-							   </sec:authorize>
-						
-						
+					</sec:authorize>
+					<td>
+					<spring:url value="/paypal/make/payment" var="paypal" >
+        				<spring:param name="donationId" value="${donation.id}" />
+        				<spring:param name="currency" value="EUR"/>
+        			</spring:url>
+        			<a href="${fn:escapeXml(paypal)}">Pagar con Paypal</a>
+        			</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 	
 				<spring:url value="/cause/{causeId}/donations/new"
-					var="donationUrl2">
-					<spring:param name="causeId" value="${causes.id}"/>
+		var="donationUrl2">
+					<spring:param name="causeId" value="${causes.id}" />
 				</spring:url> 
 				<a href="${fn:escapeXml(donationUrl2)}" class="btn btn-default">Add Donation</a>
 
   
-  <spring:url value="/cause/{causeId}/donations/myDonations" var="myDonations">
-  <spring:param name="causeId" value="${causes.id}"/>
+  <spring:url value="/cause/{causeId}/donations/myDonations"
+		var="myDonations">
+  <spring:param name="causeId" value="${causes.id}" />
 				</spring:url> 
     <a href="${fn:escapeXml(myDonations)}" class="btn btn-default">See My Donations</a>
 

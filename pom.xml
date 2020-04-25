@@ -69,6 +69,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+        
         <!-- validation 
         <dependency>
                 <groupId>org.hibernate</groupId>
@@ -113,6 +114,12 @@
             <artifactId>bootstrap</artifactId>
             <version>${webjars-bootstrap.version}</version>
         </dependency>
+        <!-- PAYPAL DEPENDENCY -->
+        <dependency> 
+    		<groupId> com.paypal.sdk </groupId> 
+    		<artifactId> rest-api-sdk </artifactId> 
+    		<version> 1.13.1 </version> 
+		</dependency>
 
         <!-- Testing -->
         <dependency>

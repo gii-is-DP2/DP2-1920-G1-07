@@ -223,5 +223,13 @@ public class DonationController {
 		modelMap.addAttribute("donations", myDonations);
 		return view;
 	}
+	
+	@GetMapping("/donation/{donationId}")
+	public String showDonation(final ModelMap model, @PathVariable("donationId") int donationId) {
+		String view = "paypal/check";
+		Donation d = this.donationService.findDonationByIdNotOptional(donationId);
+		model.put("donation", d);
+		return view;
+	}
 
 }

@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.samples.petclinic.model.PayPalClient;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -34,11 +36,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll().antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers("/users/new").permitAll().antMatchers("/admin/**").hasAnyAuthority("admin")
-			.antMatchers("/owners/**").hasAnyAuthority("owner", "admin").antMatchers("/owner/**").hasAnyAuthority("owner", "admin").antMatchers("/owner/pets/**").hasAnyAuthority("owner").antMatchers("/cause/donations").hasAnyAuthority("owner", "admin")
-			.antMatchers("/cause/donations/**").hasAnyAuthority("owner", "admin").antMatchers("/donations/**").hasAnyAuthority("admin", "owner").antMatchers("/cause").permitAll().antMatchers("/cause/**").hasAnyAuthority("admin", "owner", "veterinarian")
-			.antMatchers("/myCauses").hasAnyAuthority("admin", "owner", "veterinarian").antMatchers("/causes/PendingCauses").hasAnyAuthority("admin").antMatchers("/vets/**").authenticated().antMatchers("/request/**").authenticated()
-			.antMatchers("/rooms/**").hasAnyAuthority("admin", "owner", "veterinarian", "sitter").antMatchers("/vets/create").hasAnyAuthority("admin").antMatchers("/vets/visit").hasAnyAuthority("veterinarian").antMatchers("/vet/{vetId}/diagnosis")
-			.hasAnyAuthority("veterinarian").antMatchers("/diagnosis/myDiagnosis").hasAnyAuthority("owner").antMatchers("/visits").permitAll().antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
+			.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")
+			.antMatchers("/owner/**").hasAnyAuthority("owner", "admin")
+			.antMatchers("/owner/pets/**").hasAnyAuthority("owner")
+			.antMatchers("/cause/donations").hasAnyAuthority("owner", "admin")
+			.antMatchers("/cause/donations/**").hasAnyAuthority("owner", "admin")
+			.antMatchers("/donations/**").hasAnyAuthority("admin", "owner")
+			.antMatchers("/cause").permitAll()
+			.antMatchers("/cause/**").hasAnyAuthority("admin", "owner", "veterinarian")
+			.antMatchers("/myCauses").hasAnyAuthority("admin", "owner", "veterinarian")
+			.antMatchers("/causes/PendingCauses").hasAnyAuthority("admin")
+			.antMatchers("/vets/**").authenticated()
+			.antMatchers("/request/**").authenticated()
+			.antMatchers("/rooms/**").hasAnyAuthority("admin", "owner", "veterinarian", "sitter")
+			.antMatchers("/vets/create").hasAnyAuthority("admin")
+			.antMatchers("/vets/visit").hasAnyAuthority("veterinarian")
+			.antMatchers("/vet/{vetId}/diagnosis").hasAnyAuthority("veterinarian")
+			.antMatchers("/paypal/**").hasAnyAuthority("owner","admin")
+			.antMatchers("/diagnosis/myDiagnosis").hasAnyAuthority("owner")
+			.antMatchers("/visits").permitAll()
+			.antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
 			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
 		// Configuración para que funcione la consola de administración
@@ -59,6 +76,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		PasswordEncoder encoder = NoOpPasswordEncoder.getInstance();
 		return encoder;
+	}
+	
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
 	}
 
 }
