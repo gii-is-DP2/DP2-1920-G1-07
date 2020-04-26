@@ -70,7 +70,7 @@ public class Visit extends BaseEntity {
 	@JoinColumn(name = "diagnosis_id")
 	private Diagnosis	diagnosis;
 
-
+	
 	public Diagnosis getDiagnosis() {
 		return this.diagnosis;
 	}

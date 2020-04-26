@@ -28,13 +28,20 @@
                         <tr>
                             <th>Visit Date</th>
                             <th>Description</th>
+                            <th>Google Calendar</th>
                         </tr>
                         </thead>
                         <c:forEach var="visit" items="${pet.visits}">
                             <tr>
                                 <td><petclinic:localDate date="${visit.date}" pattern="yyyy-MM-dd"/></td>
                                 <td><c:out value="${visit.description}"/></td>
-                            </tr>
+                            	<td>
+                            	<spring:url value="/singIn/google" var="eventUrl">
+                            		<spring:param name="visitId" value="${visit.id}"/>
+                            	</spring:url>
+                            	<a href="${fn:escapeXml(eventUrl)}">Add</a>
+                            	</td>
+              					</tr>
                         </c:forEach>
                         <tr>
                             <td>
