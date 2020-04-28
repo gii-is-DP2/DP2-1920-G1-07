@@ -127,7 +127,7 @@ public class VetController {
 	}
 
 	@GetMapping(value = "/vets/admin")
-	public String vestShow(final Map<String, Object> model, final HttpServletRequest request) {
+	public String vetsShow(final Map<String, Object> model, final HttpServletRequest request) {
 
 		Collection<Vet> vet = this.vetService.findVets();
 		model.put("vets", vet);

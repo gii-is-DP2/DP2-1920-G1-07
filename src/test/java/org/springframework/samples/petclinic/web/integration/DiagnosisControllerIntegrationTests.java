@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.samples.petclinic.model.Diagnosis;
 import org.springframework.samples.petclinic.service.DiagnosisService;
@@ -37,14 +36,13 @@ public class DiagnosisControllerIntegrationTests {
 	@Autowired
 	public DiagnosisController	diagnosisController;
 
-	@MockBean
-
+	@Autowired
 	public DiagnosisService		clinicService;
 
-	@MockBean
+	@Autowired
 	public VetService			vetService;
 
-	@MockBean
+	@Autowired
 	public VisitService			visitService;
 
 
@@ -65,13 +63,13 @@ public class DiagnosisControllerIntegrationTests {
 		ModelMap model = new ModelMap();
 		Diagnosis diagnosis = new Diagnosis();
 
-		diagnosis.setDate(LocalDate.now());
 		diagnosis.setDescription("Prueba");
+		diagnosis.setDate(LocalDate.of(2025, 3, 15));
+		//		this.clinicService.saveDiagnosis(diagnosis);
 
 		BindingResult bindingResult = new MapBindingResult(Collections.emptyMap(), "");
 
 		String view = this.diagnosisController.processCreateDiagnosis(diagnosis, bindingResult, model, DiagnosisControllerIntegrationTests.TEST_VET_ID, DiagnosisControllerIntegrationTests.TEST_VISIT_ID);
-
 		Assertions.assertEquals(view, "redirect:/vets/mySpace/");
 	}
 	//test de creacion de un diagnostico con fallo, ya que faltaria poner date

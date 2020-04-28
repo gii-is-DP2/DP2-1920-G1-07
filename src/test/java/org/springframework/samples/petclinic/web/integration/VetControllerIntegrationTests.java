@@ -10,10 +10,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
+import org.springframework.samples.petclinic.repository.UserRepository;
+import org.springframework.samples.petclinic.service.DiagnosisService;
+import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.VetService;
+import org.springframework.samples.petclinic.service.VisitService;
 import org.springframework.samples.petclinic.web.VetController;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.ui.ModelMap;
@@ -32,13 +36,23 @@ public class VetControllerIntegrationTests {
 
 	private static final int	TEST_PET_ID			= 1;
 
-	private static final String	TEST_USER_NAME		= "spring";
-
 	@Autowired
 	private VetController		vetController;
 
-	@MockBean
-	private VetService			clinicService;
+	@Autowired
+	public VetService			clinicService;
+
+	@Autowired
+	public DiagnosisService		diagnosisService;
+
+	@Autowired
+	public VisitService			visitService;
+
+	@Autowired
+	private UserService			userService;
+
+	@Autowired
+	private UserRepository		userRepository;
 
 
 	@Test
@@ -54,12 +68,19 @@ public class VetControllerIntegrationTests {
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		Vet vet = new Vet();
-		vet.setId(VetControllerIntegrationTests.TEST_VET_ID);
+		vet.setId(1);
 		vet.setFirstName("Pablo");
 		vet.setLastName("Reneses");
+		Specialty specialty = this.clinicService.findSpecialties().iterator().next();
+		Integer idSpecialty = specialty.getId();
 		int[] specialties = {
-			1
+			idSpecialty
 		};
+		//		this.clinicService.saveVet(vet);
+		//		User user = new User();
+		//		this.userRepository.save(user);
+		//		user.setEnabled(true);
+		//		this.userService.saveUser(vet.getUser());
 
 		BindingResult bindingResult = new MapBindingResult(Collections.emptyMap(), "");
 
@@ -87,10 +108,17 @@ public class VetControllerIntegrationTests {
 	}
 
 	@Test
-	void testShow() throws Exception {
-
-		Map<String, Object> model = new HashMap<String, Object>();
+	void testShowVisitList() throws Exception {
+		Map<String, Object> model = new HashMap<>();
 		MockHttpServletRequest request = new MockHttpServletRequest();
+		//		Principal principal = request.getUserPrincipal();
+		//		String userName = principal.getName();
+		//		model.put("userName", userName);
+
+		//		Vet vet = new Vet();
+		//		vet.setFirstName("James");
+		//		vet.setLastName("Carter");
+		//		int[] specialties = {};
 
 		String view = this.vetController.visitList(model, request);
 
