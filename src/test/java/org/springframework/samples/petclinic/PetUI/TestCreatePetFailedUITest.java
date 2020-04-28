@@ -7,15 +7,23 @@ import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestCreatePetFailedUITest {
 
+	@LocalServerPort
+	private int				port;
 	private WebDriver		driver;
 	private String			baseUrl;
 	private boolean			acceptNextAlert		= true;
@@ -25,8 +33,8 @@ public class TestCreatePetFailedUITest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
-		//		String pathToGeckoDriver = "C:\\gecko";
-		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		//String pathToGeckoDriver = "C:\\gecko";
+		//System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -34,7 +42,7 @@ public class TestCreatePetFailedUITest {
 
 	@Test
 	public void testCreatePetFailed() throws Exception {
-		this.driver.get("http://localhost:8080/");
+		this.driver.get("http://localhost:8080" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("0wn3r");
