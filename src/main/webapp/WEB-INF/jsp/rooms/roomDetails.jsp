@@ -34,7 +34,7 @@
         </tr>
     </table>
 	<sec:authorize access="hasAnyAuthority('admin')">
-    	<c:if test="${notHaveReservations==true}">
+    	<c:if test="${notHaveAcceptedReservations==true}">
     		<spring:url value="/rooms/{roomId}/edit" var="editUrl">
         		<spring:param name="roomId" value="${room.id}"/>
     		</spring:url>

@@ -54,7 +54,8 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;import java.awt.print.Printable;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import java.awt.print.Printable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,36 +64,34 @@ import java.util.Set;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
-@WebMvcTest(controllers = RoomController.class, includeFilters = @ComponentScan.Filter(value = PetTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE),
-	excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
+@WebMvcTest(controllers = RoomController.class, includeFilters = @ComponentScan.Filter(value = PetTypeFormatter.class, type = FilterType.ASSIGNABLE_TYPE), excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class RoomControllerTest {
 
-	public static final int		TEST_ROOM_ID					= 1;
-	public static final int		TEST_OWNER_ID					= 2;
-	private static final int	TEST_SPRING_ID					= 1;
-	public static final int		TEST_ROOM_WITHRESERVATION_ID	= 2;
-	public static final int		TEST_RESERVATION_ID				= 1;
+	public static final int TEST_ROOM_ID = 1;
+	public static final int TEST_OWNER_ID = 2;
+	private static final int TEST_SPRING_ID = 1;
+	public static final int TEST_ROOM_WITHRESERVATION_ID = 2;
+	public static final int TEST_RESERVATION_ID = 1;
 
 	@Autowired
-	private RoomController		roomController;
+	private RoomController roomController;
 
 	@MockBean
-	private RoomService			roomService;
+	private RoomService roomService;
 	@MockBean
-	private ReservationService	reservationService;
+	private ReservationService reservationService;
 
 	@MockBean
-	private OwnerService		ownerService;
+	private OwnerService ownerService;
 
 	@MockBean
-	private PetService			petService;
+	private PetService petService;
 
 	@MockBean
-	private SitterService		sitterService;
+	private SitterService sitterService;
 
 	@Autowired
-	private MockMvc				mockMvc;
-
+	private MockMvc mockMvc;
 
 	@WithMockUser(value = "spring")
 	@BeforeEach
@@ -166,134 +165,180 @@ class RoomControllerTest {
 		roomNames.add(room.getName());
 		roomNames.add(room2.getName());
 		
+		BDDMockito.given(this.reservationService.findReservationsByOwnerAndRoomId(TEST_OWNER_ID, TEST_ROOM_WITHRESERVATION_ID)).willReturn(reservations);
 		BDDMockito.given(this.roomService.findAllRoomsName()).willReturn(roomNames);
 		BDDMockito.given(this.reservationService.findReservationsById(TEST_RESERVATION_ID)).willReturn(res);
 		BDDMockito.given(this.ownerService.findOwnerById(TEST_SPRING_ID)).willReturn(spring);
 		BDDMockito.given(this.ownerService.findOwnerByUserName("owner")).willReturn(owner);
 		BDDMockito.given(this.petService.findPetTypes()).willReturn(Lists.newArrayList(dogType));
 		BDDMockito.given(this.roomService.findRoomById(RoomControllerTest.TEST_ROOM_ID)).willReturn(room);
-		BDDMockito.given(this.roomService.findRoomById(RoomControllerTest.TEST_ROOM_WITHRESERVATION_ID)).willReturn(room2);
+		BDDMockito.given(this.roomService.findRoomById(RoomControllerTest.TEST_ROOM_WITHRESERVATION_ID))
+				.willReturn(room2);
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testlistadoDeRomms() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("rooms")).andExpect(MockMvcResultMatchers.view().name("rooms/roomList"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms")).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("rooms"))
+				.andExpect(MockMvcResultMatchers.view().name("rooms/roomList"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitCreationForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("room"))
-			.andExpect(MockMvcResultMatchers.view().name("rooms/createOrUpdateRoomForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/new")).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("room"))
+				.andExpect(MockMvcResultMatchers.view().name("rooms/createOrUpdateRoomForm"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitChangeSitterForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{roomId}/sitter", RoomControllerTest.TEST_ROOM_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("sitters"))
-			.andExpect(MockMvcResultMatchers.view().name("rooms/selectSitter"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{roomId}/sitter", RoomControllerTest.TEST_ROOM_ID))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("sitters"))
+				.andExpect(MockMvcResultMatchers.view().name("rooms/selectSitter"));
 	}
 
-  @WithMockUser(value = "spring")
+	@WithMockUser(value = "spring")
 	@Test
-	void testProcessCreationFormSuccess() throws Exception { 
-		mockMvc.perform(post("/rooms/new").param("id", "1")
-								.with(csrf())
-								.param("name", "Test Room2")
-								.param("capacity", "2")
-								.param("type", "dog"))
-		.andExpect(status().is3xxRedirection());
+	void testProcessCreationFormSuccess() throws Exception {
+		mockMvc.perform(post("/rooms/new").param("id", "1").with(csrf()).param("name", "Test Room2")
+				.param("capacity", "2").param("type", "dog")).andExpect(status().is3xxRedirection());
 	}
-
 
 	@WithMockUser(value = "spring")
 	@Test
 
 	void testProcessCreationFormHasErrorsOnCapacityAndName() throws Exception {
-		mockMvc.perform(post("/rooms/new")
-				.with(csrf())
-				.param("id", "1")
-				.param("name","Test Room")
-				.param("capacity", "0")
-				.param("type","dog"))
-		.andExpect(status().isOk())
-		.andExpect(model().attributeHasErrors("room"))
-		.andExpect(model().attributeHasFieldErrors("room","capacity","name"))
-		.andExpect(view().name("rooms/createOrUpdateRoomForm"));
+		mockMvc.perform(post("/rooms/new").with(csrf()).param("id", "1").param("name", "Test Room")
+				.param("capacity", "0").param("type", "dog")).andExpect(status().isOk())
+				.andExpect(model().attributeHasErrors("room"))
+				.andExpect(model().attributeHasFieldErrors("room", "capacity", "name"))
+				.andExpect(view().name("rooms/createOrUpdateRoomForm"));
 	}
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormHasErrorsOnType() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/rooms/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("id", "1").param("name", "Bad Room")).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("type")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("room", "capacity", "type")).andExpect(MockMvcResultMatchers.view().name("rooms/createOrUpdateRoomForm"));
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/rooms/new").with(SecurityMockMvcRequestPostProcessors.csrf())
+						.param("id", "1").param("name", "Bad Room"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("type"))
+				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("room", "capacity", "type"))
+				.andExpect(MockMvcResultMatchers.view().name("rooms/createOrUpdateRoomForm"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitUpdateRoomForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{roomId}/edit", RoomControllerTest.TEST_ROOM_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("types"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("room")).andExpect(MockMvcResultMatchers.view().name("/rooms/createOrUpdateRoomForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{roomId}/edit", RoomControllerTest.TEST_ROOM_ID))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeExists("types"))
+				.andExpect(MockMvcResultMatchers.model().attributeExists("room"))
+				.andExpect(MockMvcResultMatchers.view().name("/rooms/createOrUpdateRoomForm"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateRoomFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/rooms/{roomId}/edit", RoomControllerTest.TEST_ROOM_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Room Updated").param("capacity", "3").param("type", "dog"))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/rooms/" + RoomControllerTest.TEST_ROOM_ID));
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/rooms/{roomId}/edit", RoomControllerTest.TEST_ROOM_ID)
+						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Room Updated")
+						.param("capacity", "3").param("type", "dog"))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/rooms/" + RoomControllerTest.TEST_ROOM_ID));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateRoomFormHasErrorsOnCapacity() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/rooms/{roomId}/edit", RoomControllerTest.TEST_ROOM_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Failed Room").param("type", "dog"))
-			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors("room")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("room", "capacity"))
-			.andExpect(MockMvcResultMatchers.view().name("/rooms/createOrUpdateRoomForm"));
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/rooms/{roomId}/edit", RoomControllerTest.TEST_ROOM_ID)
+						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Failed Room")
+						.param("type", "dog"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("room"))
+				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("room", "capacity"))
+				.andExpect(MockMvcResultMatchers.view().name("/rooms/createOrUpdateRoomForm"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateRoomFormHasErrorsOnCapacityNull() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/rooms/{roomId}/edit", RoomControllerTest.TEST_ROOM_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Failed Room").param("type", "dog").param("capacity", "0"))
-			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors("room")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("room", "capacity"))
-			.andExpect(MockMvcResultMatchers.view().name("/rooms/createOrUpdateRoomForm"));
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.post("/rooms/{roomId}/edit", RoomControllerTest.TEST_ROOM_ID)
+						.with(SecurityMockMvcRequestPostProcessors.csrf())
+						.param("name", "Failed Room")
+						.param("type", "dog")
+						.param("capacity", "0"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("room"))
+				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("room", "capacity"))
+				.andExpect(MockMvcResultMatchers.view().name("/rooms/createOrUpdateRoomForm"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowRoomsWithouthReservations() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{roomId}", RoomControllerTest.TEST_ROOM_ID)).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("name", Matchers.is("Test Room")))).andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("capacity", Matchers.is(4))))
-			.andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("type"))).andExpect(MockMvcResultMatchers.view().name("rooms/roomDetails"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{roomId}", RoomControllerTest.TEST_ROOM_ID))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attribute("room",
+						Matchers.hasProperty("name", Matchers.is("Test Room"))))
+				.andExpect(MockMvcResultMatchers.model().attribute("room",
+						Matchers.hasProperty("capacity", Matchers.is(4))))
+				.andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("type")))
+				.andExpect(MockMvcResultMatchers.view().name("rooms/roomDetails"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testShowRoomsWithReservations() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{roomId}", RoomControllerTest.TEST_ROOM_WITHRESERVATION_ID)).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("name", Matchers.is("Room with Reser")))).andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("capacity", Matchers.is(3))))
-			.andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("type"))).andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("reservations")))
-			.andExpect(MockMvcResultMatchers.view().name("rooms/roomDetails"));
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get("/rooms/{roomId}", RoomControllerTest.TEST_ROOM_WITHRESERVATION_ID))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attribute("room",
+						Matchers.hasProperty("name", Matchers.is("Room with Reser"))))
+				.andExpect(MockMvcResultMatchers.model().attribute("room",
+						Matchers.hasProperty("capacity", Matchers.is(3))))
+				.andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("type")))
+				.andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("reservations")))
+				.andExpect(MockMvcResultMatchers.view().name("rooms/roomDetails"));
 	}
 
 	@WithMockUser(value = "owner")
 	@Test
 	void testShowRoomsWithReservationsAndOwner() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/{roomId}", RoomControllerTest.TEST_ROOM_WITHRESERVATION_ID)).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("name", Matchers.is("Room with Reser")))).andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("capacity", Matchers.is(3))))
-			.andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("type"))).andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("reservations")))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("myReservations")).andExpect(MockMvcResultMatchers.view().name("rooms/roomDetails"));
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get("/rooms/{roomId}", RoomControllerTest.TEST_ROOM_WITHRESERVATION_ID))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.model().attribute("room",
+						Matchers.hasProperty("name", Matchers.is("Room with Reser"))))
+				.andExpect(MockMvcResultMatchers.model().attribute("room",
+						Matchers.hasProperty("capacity", Matchers.is(3))))
+				.andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("type")))
+				.andExpect(MockMvcResultMatchers.model().attribute("room", Matchers.hasProperty("reservations")))
+				.andExpect(MockMvcResultMatchers.model().attributeExists("myReservations"))
+				.andExpect(MockMvcResultMatchers.view().name("rooms/roomDetails"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessDeleteRoom() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/delete/{roomId}", RoomControllerTest.TEST_ROOM_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/rooms/"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/delete/{roomId}", RoomControllerTest.TEST_ROOM_ID))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/rooms/"));
 	}
+
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessDeleteRoomWithResercations() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/rooms/delete/{roomId}", RoomControllerTest.TEST_ROOM_WITHRESERVATION_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-			.andExpect(MockMvcResultMatchers.view().name("redirect:/rooms/"));
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.get("/rooms/delete/{roomId}",
+						RoomControllerTest.TEST_ROOM_WITHRESERVATION_ID))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/rooms/"));
 	}
 }

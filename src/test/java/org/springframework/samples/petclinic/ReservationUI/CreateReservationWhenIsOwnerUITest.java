@@ -53,7 +53,7 @@ public class CreateReservationWhenIsOwnerUITest {
 		this.driver.findElement(By.id("password")).sendKeys("owner");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
-		this.driver.findElement(By.linkText("Room4")).click();
+		this.driver.findElement(By.linkText("Room1")).click();
 		this.driver.findElement(By.linkText("Add New Reservation")).click();
 		this.driver.findElement(By.id("entryDate")).click();
 		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
@@ -63,12 +63,12 @@ public class CreateReservationWhenIsOwnerUITest {
 		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
 		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
 		this.driver.findElement(By.linkText("27")).click();
-		new Select(this.driver.findElement(By.id("pet"))).selectByVisibleText("Pet Bird");
-		this.driver.findElement(By.xpath("//option[@value='17']")).click();
+		new Select(this.driver.findElement(By.id("pet"))).selectByVisibleText("Pet Dog");
+		this.driver.findElement(By.xpath("//option[@value='16']")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		Assert.assertEquals("2020/06/19", this.driver.findElement(By.xpath("//tr[2]/td[3]")).getText());
 		Assert.assertEquals("2020/06/27", this.driver.findElement(By.xpath("//tr[2]/td[4]")).getText());
-		Assert.assertEquals("Pet Bird", this.driver.findElement(By.xpath("//tr[2]/td[5]")).getText());
+		Assert.assertEquals("Pet Dog", this.driver.findElement(By.xpath("//tr[2]/td[5]")).getText());
 	}
 
 	@AfterEach
