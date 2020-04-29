@@ -53,7 +53,13 @@ public class PetsController {
 	}
 
 	@GetMapping(value = "/owner/pets")
-	public ModelAndView showPets(final HttpServletRequest request) {
+	public ModelAndView showPets(final HttpServletRequest request,ModelMap model) {
+		/*
+		 * Añado el atributo wasSavedOnGoogleCalendar al model para que en caso de que ya se haya guardado 
+		 * la visita de una pet en google calendar ya no salga mas el boton para volver a hacerlo.
+		 */
+		String accessToken = (String) request.getSession().getAttribute("accessToken");
+		model.addAttribute("haceAccessToken", accessToken != null);
 		Principal principal = request.getUserPrincipal();
 		ModelAndView mav = new ModelAndView("pets/petList");
 		mav.addObject(this.ownerService.findOwnerByUser(principal.getName()));
