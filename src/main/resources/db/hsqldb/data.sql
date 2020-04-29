@@ -81,6 +81,8 @@ INSERT INTO owners VALUES (11, 'Amine', 'Chaghir', 'C/San Francisco n3', 'Zalame
 INSERT INTO owners VALUES (12, 'Prueba', 'Prueba', '110 W. Liberty St.', 'Madison', '666666666', 'owner');
 INSERT INTO owners VALUES (13, 'Pablo', 'Reneses', '110 W. Liberty St.', 'Sevilla', '666665432', 'pablo');
 
+INSERT INTO request(id,address,telephone,type_id,username) VALUES (1, 'Calle B', '666666666', 1, 'ownerFail');
+
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (2, 'Basil', '2012-08-06', 6, 2);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (3, 'Rosy', '2011-04-17', 2, 3);
