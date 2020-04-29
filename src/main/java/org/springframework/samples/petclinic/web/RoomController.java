@@ -182,7 +182,6 @@ public class RoomController {
 	}
 
 	@PostMapping(value = "/rooms/{roomId}/edit")
-
 	public String processUpdateRoom(@Valid final Room room, @PathVariable("roomId") final int roomId, final BindingResult result, final ModelMap modelMap) {
 		RoomValidator roomValidator = new RoomValidator(this.roomService, roomId);
 		roomValidator.validate(room, result);
@@ -201,19 +200,21 @@ public class RoomController {
 		ModelAndView mav = new ModelAndView("rooms/roomDetails");
 
 		Room r = this.roomService.findRoomById(roomId);
-		if (r.getReservations() != null) {
+		if (r.getReservations() != null ) {
 			Integer numReservationsAccepted = (int) r.getReservations().stream().filter(x -> x.getStatus().getName().equals("ACCEPTED")).count();
 			Boolean completedRoom = numReservationsAccepted == r.getCapacity();
 			model.addAttribute("completedRoom", completedRoom);
 			//Para no poder eliminar una room si tiene reservas
-			model.addAttribute("notHaveReservations", numReservationsAccepted == 0);
+			model.addAttribute("notHaveAcceptedReservations", numReservationsAccepted == 0);
 		}
 		//Para mostrar las reservas de cada usuario por cada habitacion, siempre y cuando no sea admin, ya que el admin las ve todas.
 		if (!this.hasRole("admin") && !this.hasRole("sitter") && !request.getUserPrincipal().getName().equals("spring")) {
 			Principal principal = request.getUserPrincipal();
 			int ownerId = this.ownerService.findOwnerByUserName(principal.getName()).getId();
 			Collection<Reservation> reservations = this.reservationService.findReservationsByOwnerAndRoomId(ownerId, roomId);
+			if(!reservations.isEmpty()) {
 			model.addAttribute("myReservations", reservations);
+			}
 		}
 		model.put("room", this.roomService.findRoomById(roomId));
 		mav.addObject(this.roomService.findRoomById(roomId));
