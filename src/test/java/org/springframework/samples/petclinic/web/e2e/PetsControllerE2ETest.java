@@ -49,7 +49,7 @@ public class PetsControllerE2ETest {
 	void testProcessCreationFormSuccess() throws Exception {
 		mockMvc.perform(post("/owner/pets/new")
 			.with(csrf())
-			.param("name", "Betty")
+			.param("name", "xWFASD")
 			.param("type", "hamster")
 			.param("birthDate", "2015/02/12"))
 		.andExpect(status().is3xxRedirection())

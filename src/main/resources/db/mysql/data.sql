@@ -11,6 +11,9 @@ INSERT INTO authorities VALUES ('sitter1','sitter');
 INSERT INTO users(username,password,enabled) VALUES ('amine','12345',TRUE);
 INSERT INTO authorities VALUES ('amine','owner');
 
+INSERT INTO users(username,password,enabled) VALUES ('ownerRequest','owner',TRUE);
+INSERT INTO authorities VALUES ('ownerRequest','owner');
+
 INSERT INTO users(username,password,enabled) VALUES ('pablo','12345',TRUE);
 INSERT INTO authorities VALUES ('pablo','owner');
 
@@ -79,8 +82,9 @@ INSERT INTO owners VALUES (10, 'Carlos', 'Estaban', '2335 Independence La.', 'Wa
 INSERT INTO owners VALUES (11, 'Amine', 'Chaghir', 'C/San Francisco n3', 'Zalamea de la Serena', '6085555487', 'amine');
 INSERT INTO owners VALUES (12, 'Prueba', 'Prueba', '110 W. Liberty St.', 'Madison', '666666666', 'owner');
 INSERT INTO owners VALUES (13, 'Pablo', 'Reneses', '110 W. Liberty St.', 'Sevilla', '666665432', 'pablo');
+INSERT INTO owners VALUES (14, 'Request', 'RE', '111 W. Liberty St.', 'Sevilla', '663665432', 'ownerRequest');
 
-INSERT INTO request(id,address,telephone,type_id,username) VALUES (1, 'Calle B', '666666666', 1, 'ownerFail');
+INSERT INTO request(id,address,telephone,type_id,username) VALUES (1, 'Calle B', '666666666', 1, 'ownerRequest');
 
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (2, 'Basil', '2012-08-06', 6, 2);
