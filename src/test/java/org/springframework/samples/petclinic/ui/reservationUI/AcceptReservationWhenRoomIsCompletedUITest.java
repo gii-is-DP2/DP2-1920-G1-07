@@ -55,6 +55,8 @@ public class AcceptReservationWhenRoomIsCompletedUITest {
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
 		this.driver.findElement(By.linkText("Room2")).click();
+		String statusPendig = this.driver.findElement(By.linkText("PENDING")).getText();
+		Assert.assertEquals("PENDING", statusPendig);
 		this.driver.findElement(By.linkText("PENDING")).click();
 		new Select(this.driver.findElement(By.id("status"))).selectByVisibleText("ACCEPTED");
 		this.driver.findElement(By.xpath("//option[@value='ACCEPTED']")).click();
@@ -63,13 +65,8 @@ public class AcceptReservationWhenRoomIsCompletedUITest {
 		this.driver.findElement(By.xpath("//option[@value='16']")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		Assert.assertEquals("ESTA HABITACION TIENE LAS RESERVAS AGOTADAS", this.driver.findElement(By.xpath("//h3")).getText());
-		this.driver.findElement(By.linkText("PENDING")).click();
-		Assert.assertEquals("ESTA HABITACION TIENE LAS RESERVAS AGOTADAS", this.driver.findElement(By.xpath("//form[@id='add-editreservation-form']/div/div[5]/div/div/div/h3")).getText());
-		this.driver.findElement(By.id("pet")).click();
-		new Select(this.driver.findElement(By.id("pet"))).selectByVisibleText("Pet Dog");
-		this.driver.findElement(By.xpath("//option[@value='16']")).click();
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Assert.assertEquals("ESTA HABITACION TIENE LAS RESERVAS AGOTADAS", this.driver.findElement(By.xpath("//h3")).getText());
+		String statusAfter = this.driver.findElement(By.linkText("ACCEPTED")).getText();
+		Assert.assertEquals("ACCEPTED", statusAfter);
 	}
 
 	@AfterEach

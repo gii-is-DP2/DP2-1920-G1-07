@@ -23,20 +23,20 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AcceptReservationWhenIsAdminUITest {
 
-	private WebDriver		driver;
-	private String			baseUrl;
-	private boolean			acceptNextAlert		= true;
-	private StringBuffer	verificationErrors	= new StringBuffer();
+	private WebDriver driver;
+	private String baseUrl;
+	private boolean acceptNextAlert = true;
+	private StringBuffer verificationErrors = new StringBuffer();
 	@LocalServerPort
-	private int				port;
-
+	private int port;
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
-		//		String pathToGeckoDriver = "C:\\Users\\mediamarkt\\Downloads";
-		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
-		//		driver = new FirefoxDriver();
+		// String pathToGeckoDriver = "C:\\Users\\mediamarkt\\Downloads";
+		// System.setProperty("webdriver.gecko.driver", pathToGeckoDriver +
+		// "\\geckodriver.exe");
+		// driver = new FirefoxDriver();
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -46,46 +46,23 @@ public class AcceptReservationWhenIsAdminUITest {
 	public void testAcceptReservationWhenIsAdminUI() throws Exception {
 		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
-		this.driver.findElement(By.id("username")).click();
-		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("owner");
-		this.driver.findElement(By.id("password")).click();
-		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("owner");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
-		this.driver.findElement(By.linkText("Room4")).click();
-		this.driver.findElement(By.linkText("Add New Reservation")).click();
-		this.driver.findElement(By.id("entryDate")).click();
-		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
-		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
-		this.driver.findElement(By.linkText("26")).click();
-		this.driver.findElement(By.id("exitDate")).click();
-		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
-		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
-		this.driver.findElement(By.linkText("30")).click();
-		new Select(this.driver.findElement(By.id("pet"))).selectByVisibleText("Pet Bird");
-		this.driver.findElement(By.xpath("//option[@value='17']")).click();
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
-		this.driver.findElement(By.linkText("Logout")).click();
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
-		this.driver.findElement(By.id("username")).click();
-		this.driver.findElement(By.id("username")).clear();
-		this.driver.findElement(By.id("username")).sendKeys("admin1");
-		this.driver.findElement(By.id("password")).click();
-		this.driver.findElement(By.id("password")).clear();
-		this.driver.findElement(By.id("password")).sendKeys("4dm1n");
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
-		this.driver.findElement(By.linkText("Room4")).click();
-		this.driver.findElement(By.linkText("PENDING")).click();
-		new Select(this.driver.findElement(By.id("status"))).selectByVisibleText("ACCEPTED");
-		this.driver.findElement(By.xpath("//option[@value='ACCEPTED']")).click();
-		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		
-		//Hacer las lineas de findElement con Assertions
+		driver.findElement(By.id("username")).clear();
+	    driver.findElement(By.id("username")).sendKeys("admin1");
+	    driver.findElement(By.id("password")).click();
+	    driver.findElement(By.id("password")).clear();
+	    driver.findElement(By.id("password")).sendKeys("4dm1n");
+	    driver.findElement(By.xpath("//button[@type='submit']")).click();
+	    driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
+	    driver.findElement(By.linkText("Room4")).click();
+		String statusbefore = driver.findElement(By.linkText("REJECTED")).getText();
+		Assert.assertEquals("REJECTED", statusbefore);
+		driver.findElement(By.linkText("REJECTED")).click();
+		new Select(driver.findElement(By.id("status"))).selectByVisibleText("ACCEPTED");
+		driver.findElement(By.xpath("//option[@value='ACCEPTED']")).click();
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		driver.findElement(By.xpath("//div/div/div/div/div")).click();
+		String statusafter = driver.findElement(By.linkText("ACCEPTED")).getText();
+		Assert.assertEquals("ACCEPTED", statusafter);
 	}
 
 	@AfterEach
