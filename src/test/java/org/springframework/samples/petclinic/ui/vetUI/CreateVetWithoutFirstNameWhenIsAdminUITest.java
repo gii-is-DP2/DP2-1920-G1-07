@@ -54,6 +54,7 @@ public class CreateVetWithoutFirstNameWhenIsAdminUITest {
 		this.driver.findElement(By.id("password")).sendKeys("4dm1n");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[5]/a/span[2]")).click();
+		Assert.assertEquals("Create Vet", this.driver.findElement(By.linkText("Create Vet")).getText());
 		this.driver.findElement(By.linkText("Create Vet")).click();
 		this.driver.findElement(By.id("lastName")).click();
 		this.driver.findElement(By.id("lastName")).clear();
@@ -67,6 +68,11 @@ public class CreateVetWithoutFirstNameWhenIsAdminUITest {
 		this.driver.findElement(By.id("user.password")).clear();
 		this.driver.findElement(By.id("user.password")).sendKeys("dsadsa");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		try {
+			Assert.assertEquals("no puede estar vacío", this.driver.findElement(By.xpath("//form[@id='add-vet-form']/div/div/div/span[2]")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
 	}
 
 	@AfterEach

@@ -55,6 +55,7 @@ public class CreateDiagnosisWithPastDateWhenIsVetUITest {
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[3]/a/span[2]")).click();
+		Assert.assertEquals("Add Visit", this.driver.findElement(By.linkText("Add Visit")).getText());
 		this.driver.findElement(By.linkText("Add Visit")).click();
 		this.driver.findElement(By.xpath("(//a[contains(text(),'Add Visit')])[7]")).click();
 		this.driver.findElement(By.xpath("//form[@id='visit']/div")).click();
@@ -75,6 +76,7 @@ public class CreateDiagnosisWithPastDateWhenIsVetUITest {
 		this.driver.findElement(By.id("password")).sendKeys("12345");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
+		Assert.assertEquals("Add diagnosis", this.driver.findElement(By.linkText("Add diagnosis")).getText());
 		this.driver.findElement(By.linkText("Add diagnosis")).click();
 		this.driver.findElement(By.id("description")).click();
 		this.driver.findElement(By.id("description")).clear();
