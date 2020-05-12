@@ -63,7 +63,7 @@ public class DonationControllerE2ETest {
 				.param("money", "5000.0"))
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 				
-		
+		//Añadir a donde se redirige
 	}
 	
 	@WithMockUser(username="admin1",authorities = {

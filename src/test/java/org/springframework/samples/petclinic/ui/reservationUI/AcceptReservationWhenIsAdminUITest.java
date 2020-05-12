@@ -84,6 +84,8 @@ public class AcceptReservationWhenIsAdminUITest {
 		new Select(this.driver.findElement(By.id("status"))).selectByVisibleText("ACCEPTED");
 		this.driver.findElement(By.xpath("//option[@value='ACCEPTED']")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+		
+		//Hacer las lineas de findElement con Assertions
 	}
 
 	@AfterEach
