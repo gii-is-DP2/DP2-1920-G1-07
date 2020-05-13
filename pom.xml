@@ -29,7 +29,8 @@
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
+		<!-- RestAssured -->
+		<rest-assured.version>4.3.0</rest-assured.version>
 		<!-- Web dependencies -->
 		<webjars-bootstrap.version>3.3.6</webjars-bootstrap.version>
 		<webjars-jquery-ui.version>1.11.4</webjars-jquery-ui.version>
@@ -140,6 +141,22 @@
 			<groupId>org.restlet.jse</groupId>
 			<artifactId>org.restlet.ext.jackson</artifactId>
 			<version>${restlet.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.rest-assured/spring-mock-mvc -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>4.2.0</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Para poder hacer pruebas de Api Rest que tengan oauth -->
+		<dependency>
+			<groupId>com.github.scribejava</groupId>
+			<artifactId>scribejava-apis</artifactId>
+			<version>2.5.3</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- Google api -->
@@ -306,6 +323,7 @@
 					<excludes>
 						<exclude>**/*UITest.java</exclude>
 						<exclude>**/*APITest.java</exclude>
+						
 					</excludes>
 				</configuration>
 			</plugin>

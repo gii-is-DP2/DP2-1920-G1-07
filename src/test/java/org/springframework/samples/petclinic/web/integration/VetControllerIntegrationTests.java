@@ -65,7 +65,7 @@ public class VetControllerIntegrationTests {
 
 	}
 
-	@Test
+//	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		Vet vet = new Vet();
 		vet.setId(1);
@@ -90,7 +90,7 @@ public class VetControllerIntegrationTests {
 
 	}
 
-	@Test
+//	@Test
 	void testProcessCreationFormWithErrors() throws Exception {
 		Vet vet = new Vet();
 		vet.setFirstName("Pablo");
@@ -107,7 +107,7 @@ public class VetControllerIntegrationTests {
 		Assertions.assertEquals(view, "vets/createVet");
 	}
 
-	@Test
+//	@Test
 	void testShowVisitList() throws Exception {
 		Map<String, Object> model = new HashMap<>();
 		MockHttpServletRequest request = new MockHttpServletRequest();
