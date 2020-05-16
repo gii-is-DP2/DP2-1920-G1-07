@@ -164,8 +164,10 @@ class RoomControllerTest {
 		Collection<String> roomNames = new ArrayList<String>();
 		roomNames.add(room.getName());
 		roomNames.add(room2.getName());
-		
-		BDDMockito.given(this.reservationService.findReservationsByOwnerAndRoomId(TEST_OWNER_ID, TEST_ROOM_WITHRESERVATION_ID)).willReturn(reservations);
+
+		BDDMockito.given(
+				this.reservationService.findReservationsByOwnerAndRoomId(TEST_OWNER_ID, TEST_ROOM_WITHRESERVATION_ID))
+				.willReturn(reservations);
 		BDDMockito.given(this.roomService.findAllRoomsName()).willReturn(roomNames);
 		BDDMockito.given(this.reservationService.findReservationsById(TEST_RESERVATION_ID)).willReturn(res);
 		BDDMockito.given(this.ownerService.findOwnerById(TEST_SPRING_ID)).willReturn(spring);
@@ -210,7 +212,6 @@ class RoomControllerTest {
 
 	@WithMockUser(value = "spring")
 	@Test
-
 	void testProcessCreationFormHasErrorsOnCapacityAndName() throws Exception {
 		mockMvc.perform(post("/rooms/new").with(csrf()).param("id", "1").param("name", "Test Room")
 				.param("capacity", "0").param("type", "dog")).andExpect(status().isOk())
@@ -270,10 +271,8 @@ class RoomControllerTest {
 	void testProcessUpdateRoomFormHasErrorsOnCapacityNull() throws Exception {
 		this.mockMvc
 				.perform(MockMvcRequestBuilders.post("/rooms/{roomId}/edit", RoomControllerTest.TEST_ROOM_ID)
-						.with(SecurityMockMvcRequestPostProcessors.csrf())
-						.param("name", "Failed Room")
-						.param("type", "dog")
-						.param("capacity", "0"))
+						.with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Failed Room")
+						.param("type", "dog").param("capacity", "0"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("room"))
 				.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("room", "capacity"))

@@ -70,7 +70,9 @@ public class GoogleOauthController extends HttpServlet {
 
 	@GetMapping(value="/singIn/google")
 	public RedirectView googleConnectionToOauth2(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		System.out.println(request);
 		return new RedirectView(authorize(request));
+		
 	}
 	
 	private String authorize(HttpServletRequest request) throws Exception {
