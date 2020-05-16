@@ -169,7 +169,11 @@ public class ReservationControllerTest {
 		BDDMockito.given(this.resService.findReservationsById(TEST_RESERVATIONACCEPTED_ID)).willReturn(reser);
 		
 	}
-	
+	/**
+	 * @author amine
+	 * Debe generar correctamente la vista para la creacion de una nueva reserva
+	 * @return vista de formulario para crear una nueva reservation: reservations/createReservationForm
+	 */
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitNewReservationForm() throws Exception { 
@@ -179,6 +183,11 @@ public class ReservationControllerTest {
 			   .andExpect(view().name("reservations/createReservationForm"));
 	}
 	
+	/**
+	 * @author amine
+	 * Debe crear correctamente la Reservation.
+	 * @return vista de la nueva room creada /rooms/TEST_ROOM_ID
+	 */
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessNewReservationFormSuccess() throws Exception { 
@@ -191,6 +200,12 @@ public class ReservationControllerTest {
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/rooms/{roomId}"));
 	}
+	
+	/**
+	 * @author amine
+	 * Debe generar error debido intentando crear una Reservation con la fecha de entrada y de salida en pasado.
+	 * @return vista de formulario /reservations/createReservationForm  
+	 */
 	
 	@WithMockUser(value="spring")
 	@Test
@@ -207,6 +222,14 @@ public class ReservationControllerTest {
 		.andExpect(model().attributeHasFieldErrors("reservation", "exitDate"))
 		.andExpect(view().name("reservations/createReservationForm"));
 	}
+	
+	/**
+	 * @author amine
+	 * Debe generar error debido a que la room con TEST_ROOM_ID tiene un PetType de tipo Dog que tiene en la BBDD id = 2
+	 * y en este caso estamos intentando crear una Reservation para un pet de id 1 que en la BBDD es un Cat, por lo tanto
+	 * el petType de la Room y el del Pet de la Reservation no son compatibles.
+	 * @return vista de formulario /reservations/createReservationForm  
+	 */
 	@WithMockUser(value="spring")
 	@Test
 	void testProcessNewReservationFormHasErrorsOnPet() throws Exception{
@@ -222,6 +245,13 @@ public class ReservationControllerTest {
 		.andExpect(view().name("reservations/createReservationForm"));
 	
 	}
+	
+	/**
+	 * @author amine
+	 * Debe generar error debido a que  estamos intentando crear una Reservation sin indicar el Pet para el 
+	 * cual queremos realizar la reserva.
+	 * @return vista de formulario /reservations/createReservationForm  
+	 */
 	@WithMockUser(value="spring")
 	@Test
 	void testProcessNewReservationFormHasErrorsPetNull() throws Exception{
@@ -236,7 +266,12 @@ public class ReservationControllerTest {
 		.andExpect(view().name("reservations/createReservationForm"));
 	
 	}
-	
+	/**
+	 * @author amine
+	 * Debe generar correctamente la vista para la edicion de la reserva para una room que no este Completa por 
+	 * parte del admin es decir que no tenga un nuemero de reservas aceptada igual a su capacidad
+	 * @return vista de formulario /reservations/updateReservationForm  
+	 */
 	@WithMockUser(value = "spring")
 	@Test
 	void testInitProcessUpdateReservationFormToNotComletedRoom() throws Exception{
@@ -246,12 +281,11 @@ public class ReservationControllerTest {
 			   .andExpect(view().name("reservations/updateReservationForm"));
 	}
 	/**
-	 * @param TEST_ROOMCOMPLETED_ID,TEST_OWNER_ID,TEST_RESERVATIONACCEPTED_ID
-	 * @throws Exception
-	 * @description This test proves the Init Data when the admin need to update a room,
-	 * in these case, the room is completed, because his capacity is equals to the accepted
-	 * reservations that it have. So the sistem expected three attributes, reservation, completedRoom
-	 * and statusWithaouthAccepted 
+	 * @author amine
+	 * Debe generar correctamente la vista para la edicion de la reserva para una room por parte del administrador,
+	 * en estos casos, la room esta completa porque su capacidad es igual a las reservas ya aceptadas
+	 * Entonces el sistema espera tres atributos, editreservation, completedRoom
+	 * y statusWithaouthAccepted 
 	 */
 	@WithMockUser(value = "spring")
 	@Test
@@ -261,6 +295,11 @@ public class ReservationControllerTest {
 			   .andExpect(model().attributeExists("editreservation","completedRoom","statusWithouthAccepted"))
 			   .andExpect(view().name("reservations/updateReservationForm"));
 	}
+	/**
+	 * @author amine
+	 * Debe editar correctamente la Reservation.
+	 * @return vista de la nueva room creada /rooms/TEST_ROOM_ID
+	 */
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateReservationFormSuccess() throws Exception { 
@@ -273,6 +312,16 @@ public class ReservationControllerTest {
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/rooms/{roomId}"));
 	}
+	
+	/**
+	 * @author amine
+	 * Debe generar error debido a que la room con TEST_ROOM_ID tiene un PetType de tipo Dog que tiene en la BBDD id = 2
+	 * y en este caso estamos intentando crear una Reservation para un pet de id 1 que en la BBDD es un Cat, por lo tanto
+	 * el petType de la Room y el del Pet de la Reservation no son compatibles.
+	 * Ademas las fechas de entrada (entryDate) y de salida (exitDate) estan en pasado
+	 * El sistema espera errores en la entidad reservation y en los atributos entryDate,exitDate y pet.
+	 * @return vista de formulario /reservations/updateReservationForm  
+	 */
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessUpdateReservationFormErrorsOnDateAndPet() throws Exception {
@@ -281,13 +330,17 @@ public class ReservationControllerTest {
 				.param("id", "1")
 				.param("entryDate", "2020/02/19")//Pasado debe petar
 				.param("exitDate", "2020/02/29")//Pasado debe petar
-				.param("pet", "1")) //snake mientras el type de Room es dog (debe petar)
+				.param("pet", "1")) //cat mientras el type de Room es dog (debe petar)
 		.andExpect(status().isOk())
 		.andExpect(model().attributeExists("reservation"))
 		.andExpect(model().attributeHasFieldErrors("reservation", "entryDate", "exitDate","pet"))
 		.andExpect(view().name("reservations/updateReservationForm"));
 	}
-	
+	/**
+	 * @author amine
+	 * Debe eliminar correctamente una reserva
+	 * @return vista de formulario /reservations/TEST_ROOM_ID  
+	 */
 	@WithMockUser(value="spring")
 	@Test
 	void testProcessDeleteReservation() throws Exception {

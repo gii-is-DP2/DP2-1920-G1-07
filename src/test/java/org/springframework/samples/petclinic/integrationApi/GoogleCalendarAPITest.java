@@ -31,6 +31,7 @@ import static org.hamcrest.Matchers.*;
 import javax.servlet.http.HttpServletRequest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -46,28 +47,36 @@ public class GoogleCalendarAPITest {
 	 * Se debe introducir un ACCESS_TOKEN VALIDO QUE PUEDE GENERAR EN: https://developers.google.com/oauthplayground/
 	 * EN Select and authorized API SELECCIONAR -> CALENDAR API V3
 	 * DARLE AUTORIZACION 
-	 * GENERAR EL TOKEN Y SUSTITUIR EN LA SIGUIENTE VARIABLE ESTÁTICA
+	 * GENERAR EL TOKEN Y CREAR UNA VARIABLE DE ENTORNO QUE SE LLAME GCALENDAR_TOKEN con el access token.
+	 * RECORDAR QUE EL ACCESS TOKEN EXPIRA TRAS UN PERIODO DE TIEMPO
 	 */
-	private static final String ACCESS_TOKEN = System.getenv("TOKEN_VALIDO_GCALENDAR");
+	private static final String ACCESS_TOKEN = System.getenv("GCALENDAR_TOKEN");
 	
 	private MockMvc mockMvc;
-	
+	private Map<String,String> env;
 	
 	@Test
 	public void testGetPrimaryCalendar() {
-		String calendarId = "primary";
-		RestAssured.given().auth().preemptive().oauth2(ACCESS_TOKEN)
-		.when()
-			.get("https://www.googleapis.com/calendar/v3/calendars/"+calendarId)
-		.then()
-			.statusCode(200)
-		.and()
-			.assertThat()
-				.body("kind", equalTo("calendar#calendar"));
+		if(!ACCESS_TOKEN.equals(null)) {
+			String calendarId = "primary";
+			RestAssured.given().auth().preemptive().oauth2(ACCESS_TOKEN)
+			.when()
+				.get("https://www.googleapis.com/calendar/v3/calendars/"+calendarId)
+			.then()
+				.statusCode(200)
+			.and()
+				.assertThat()
+					.body("kind", equalTo("calendar#calendar"));	
+		}else { 
+			System.out.println("RECUERDA QUE DEBES CONFIGURAR EL ACCESS TOKEN VALIDO "
+					+ "EN TUS VARIABLES DE ENTORNO CON EL NOMBRE 'GCALENDAR_TOKEN'");
+		}
+		
 	}
 	
 	@Test
 	public void testInsertEventOnPrimaryCalendar() { 
+		if(!ACCESS_TOKEN.equals(null)) {
 		Start start = new Start();
 		String dateTimeStart = "2020-09-20T10:00:00";
 		start.setDateTime(dateTimeStart);
@@ -97,5 +106,9 @@ public class GoogleCalendarAPITest {
 					//Y por lo tanto las unicas que podemos probar que existen.
 					.body("kind", equalTo("calendar#event"))
 					.body("status", equalTo("confirmed")); //Es confirmed si el evento se ha insertado.
+		}else {
+			System.out.println("RECUERDA QUE DEBES CONFIGURAR EL ACCESS TOKEN VALIDO "
+					+ "EN TUS VARIABLES DE ENTORNO CON EL NOMBRE 'GCALENDAR_TOKEN'");
+		}
 	}
 }
