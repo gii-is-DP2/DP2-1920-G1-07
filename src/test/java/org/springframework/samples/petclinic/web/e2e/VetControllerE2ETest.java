@@ -43,7 +43,7 @@ public class VetControllerE2ETest {
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/vets/create").param("id", "1").param("firstName", "Pablo").param("lastName", "Reneses").with(SecurityMockMvcRequestPostProcessors.csrf()).param("specialties", "1"))
-			.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/vets/admin"));
 
 	}
 

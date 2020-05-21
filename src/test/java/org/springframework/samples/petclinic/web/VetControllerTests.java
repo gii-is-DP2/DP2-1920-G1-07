@@ -93,7 +93,8 @@ class VetControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/vets/create").param("id", "1").param("firstName", "Pablo").param("lastName", "Reneses").with(SecurityMockMvcRequestPostProcessors.csrf()).param("specialties", "1"))
+		this.mockMvc.perform(
+			MockMvcRequestBuilders.post("/vets/create").param("id", "1").param("firstName", "Pablo").param("lastName", "Reneses").with(SecurityMockMvcRequestPostProcessors.csrf()).param("specialties", "1").param("username", "pa").param("password", "pa"))
 			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/vets/admin"));
 
 	}

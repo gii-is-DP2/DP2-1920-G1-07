@@ -1,12 +1,8 @@
 
 package org.springframework.samples.petclinic.web;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Room;
-import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.validation.Errors;
@@ -15,12 +11,16 @@ import org.springframework.validation.Validator;
 public class VetValidator implements Validator {
 
 	@Autowired
-	private VetService vetService;
-	
-	private int[] specialties;
+	private VetService	vetService;
+
+	private int[]		specialties;
 
 
-	public VetValidator(final VetService vetService,int[] specialties) {
+	public VetValidator(final VetService vetService) {
+		this.vetService = vetService;
+	}
+
+	public VetValidator(final VetService vetService, final int[] specialties) {
 		this.vetService = vetService;
 		this.specialties = specialties;
 	}
@@ -32,7 +32,7 @@ public class VetValidator implements Validator {
 		String username = vet.getUser().getUsername();
 		String password = vet.getUser().getPassword();
 
-		if (specialties==null) {
+		if (specialties == null) {
 			errors.rejectValue("specialties", "The specialties is empty", "The specialties is empty");
 		}
 
