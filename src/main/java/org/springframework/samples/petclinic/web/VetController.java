@@ -77,7 +77,7 @@ public class VetController {
 
 	@PostMapping(value = "/vets/create")
 	public String processCreationForm(@Valid final Vet vet, final BindingResult result, @RequestParam(required = false) final int[] specialties) {
-		VetValidator vetValidator = new VetValidator(this.vetService);
+		VetValidator vetValidator = new VetValidator(this.vetService,specialties);
 		vetValidator.validate(vet, result);
 		if (result.hasErrors()) {
 			return VetController.VIEWS_VET_CREATE_FORM;
