@@ -54,11 +54,18 @@ public class VetController {
 
 	private final VetService	vetService;
 
+	//	private VetValidator		vetValidator;
+
 
 	@Autowired
 	public VetController(final VetService clinicService) {
 		this.vetService = clinicService;
 	}
+
+	//	@InitBinder("vet")
+	//	public void initVetBinder(final WebDataBinder dataBinder) {
+	//		dataBinder.setValidator(this.vetValidator);
+	//	}
 
 	@GetMapping(value = "/vets/create")
 	public String initCreationForm(final ModelMap model) {
@@ -70,9 +77,8 @@ public class VetController {
 
 	@PostMapping(value = "/vets/create")
 	public String processCreationForm(@Valid final Vet vet, final BindingResult result, @RequestParam(required = false) final int[] specialties) {
-		//		Vet vet2 = this.vetService.findVetById(vet.getId());
-		//		String r = vet2.getFirstName();
-		//		String t = vet2.getLastName();
+		VetValidator vetValidator = new VetValidator(this.vetService);
+		vetValidator.validate(vet, result);
 		if (result.hasErrors()) {
 			return VetController.VIEWS_VET_CREATE_FORM;
 		} else {
