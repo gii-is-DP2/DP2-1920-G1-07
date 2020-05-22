@@ -131,14 +131,13 @@ public class RoomControllerE2ETest {
 	@WithMockUser(username = "owner", authorities = { "owner" })
 	@Test
 	void testShowRoomsWithouthReservations() throws Exception {
-		Collection<Reservation> res = this.resService.findReservationsByOwnerAndRoomId(12, TEST_ROOM_NO_HAVE_RESER_ID); // Para verificar que esta room no tiene las reservas vacias.
 		PetType cat = petService.findPetTypes().stream().filter(x -> x.getName().equals("cat")).findAny().get();
 		this.mockMvc.perform(get("/rooms/{roomId}", TEST_ROOM_NO_HAVE_RESER_ID)).andExpect(status().isOk())
 				.andExpect(model().attribute("room", Matchers.hasProperty("name", Matchers.is("Room3"))))
 				.andExpect(model().attribute("room", Matchers.hasProperty("capacity", Matchers.is(3))))
 				.andExpect(model().attribute("room", Matchers.hasProperty("type", Matchers.is(cat))))
 				.andExpect(model().attribute("room", Matchers.hasProperty("reservations")))
-//				.andExpect(model().attributeDoesNotExist("myReservations"))
+				.andExpect(model().attributeDoesNotExist("myReservations"))
 				.andExpect(view().name("rooms/roomDetails"));
 	}
 
