@@ -67,6 +67,7 @@ INSERT INTO room VALUES(1,'Room1',2,14,2);
 INSERT INTO room VALUES(2,'Room2',1,null,2);
 INSERT INTO room VALUES(3,'Room3',3,null,1);
 INSERT INTO room VALUES(4,'Room4',4,null,5);
+INSERT INTO room VALUES(10,'Room10',1,null,1);
 
 
 INSERT INTO owners VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Madison', '6085551023', 'ownerFail');
@@ -123,10 +124,11 @@ INSERT INTO donation(id,anonymous,money,money_rest,causes_id,user_id) VALUES (1,
 INSERT INTO donation(id,anonymous,money,money_rest,causes_id,user_id) VALUES (2, false,2000.0,NULL,3,'admin1');
 INSERT INTO donation(id,anonymous,money,money_rest,causes_id,user_id) VALUES (3, true,1000.0,NULL,3,'admin1');
 
-INSERT INTO reservation VALUES (1,'2020-05-12','2020-06-20','15',11,1,1);
-INSERT INTO reservation VALUES (2,'2020-05-20','2020-06-22','16',12,2,1);
-INSERT INTO reservation VALUES (3,'2020-06-20','2020-06-22','16',12,2,1);
-INSERT INTO reservation VALUES (5,'2020-05-02','2020-06-22','17',12,4,3);
+INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) VALUES (1,'2020-07-12','2020-07-20','15',12,1,1);
+INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) VALUES (2,'2020-07-20','2020-07-22','16',12,2,1);
+INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) VALUES (3,'2020-08-20','2020-08-22','16',12,2,1);
+INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) VALUES (5,'2020-07-02','2020-07-22','17',11,4,3);
+INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) VALUES (6,'2020-08-22','2020-09-12','14',11,10,2);
 
 INSERT INTO diagnosis(id, description, date, vet_id, pet_id, visit_id) VALUES (1, 'Todo bien', '2013-01-10', 7, 14, 5);
 
