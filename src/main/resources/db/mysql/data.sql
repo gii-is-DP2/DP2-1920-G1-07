@@ -30,6 +30,8 @@ INSERT INTO users(username,password,enabled) VALUES ('vet2','12345',TRUE);
 INSERT INTO authorities VALUES ('vet2','veterinarian');
 
 
+
+
 INSERT INTO vets VALUES (1, 'James', 'Carter', 'vet1');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary', 'vet1');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas', 'vet1');
