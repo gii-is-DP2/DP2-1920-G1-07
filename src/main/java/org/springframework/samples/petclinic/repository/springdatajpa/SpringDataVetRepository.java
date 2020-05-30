@@ -16,6 +16,7 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -61,4 +62,8 @@ public interface SpringDataVetRepository extends VetRepository, Repository<Vet, 
 	@Modifying
 	@Query(value = "INSERT INTO vet_specialties (vet_id, specialty_id) VALUES (:id_vet, :id_specialty)", nativeQuery = true)
 	void saveVetSpecialty(@Param("id_vet") int idVet, @Param("id_specialty") int idSpecialty) throws DataAccessException;
+
+	@Override
+	@Query("SELECT DISTINCT v FROM Vet v LEFT JOIN FETCH v.specialties sp")
+	Collection<Vet> findAllWithSpecialties();
 }

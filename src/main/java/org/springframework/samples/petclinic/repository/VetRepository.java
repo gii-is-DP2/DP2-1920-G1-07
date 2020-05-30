@@ -61,4 +61,6 @@ public interface VetRepository {
 
 	List<Diagnosis> findDiagnosis(String userName) throws DataAccessException;
 
+	Collection<Vet> findAllWithSpecialties();
+
 }

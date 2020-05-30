@@ -142,7 +142,7 @@ public class VetController {
 	@GetMapping(value = "/vets/admin")
 	public String vetsShow(final Map<String, Object> model, final HttpServletRequest request) {
 
-		Collection<Vet> vet = this.vetService.findVets();
+		Collection<Vet> vet = this.vetService.findVetsWithSpecialties();
 		model.put("vets", vet);
 
 		return VetController.VIEWS_VET_ADMIN_LIST;

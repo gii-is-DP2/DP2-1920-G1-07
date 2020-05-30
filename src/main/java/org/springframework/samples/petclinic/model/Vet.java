@@ -45,7 +45,7 @@ public class Vet extends Person {
 	private User			user;
 
 	//	 Añadido para Diagnosis
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "vet", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "vet", fetch = FetchType.LAZY)
 	private Set<Diagnosis>	diagnoses;
 
 

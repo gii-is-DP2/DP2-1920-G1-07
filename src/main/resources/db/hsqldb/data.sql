@@ -33,12 +33,12 @@ INSERT INTO users(username,password,enabled) VALUES ('vet5','pablo',TRUE);
 INSERT INTO authorities VALUES ('vet5','veterinarian');
 
 
-INSERT INTO vets VALUES (1, 'James', 'Carter', 'vet1');
+
 INSERT INTO vets VALUES (2, 'Helen', 'Leary', 'vet1');
 INSERT INTO vets VALUES (3, 'Linda', 'Douglas', 'vet1');
 INSERT INTO vets VALUES (4, 'Rafael', 'Ortega', 'vet1');
 INSERT INTO vets VALUES (5, 'Henry', 'Stevens', 'vet1');
-INSERT INTO vets VALUES (6, 'Sharon', 'Jenkins', 'vet1');
+
 INSERT INTO vets VALUES (7, 'Vet2', 'vet2', 'vet2');
 
 

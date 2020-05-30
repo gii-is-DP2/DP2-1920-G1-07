@@ -62,6 +62,11 @@ public class VetService {
 	}
 
 	@Transactional(readOnly = true)
+	public Collection<Vet> findVetsWithSpecialties() throws DataAccessException {
+		return this.vetRepository.findAllWithSpecialties();
+	}
+
+	@Transactional(readOnly = true)
 	public Vet findVetById(final int id) throws DataAccessException {
 		return this.vetRepository.findById(id);
 	}
