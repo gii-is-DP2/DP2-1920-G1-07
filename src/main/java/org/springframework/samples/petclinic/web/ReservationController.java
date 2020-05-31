@@ -102,6 +102,7 @@ public class ReservationController {
 	public String initNewReservationForm(@PathVariable("roomId") int roomId, Model model) {
 		Reservation reservation = new Reservation();
 		model.addAttribute("reservation", reservation);
+		model.addAttribute("roomId", roomId);
 		Collection<Status> s = this.reservationService.findAllStatus();
 		model.addAttribute("status", s);
 		model.addAttribute("statusPending", this.reservationService.findPendingStatus());

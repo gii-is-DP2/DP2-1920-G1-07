@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Owner;
@@ -19,6 +21,7 @@ import org.springframework.samples.petclinic.model.Status;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 public class ReservationServiceTest {
 
 	@Autowired
@@ -37,7 +40,7 @@ public class ReservationServiceTest {
 		 * El owner 11 tiene una reserva en la room 4 y la 10
 		 */
 		Collection<Reservation> reservations = this.reservationService.findReservationsByOwnerAndRoomId(11, 4);
-		Assertions.assertThat(reservations.size()).isEqualTo(1);
+		Assertions.assertThat(reservations.size()).isEqualTo(0);
 
 		/*
 		 * El owner 12 tiene dos reservas en la room 2 y una en la 1
