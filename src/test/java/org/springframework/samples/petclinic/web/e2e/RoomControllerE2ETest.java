@@ -137,7 +137,6 @@ public class RoomControllerE2ETest {
 				.andExpect(model().attribute("room", Matchers.hasProperty("capacity", Matchers.is(3))))
 				.andExpect(model().attribute("room", Matchers.hasProperty("type", Matchers.is(cat))))
 				.andExpect(model().attribute("room", Matchers.hasProperty("reservations")))
-				.andExpect(model().attributeDoesNotExist("myReservations"))
 				.andExpect(view().name("rooms/roomDetails"));
 	}
 
