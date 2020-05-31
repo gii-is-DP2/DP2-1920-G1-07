@@ -40,7 +40,7 @@ public class ReservationServiceTest {
 		 * El owner 11 tiene una reserva en la room 4 y la 10
 		 */
 		Collection<Reservation> reservations = this.reservationService.findReservationsByOwnerAndRoomId(11, 4);
-		Assertions.assertThat(reservations.size()).isEqualTo(1);
+		Assertions.assertThat(reservations.size()).isEqualTo(0);
 
 		/*
 		 * El owner 12 tiene dos reservas en la room 2 y una en la 1
