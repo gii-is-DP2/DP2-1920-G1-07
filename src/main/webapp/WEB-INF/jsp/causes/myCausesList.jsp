@@ -11,6 +11,7 @@
 	<table id="causesTable" class="table table-striped">
 		<thead>
 			<tr>
+				<th>User</th>
 				<th>Title</th>
 				<th>Description</th>
 				<th>Deadline</th>
@@ -20,8 +21,14 @@
 		</thead>
 
 		<tbody>
+			<div id="mensaje" class="mensaje">
+				<c:out value="${mensaje}"></c:out>
+			</div>
 			<c:forEach items="${causes}" var="causes">
 				<tr>
+					<td>
+						<c:out value="${causes.user.username}"></c:out>
+					</td>
 					<td>
 						<c:out value="${causes.title}"></c:out>
 					</td>

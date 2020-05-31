@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -49,6 +50,7 @@ public class Cause extends BaseEntity {
 
 	@Column(name = "deadline")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	@Future
 	private LocalDate		deadline;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -61,7 +63,6 @@ public class Cause extends BaseEntity {
 
 	@OneToMany
 	private Set<Donation>	donations;
-	
 
 
 	protected Set<Donation> getDonationsInternal() {

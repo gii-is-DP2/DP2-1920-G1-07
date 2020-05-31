@@ -23,9 +23,18 @@
             <th>Pet Type</th>
             <td><c:out value="${room.type}"/></td>
         </tr>
+        <tr>
+            <th>Sitter</th>
+            <c:if test="${room.sitter == null}">
+			<td> None </td>
+			</c:if>
+			<c:if test="${room.sitter != null}">
+			<td><c:out value="${room.sitter.user.username}"/></td>
+			</c:if>
+        </tr>
     </table>
 	<sec:authorize access="hasAnyAuthority('admin')">
-    	<c:if test="${notHaveReservations==true}">
+    	<c:if test="${notHaveAcceptedReservations==true}">
     		<spring:url value="/rooms/{roomId}/edit" var="editUrl">
         		<spring:param name="roomId" value="${room.id}"/>
     		</spring:url>
@@ -36,14 +45,23 @@
    			</spring:url>
    			<a href="${fn:escapeXml(deleteUrl)}" class="btn btn-default">Delete Room</a>
         </td>
+        
         </c:if>
+        <td>
+   			<spring:url value="/rooms/{roomId}/sitter" var="changeSitter">
+      			<spring:param name="roomId" value="${room.id}"/>
+   			</spring:url>
+   			<a href="${fn:escapeXml(changeSitter)}" class="btn btn-default">Change Sitter</a>
+        </td>
       </sec:authorize>
+      <sec:authorize access="hasAnyAuthority('owner')">
 		<c:if test="${completedRoom == false}">
     		<spring:url value="/rooms/{roomId}/reservations/new" var="addUrl">
         		<spring:param name="roomId" value="${room.id}"/>
     		</spring:url>
     		<a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Add New Reservation</a>
    		</c:if>
+   		</sec:authorize>
    		<c:if test="${completedRoom == true}">
    			<div class="alert alert-info">
    				<br/>
@@ -53,6 +71,7 @@
     <br/>
     <br/>
     <br/>
+    <sec:authorize access="!hasAnyAuthority('sitter')">
     <h2>Reservations of these Room</h2>
      <table class="table table-striped">
      <thead>
@@ -83,8 +102,15 @@
                 <td>
                 	<petclinic:localDate date="${reservation.exitDate}" pattern="yyyy/MM/dd"/>
                 </td>
-                <td> 
-                    <c:out value="${reservation.pet}"/> 
+                 <td>
+                <c:if test="${reservation.pet != '14' && reservation.pet != '15' && reservation.pet != '16' && reservation.pet != '17'}">
+                 		<c:out value="${reservation.pet}"/>
+                </c:if>
+				<c:if test="${reservation.pet == '14'}">Pet Cat</c:if>
+                <c:if test="${reservation.pet == '15'}">Pet Snake</c:if>
+                <c:if test="${reservation.pet == '16'}">Pet Dog</c:if>	
+                <c:if test="${reservation.pet == '17'}">Pet Bird</c:if>
+                
                 </td>
                  <sec:authorize access="hasAnyAuthority('admin')">
                 <td>
@@ -123,8 +149,15 @@
                 	<petclinic:localDate date="${reservation.exitDate}" pattern="yyyy/MM/dd"/>
                 </td>
                 
-                <td> 
-                    <c:out value="${reservation.pet}"/> 
+                <td>
+                <c:if test="${reservation.pet != '14' && reservation.pet != '15' && reservation.pet != '16' && reservation.pet != '17'}">
+                 		<c:out value="${reservation.pet}"/>
+                </c:if>
+				<c:if test="${reservation.pet == '14'}">Pet Cat</c:if>
+                <c:if test="${reservation.pet == '15'}">Pet Snake</c:if>
+                <c:if test="${reservation.pet == '16'}">Pet Dog</c:if>	
+                <c:if test="${reservation.pet == '17'}">Pet Bird</c:if>
+                
                 </td>
                 <sec:authorize access="hasAnyAuthority('owner')">
                 	<td>
@@ -143,4 +176,32 @@
         </sec:authorize>
         </tbody>
      </table>
+     </sec:authorize>
+     <sec:authorize access="hasAnyAuthority('sitter')">
+    <h2>Pets</h2>
+     <table class="table table-striped">
+     <thead>
+        <tr>
+            <th style="width: 150px;">Owner name</th> 
+            <th style="width: 200px;">Pet name</th> 
+            <th>Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="pey" items="${room.pets}">
+        <tr>
+                <td>
+                    <c:out value="${pet.owner.firstName}, ${pet.owner.lastName}" />
+	            </td> 
+                 <td> 
+                     <c:out value="${pet.name}"/>
+                 </td> 
+                <td>
+                    <c:out value="${pet.type}"/>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+     </table>
+     </sec:authorize>
 </petclinic:layout>
