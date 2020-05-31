@@ -34,7 +34,6 @@ public class DiagnosisControllerE2ETest {
 	private MockMvc				mockMvc;
 
 
-	//test para que te lleve al formulario de creación de diagnositico
 	@WithMockUser(username = "vet2", authorities = {
 		"veterinarian"
 	})
@@ -44,7 +43,6 @@ public class DiagnosisControllerE2ETest {
 			.andExpect(MockMvcResultMatchers.view().name("vets/createDiagnosis"));
 	}
 
-	//test para comprobar la creacion de un diagnostico correctamente
 	@WithMockUser(username = "vet2", authorities = {
 		"veterinarian"
 	})
@@ -54,7 +52,6 @@ public class DiagnosisControllerE2ETest {
 			.with(SecurityMockMvcRequestPostProcessors.csrf())).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/vets/mySpace/"));
 	}
 
-	//test de creacion de un diagnostico con fallo, ya que faltaria poner date
 	@WithMockUser(username = "vet2", authorities = {
 		"veterinarian"
 	})
@@ -66,14 +63,12 @@ public class DiagnosisControllerE2ETest {
 			.andExpect(MockMvcResultMatchers.view().name("vets/createDiagnosis"));
 	}
 
-	//test para comprobar el funcionamiento del show de mis diagnosticos
 	@WithMockUser(username = "owner1", authorities = {
 		"owner"
 	})
 	@Test
 	void testShowDiagnosis() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/diagnosis/myDiagnosis").param("petId", "1")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("diagnosis"))
-			//Una forma alternativa de asegurar que el modelo tenga el diagnostico con los datos dentro
 			.andExpect(MockMvcResultMatchers.model().size(1)).andExpect(MockMvcResultMatchers.view().name("vets/diagnosisList"));
 	}
 }
