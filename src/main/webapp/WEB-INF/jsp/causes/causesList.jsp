@@ -9,6 +9,7 @@
 
 <petclinic:layout pageName="cause">
 	<h2>Causes</h2>
+	
 	<table id="causesTable" class="table table-striped">
 		<thead>
 			<tr>
@@ -16,7 +17,6 @@
 				<th>Description</th>
 				<th>Deadline</th>
 				<th>Money</th>
-				<th>Status</th>
 				<th>Actions</th>
 			</tr>
 		</thead>
@@ -37,9 +37,6 @@
 						<c:out value="${cause.money}"></c:out>
 					</td>
 					<td>
-						<c:out value="${cause.status.name}"></c:out>
-					</td>
-					<td>
 					   <spring:url value="/cause/{causeId}/donations" var="addUrl">
    						<spring:param name="causeId" value="${cause.id}"/>
    						</spring:url>
@@ -53,11 +50,11 @@
     <spring:url value="/cause/new" var="addCause"/>
     <a href="${fn:escapeXml(addCause)}" class="btn btn-default">Add New Cause</a>
     
-    <spring:url value="/cause/myCauses/${userName}" var="myCauses"/>
+    <spring:url value="/cause/myCauses" var="myCauses"/>
     <a href="${fn:escapeXml(myCauses)}" class="btn btn-default">See My Causes</a>
     
    <sec:authorize access="hasAnyAuthority('admin')"> 
-    <spring:url value="/causes/PendingCauses" var="pending"/>
+    <spring:url value="/cause/PendingCauses" var="pending"/>
     <a href="${fn:escapeXml(pending)}" class="btn btn-default">See Pending Causes</a>
    </sec:authorize>
 	

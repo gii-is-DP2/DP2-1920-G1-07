@@ -55,7 +55,7 @@
              <div class="form-group">
              <div class="col-sm-offset-2 col-sm-10">
                    <button class="btn btn-default" type="submit">Add Reservation</button>
-                   <input class="btn btn-default" type="button" onclick="window.location.href='/rooms/${roomId}'" name="volver atrás" value="Return">
+                   <input class="btn btn-default" type="button" onclick="history.back()" name="volver atrás" value="Return">
             </div>
         </div>
                 </div>

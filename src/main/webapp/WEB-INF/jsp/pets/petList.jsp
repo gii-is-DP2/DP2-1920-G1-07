@@ -5,16 +5,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 
 <petclinic:layout pageName="myPets">
- 
-  <div class="alert alert-warning" role="alert">
-  		Remember. If you want to add visits to Google Calendar you must log in with Google!
-  </div>
-  <div class="row">
-  
-  <spring:url value="/singIn/google" var="eventUrl"/>
-  <a type="button" class="btn btn-success" style="margin-left: 30pc;" href="${fn:escapeXml(eventUrl)}">Log in with Google</a>
-  </div>
- 
+
  <h2>Pets and Visits</h2>
 
     <table class="table table-striped">
@@ -37,23 +28,13 @@
                         <tr>
                             <th>Visit Date</th>
                             <th>Description</th>
-                            <th>Google Calendar</th>
                         </tr>
                         </thead>
                         <c:forEach var="visit" items="${pet.visits}">
                             <tr>
                                 <td><petclinic:localDate date="${visit.date}" pattern="yyyy-MM-dd"/></td>
                                 <td><c:out value="${visit.description}"/></td>
-                            	<td>
-                            	<c:if test="${haceAccessToken == true }">
-                            	<spring:url value="/visit/{visitId}/event/insert/" var="eventUrl">
-                            		<spring:param name="visitId" value="${visit.id}"/>
-                            	</spring:url>
-                            	
-                            	<a href="${fn:escapeXml(eventUrl)}">Add</a>
-                            	</c:if>
-                            	</td>
-              					</tr>
+                            </tr>
                         </c:forEach>
                         <tr>
                             <td>
@@ -96,6 +77,4 @@
         <spring:param name="ownerId" value="${owner.id}"/>
     </spring:url>
     <a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Add New Pet</a>
-	
 </petclinic:layout>
-

@@ -30,54 +30,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	DataSource dataSource;
 
+
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-//		http.antMatcher("/visit/**").oauth2Login();
-
-		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
-				.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
-				.antMatchers("/users/new").permitAll()
-				.antMatchers("/admin/**").hasAnyAuthority("admin")
-				.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")
-				.antMatchers("/owner/**").hasAnyAuthority("owner", "admin")
-				.antMatchers("/owner/pets/**").hasAnyAuthority("owner")
-				.antMatchers("/cause/donations").hasAnyAuthority("owner", "admin")
-				.antMatchers("/cause/donations/**").hasAnyAuthority("owner", "admin")
-				.antMatchers("/donations/**").hasAnyAuthority("admin", "owner")
-				.antMatchers("/cause").permitAll()
-				.antMatchers("/cause/**").hasAnyAuthority("admin", "owner", "veterinarian")
-				.antMatchers("/myCauses").hasAnyAuthority("admin", "owner", "veterinarian")
-				.antMatchers("/causes/PendingCauses").hasAnyAuthority("admin")
-				.antMatchers("/causes/PendingCauses/**").hasAnyAuthority("admin")
-				.antMatchers("/vets/**").authenticated()
-				.antMatchers("/request/**").authenticated()
-				.antMatchers("/rooms/**").hasAnyAuthority("admin", "owner", "veterinarian", "sitter")
-				.antMatchers("/sitter/**").hasAnyAuthority("sitter")
-				.antMatchers("/vets/create").hasAnyAuthority("admin")
-				.antMatchers("/vets/visit").hasAnyAuthority("veterinarian")
-				.antMatchers("/singIn/google").permitAll()
-				.antMatchers("/vet/{vetId}/diagnosis").hasAnyAuthority("veterinarian")
-				.antMatchers("/diagnosis/myDiagnosis").hasAnyAuthority("owner")
-				.antMatchers("/visits").permitAll()
-				.antMatchers("/visit/**").permitAll()
-				.antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
-				/* .loginPage("/login") */
-				.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
+		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll().antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers("/users/new").permitAll().antMatchers("/admin/**").hasAnyAuthority("admin")
+			.antMatchers("/owners/**").hasAnyAuthority("owner", "admin").antMatchers("/owner/**").hasAnyAuthority("owner", "admin").antMatchers("/owner/pets/**").hasAnyAuthority("owner").antMatchers("/cause/donations").hasAnyAuthority("owner", "admin")
+			.antMatchers("/cause/donations/**").hasAnyAuthority("owner", "admin").antMatchers("/donations/**").hasAnyAuthority("admin", "owner").antMatchers("/cause").permitAll().antMatchers("/cause/**").hasAnyAuthority("admin", "owner", "veterinarian")
+			.antMatchers("/myCauses").hasAnyAuthority("admin", "owner", "veterinarian").antMatchers("/causes/PendingCauses").hasAnyAuthority("admin").antMatchers("/vets/**").authenticated().antMatchers("/request/**").authenticated()
+			.antMatchers("/rooms/**").hasAnyAuthority("admin", "owner", "veterinarian", "sitter").antMatchers("/vets/create").hasAnyAuthority("admin").antMatchers("/vets/visit").hasAnyAuthority("veterinarian").antMatchers("/vet/{vetId}/diagnosis")
+			.hasAnyAuthority("veterinarian").antMatchers("/diagnosis/myDiagnosis").hasAnyAuthority("owner").antMatchers("/visits").permitAll().antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
+			/* .loginPage("/login") */
+			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
 		// Configuración para que funcione la consola de administración
 		// de la BD H2 (deshabilitar las cabeceras de protección contra
 		// ataques de tipo csrf y habilitar los framesets si su contenido
 		// se sirve desde esta misma página.
 		http.csrf().ignoringAntMatchers("/h2-console/**");
 		http.headers().frameOptions().sameOrigin();
-
 	}
 
 	@Override
 	public void configure(final AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication().dataSource(this.dataSource)
-				.usersByUsernameQuery("select username,password,enabled " + "from users " + "where username = ?")
-				.authoritiesByUsernameQuery("select username, authority " + "from authorities " + "where username = ?")
-				.passwordEncoder(this.passwordEncoder());
+		auth.jdbcAuthentication().dataSource(this.dataSource).usersByUsernameQuery("select username,password,enabled " + "from users " + "where username = ?")
+			.authoritiesByUsernameQuery("select username, authority " + "from authorities " + "where username = ?").passwordEncoder(this.passwordEncoder());
 	}
 
 	@Bean

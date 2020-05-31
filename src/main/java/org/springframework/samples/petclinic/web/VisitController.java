@@ -37,28 +37,25 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-/*
+ /*
  * @author Juergen Hoeller
- * 
  * @author Ken Krebs
- * 
  * @author Arjen Poutsma
- * 
  * @author Michael Isvy
  */
 @Controller
 public class VisitController {
-
+	
 	@Autowired
-	private final PetService	petService;
-
+	private final PetService petService;
+	
 	@Autowired
-	private VisitService		visitService;
-
+	private VisitService visitService;
+	
 	@Autowired
-	private VetService			vetService;
+	private VetService vetService;
 
 
 	@Autowired
@@ -76,7 +73,6 @@ public class VisitController {
 	 * - Make sure we always have fresh data - Since we do not use the session scope, make
 	 * sure that Pet object always has an id (Even though id is not part of the form
 	 * fields)
-	 * 
 	 * @param petId
 	 * @return Pet
 	 */
@@ -98,10 +94,9 @@ public class VisitController {
 
 	// Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is called
 	@PostMapping(value = "/owner/pets/{petId}/visits/new")
-	public String processNewVisitForm(@Valid final Visit visit, final BindingResult result, @RequestParam("vetId") final int vetId) {
-		VisitValidator visitValidator = new VisitValidator(this.visitService);
-		visitValidator.validate(visit, result);
-
+	public String processNewVisitForm(@Valid final Visit visit, final BindingResult result,@RequestParam("vetId") int vetId) {
+		
+		
 		if (result.hasErrors()) {
 			return "pets/createOrUpdateVisitForm";
 		} else {
@@ -118,7 +113,10 @@ public class VisitController {
 		return "visitList";
 	}
 
-	@GetMapping(value = "/visits")
+
+
+
+	@GetMapping(value="/visits")
 	public String listadoVisitas(final ModelMap model) {
 		String vista = "visits/listadoVisitas";
 		Iterable<Visit> visits = this.visitService.visitFind();

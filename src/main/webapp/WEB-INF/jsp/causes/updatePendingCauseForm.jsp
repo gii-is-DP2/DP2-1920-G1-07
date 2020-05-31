@@ -17,7 +17,7 @@
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">
 				<button class="btn btn-default" type="submit">Update Cause</button>
-				<spring:url value="/causes/PendingCauses" var="volver"/>
+				<spring:url value="/cause/PendingCauses" var="volver"/>
   				<a href="${fn:escapeXml(volver)}" class="btn btn-default">Return</a>
 			</div>
 			

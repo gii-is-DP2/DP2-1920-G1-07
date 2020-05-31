@@ -2,8 +2,6 @@
 package org.springframework.samples.petclinic.web;
 
 import java.security.Principal;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +22,10 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/cause")
 public class CauseController {
 
 	private static final String	VIEWS_CAUSE_CREATE_OR_UPDATE_FORM	= "causes/createOrUpdateCauseForm";
@@ -51,49 +51,33 @@ public class CauseController {
 		dataBinder.setValidator(new CauseValidator());
 	}
 
-	@GetMapping(path = "/cause")
-	public String showCausesList(final ModelMap model, final HttpServletRequest request) {
-		Principal principal = request.getUserPrincipal();
-		String userName = principal.getName();
-		model.put("userName", userName);
-
+	@GetMapping
+	public String showCausesList(final ModelMap modelMap) {
 		Collection<Cause> causes = this.causeService.findAcceptedCauses();
-		Collection<Cause> causasValidas = new ArrayList<Cause>();
-		LocalDate now = LocalDate.now();
-		for (Cause c : causes) {
-			if (c.getDeadline().isAfter(now)) {
-				causasValidas.add(c);
-			}
-		}
-		model.addAttribute("cause", causasValidas);
+		modelMap.addAttribute("cause", causes);
 		return "causes/causesList";
 	}
 
-	@GetMapping(path = "/cause/myCauses/{userName}")
-	public String showMyCausesList(@PathVariable("userName") final String username, final ModelMap model, final HttpServletRequest request) {
+	@GetMapping(path = "/myCauses")
+	public String showMyCausesList(final ModelMap model, final HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();
 		String userName = principal.getName();
 		model.put("userName", userName);
-		Collection<Cause> myCauses = this.causeService.findMyCauses(userName);
 
-		if (!userName.equals(username)) {
-			String mensaje = "No puedes ver las causas que ha realizado otra persona";
-			model.put("mensaje", mensaje);
-			return "causes/myCausesList";
-		}
+		Collection<Cause> myCauses = this.causeService.findMyCauses(userName);
 
 		model.addAttribute("causes", myCauses);
 		return "causes/myCausesList";
 	}
 
-	@GetMapping(path = "/cause/new")
+	@GetMapping(path = "/new")
 	public String initCreationForm(final ModelMap model) {
 		Cause cause = new Cause();
 		model.addAttribute("cause", cause);
 		return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/cause/new")
+	@PostMapping(value = "/new")
 	public String processCreationForm(@Valid final Cause cause, final BindingResult result, final ModelMap model, final HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();
 		String userName = principal.getName();
@@ -110,7 +94,7 @@ public class CauseController {
 		}
 	}
 
-	@GetMapping(path = "/causes/PendingCauses")
+	@GetMapping(path = "/PendingCauses")
 	public String showPendingCausesList(final ModelMap model) {
 		Collection<Cause> myCauses = this.causeService.findPendingCauses();
 		model.addAttribute("cause", myCauses);
@@ -122,19 +106,19 @@ public class CauseController {
 		return this.causeService.findStatus();
 	}
 
-	@GetMapping(value = "/causes/PendingCauses/cause/{causeId}/edit")
+	@GetMapping(value = "/PendingCauses/cause/{causeId}/edit")
 	public String initUpdateOwnerForm(@PathVariable("causeId") final int causeId, final ModelMap model) {
 		Cause cause = this.causeService.findCauseById(causeId);
 		model.put("cause", cause);
 		return CauseController.VIEWS_CAUSE_PENDING_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/causes/PendingCauses/cause/{causeId}/edit")
+	@PostMapping(value = "/PendingCauses/cause/{causeId}/edit")
 	public String processUpdateOwnerForm(@Valid final Cause cause, final BindingResult result, @PathVariable("causeId") final int causeId, final ModelMap model) {
 		Cause causeToUpdate = this.causeService.findCauseById(causeId);
 		causeToUpdate.setStatus(cause.getStatus());
 		this.causeService.saveCauses(causeToUpdate);
-		return "redirect:/causes/PendingCauses";
+		return "redirect:/cause/PendingCauses";
 
 	}
 

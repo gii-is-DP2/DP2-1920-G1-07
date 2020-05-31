@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -102,7 +100,6 @@ public class ReservationController {
 	public String initNewReservationForm(@PathVariable("roomId") int roomId, Model model) {
 		Reservation reservation = new Reservation();
 		model.addAttribute("reservation", reservation);
-		model.addAttribute("roomId", roomId);
 		Collection<Status> s = this.reservationService.findAllStatus();
 		model.addAttribute("status", s);
 		model.addAttribute("statusPending", this.reservationService.findPendingStatus());
@@ -141,8 +138,6 @@ public class ReservationController {
 			Room r = this.roomService.findRoomById(roomId);
 			reservation.setRoom(r);
 			reservation.setOwner(o);
-			Status pending = this.reservationService.findPendingStatus();
-			reservation.setStatus(pending);
 			ReservationValidator reservationValidator = new ReservationValidator(this.petService);
 			reservationValidator.validate(reservation, result);
 			if(result.hasErrors()) {
@@ -168,7 +163,7 @@ public class ReservationController {
 		Reservation reservation = this.reservationService.findReservationsById(reservationId);
 		Collection<Status> s = this.reservationService.findAllStatus();
 		if(completedRoom) {
-			Status accepted = this.reservationService.findStatusById(2); 
+			Status accepted = this.reservationService.findStatusById(1);
 			s.remove(accepted);
 			model.addAttribute("statusWithouthAccepted", s);
 		}else {
@@ -183,7 +178,6 @@ public class ReservationController {
 			@PathVariable("reservationId") int reservationId,BindingResult result, ModelMap modelMap) {
 		Reservation captReservation = this.reservationService.findReservationsById(reservationId);
 		Pet p = this.petService.findPetById(Integer.parseInt(reservation.getPet()));
-		reservation.setId(reservationId);
 		reservation.setRoom(this.roomService.findRoomById(roomId));
 		reservation.setOwner(this.ownerService.findOwnerById(ownerId));
 		ReservationValidator reservaValidator = new ReservationValidator(this.petService);
@@ -197,11 +191,10 @@ public class ReservationController {
 			captReservation.setRoom(this.roomService.findRoomById(roomId));
 			captReservation.setOwner(this.ownerService.findOwnerById(ownerId));
 			captReservation.setPet(p.getName());
-			reservation.setPet(p.getName());
-
-			this.reservationService.saveReservation(reservation);
+			this.reservationService.saveReservation(captReservation);
 			return "redirect:/rooms/{roomId}";
 		}
+		
 	}
 	@GetMapping(value = "/rooms/{roomId}/reservation/{reservationId}/delete")
 	public String processDeleteReservation(@PathVariable("roomId") int roomId, @PathVariable("reservationId") int reservationId, ModelMap model) {

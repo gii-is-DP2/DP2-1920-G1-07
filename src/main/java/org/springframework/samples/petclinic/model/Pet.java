@@ -114,7 +114,7 @@ public class Pet extends NamedEntity {
 		return this.room;
 	}
 
-	public void setRoom(final Room room) {
+	protected void setRoom(final Room room) {
 		this.room = room;
 	}
 

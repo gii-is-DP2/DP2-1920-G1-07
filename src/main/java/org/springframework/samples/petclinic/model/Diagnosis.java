@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.core.style.ToStringCreator;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,7 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Diagnosis extends BaseEntity {
 
 	@Column(name = "description")
-	//	@NotEmpty
+	@NotEmpty
 	private String		description;
 
 	@Column(name = "date")
@@ -79,7 +80,10 @@ public class Diagnosis extends BaseEntity {
 	}
 	@Override
 	public String toString() {
-
-		return new ToStringCreator(this).append("id", this.id).append("capacity", this.description).append("date", this.date).toString();
+		
+		return new ToStringCreator(this)
+				.append("id",this.id)
+				.append("capacity",this.description)
+				.append("date",this.date).toString();
 	}
 }
