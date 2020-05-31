@@ -115,4 +115,5 @@ public class Vet extends Person {
 	public void setUser(final User user) {
 		this.user = user;
 	}
+
 }

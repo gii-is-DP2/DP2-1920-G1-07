@@ -54,6 +54,7 @@ public class ShowMyVetSpaceWhenIsVetUITest {
 		this.driver.findElement(By.id("password")).sendKeys("12345");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
+		Assert.assertEquals("Veterinarian Information", this.driver.findElement(By.xpath("//h2")).getText());
 	}
 
 	@AfterEach
