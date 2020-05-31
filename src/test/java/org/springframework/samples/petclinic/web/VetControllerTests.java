@@ -93,17 +93,26 @@ class VetControllerTests {
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/vets/create").param("id", "1").param("firstName", "Pablo").param("lastName", "Reneses").with(SecurityMockMvcRequestPostProcessors.csrf()).param("specialties", "1"))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/vets/admin"));
-
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/vets/create").param("id", "1").param("firstName", "Pablo").param("lastName", "Reneses").with(SecurityMockMvcRequestPostProcessors.csrf()).param("specialties", "1").param("user.username", "pa")
+			.param("user.password", "pa")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/vets/admin"));
 	}
 
 	@WithMockUser(value = "spring")
 	@Test
 	void testProcessCreationFormWithErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/vets/create").with(SecurityMockMvcRequestPostProcessors.csrf()).param("firstName", "Pablo")).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("vet")).andExpect(MockMvcResultMatchers.view().name("vets/createVet"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/vets/create").with(SecurityMockMvcRequestPostProcessors.csrf()).param("user.username", "")).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("vet")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("vet", "user.username")).andExpect(MockMvcResultMatchers.view().name("vets/createVet"));
 	}
+
+	//	@WithMockUser(value = "spring")
+	//	@Test
+	//	void testProcessCreationFormHasErrorsOnCapacityAndName() throws Exception {
+	//		mockMvc.perform(post("/rooms/new").with(csrf()).param("id", "1").param("name", "Test Room")
+	//				.param("capacity", "0").param("type", "dog")).andExpect(status().isOk())
+	//				.andExpect(model().attributeHasErrors("room"))
+	//				.andExpect(model().attributeHasFieldErrors("room", "capacity", "name"))
+	//				.andExpect(view().name("rooms/createOrUpdateRoomForm"));
+	//	}
 
 	@WithMockUser(value = "spring")
 	@Test
