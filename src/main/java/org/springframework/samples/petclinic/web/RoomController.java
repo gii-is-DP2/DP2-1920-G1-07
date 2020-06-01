@@ -201,7 +201,7 @@ public class RoomController {
 		Room r = this.roomService.findRoomById(roomId);
 		if (r.getReservations() != null ) {
 			Integer numReservationsAccepted = (int) r.getReservations().stream().filter(x -> x.getStatus().getName().equals("ACCEPTED")).count();
-			Boolean completedRoom = numReservationsAccepted == r.getCapacity();
+			Boolean completedRoom = numReservationsAccepted.equals(r.getCapacity());
 			model.addAttribute("completedRoom", completedRoom);
 			//Para no poder eliminar una room si tiene reservas
 			model.addAttribute("notHaveAcceptedReservations", numReservationsAccepted == 0);
