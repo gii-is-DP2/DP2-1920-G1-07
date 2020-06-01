@@ -51,7 +51,7 @@ public class NonSeeCausesFromAnotherUserUITest {
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/cause')]")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/cause/myCauses/owner1')]")).click();
-		this.driver.get("http://localhost:8080/cause/myCauses/admin1");
+		this.driver.get("http://localhost:" + this.port + "/cause/myCauses/admin1");
 		//		Assert.assertEquals("No puedes ver las causas que ha realizado otra persona", this.driver.findElement(By.cssSelector("#mensaje")).getText());
 	}
 

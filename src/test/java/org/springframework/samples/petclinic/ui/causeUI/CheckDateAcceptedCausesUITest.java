@@ -35,8 +35,8 @@ public class CheckDateAcceptedCausesUITest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
-//		String pathToGeckoDriver = "C:\\Users\\amine";
-//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		//		String pathToGeckoDriver = "C:\\Users\\alvaro";
+		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -58,6 +58,7 @@ public class CheckDateAcceptedCausesUITest {
 		LocalDate fecha1 = LocalDate.parse(fechaCausa1);
 		String fechaCausa2 = this.driver.findElement(By.xpath("//table[@id='causesTable']/tbody/tr[2]/td[3]")).getText();
 		LocalDate fecha2 = LocalDate.parse(fechaCausa2);
+
 		Assert.assertEquals(true, fecha1.isAfter(this.fechaActual));
 		Assert.assertEquals(true, fecha2.isAfter(this.fechaActual));
 	}
