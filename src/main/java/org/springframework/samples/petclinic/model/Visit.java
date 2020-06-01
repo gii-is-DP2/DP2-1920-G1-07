@@ -91,7 +91,7 @@ public class Visit extends BaseEntity {
 	 *
 	 * @return Value of property date.
 	 */
-	public LocalDate getDate() {
+	public LocalDate getDate() { 
 		return this.date;
 	}
 

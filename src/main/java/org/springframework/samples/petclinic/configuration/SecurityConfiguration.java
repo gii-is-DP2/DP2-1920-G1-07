@@ -1,4 +1,3 @@
-
 package org.springframework.samples.petclinic.configuration;
 
 import javax.sql.DataSource;
@@ -27,37 +26,37 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+	private static final String ADMIN = "admin";
+	private static final String OWNER = "owner";
+	private static final String VETERINARIAN = "veterinarian";
 	@Autowired
 	DataSource dataSource;
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-//		http.antMatcher("/visit/**").oauth2Login();
+
 
 		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
 				.antMatchers("/users/new").permitAll()
-				.antMatchers("/admin/**").hasAnyAuthority("admin")
-				.antMatchers("/owners/**").hasAnyAuthority("owner", "admin")
-				.antMatchers("/owner/**").hasAnyAuthority("owner", "admin")
-				.antMatchers("/owner/pets/**").hasAnyAuthority("owner")
-				.antMatchers("/cause/donations").hasAnyAuthority("owner", "admin")
-				.antMatchers("/cause/donations/**").hasAnyAuthority("owner", "admin")
-				.antMatchers("/donations/**").hasAnyAuthority("admin", "owner")
+				.antMatchers("/admin/**").hasAnyAuthority(ADMIN)
+				.antMatchers("/owners/**").hasAnyAuthority(OWNER, ADMIN)
+				.antMatchers("/owner/**").hasAnyAuthority(OWNER, ADMIN)
+				.antMatchers("/cause/donations").hasAnyAuthority(OWNER, ADMIN)
+				.antMatchers("/cause/donations/**").hasAnyAuthority(OWNER, ADMIN)
+				.antMatchers("/donations/**").hasAnyAuthority(ADMIN, OWNER)
 				.antMatchers("/cause").permitAll()
-				.antMatchers("/cause/**").hasAnyAuthority("admin", "owner", "veterinarian")
-				.antMatchers("/myCauses").hasAnyAuthority("admin", "owner", "veterinarian")
-				.antMatchers("/causes/PendingCauses").hasAnyAuthority("admin")
-				.antMatchers("/causes/PendingCauses/**").hasAnyAuthority("admin")
+				.antMatchers("/cause/**").hasAnyAuthority(ADMIN, OWNER, VETERINARIAN)
+				.antMatchers("/myCauses").hasAnyAuthority(ADMIN, OWNER, VETERINARIAN)
+				.antMatchers("/causes/PendingCauses").hasAnyAuthority(ADMIN)
+				.antMatchers("/causes/PendingCauses/**").hasAnyAuthority(ADMIN)
 				.antMatchers("/vets/**").authenticated()
 				.antMatchers("/request/**").authenticated()
-				.antMatchers("/rooms/**").hasAnyAuthority("admin", "owner", "veterinarian", "sitter")
+				.antMatchers("/rooms/**").hasAnyAuthority(ADMIN, OWNER, VETERINARIAN, "sitter")
 				.antMatchers("/sitter/**").hasAnyAuthority("sitter")
-				.antMatchers("/vets/create").hasAnyAuthority("admin")
-				.antMatchers("/vets/visit").hasAnyAuthority("veterinarian")
 				.antMatchers("/singIn/google").permitAll()
-				.antMatchers("/vet/{vetId}/diagnosis").hasAnyAuthority("veterinarian")
-				.antMatchers("/diagnosis/myDiagnosis").hasAnyAuthority("owner")
+				.antMatchers("/vet/{vetId}/diagnosis").hasAnyAuthority(VETERINARIAN)
+				.antMatchers("/diagnosis/myDiagnosis").hasAnyAuthority(OWNER)
 				.antMatchers("/visits").permitAll()
 				.antMatchers("/visit/**").permitAll()
 				.antMatchers("/vets/**").authenticated().anyRequest().denyAll().and().formLogin()
