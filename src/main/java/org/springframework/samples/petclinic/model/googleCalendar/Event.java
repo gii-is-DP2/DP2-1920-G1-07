@@ -68,8 +68,6 @@ public class Event {
     private String colorId;
     @JsonProperty("creator")
     private Creator creator;
-    @JsonProperty("organizer")
-    private Organizer organizer;
     @JsonProperty("start")
     private Start start;
     @JsonProperty("end")
@@ -90,16 +88,10 @@ public class Event {
     private String iCalUID;
     @JsonProperty("sequence")
     private String sequence;
-    @JsonProperty("attendees")
-    private List<Attendee> attendees = null;
     @JsonProperty("attendeesOmitted")
     private String attendeesOmitted;
-    @JsonProperty("extendedProperties")
-    private ExtendedProperties extendedProperties;
     @JsonProperty("hangoutLink")
     private String hangoutLink;
-    @JsonProperty("conferenceData")
-    private ConferenceData conferenceData;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -223,15 +215,6 @@ public class Event {
         this.creator = creator;
     }
 
-    @JsonProperty("organizer")
-    public Organizer getOrganizer() {
-        return organizer;
-    }
-
-    @JsonProperty("organizer")
-    public void setOrganizer(Organizer organizer) {
-        this.organizer = organizer;
-    }
 
     @JsonProperty("start")
     public Start getStart() {
@@ -333,15 +316,6 @@ public class Event {
         this.sequence = sequence;
     }
 
-    @JsonProperty("attendees")
-    public List<Attendee> getAttendees() {
-        return attendees;
-    }
-
-    @JsonProperty("attendees")
-    public void setAttendees(List<Attendee> attendees) {
-        this.attendees = attendees;
-    }
 
     @JsonProperty("attendeesOmitted")
     public String getAttendeesOmitted() {
@@ -353,16 +327,6 @@ public class Event {
         this.attendeesOmitted = attendeesOmitted;
     }
 
-    @JsonProperty("extendedProperties")
-    public ExtendedProperties getExtendedProperties() {
-        return extendedProperties;
-    }
-
-    @JsonProperty("extendedProperties")
-    public void setExtendedProperties(ExtendedProperties extendedProperties) {
-        this.extendedProperties = extendedProperties;
-    }
-
     @JsonProperty("hangoutLink")
     public String getHangoutLink() {
         return hangoutLink;
@@ -371,16 +335,6 @@ public class Event {
     @JsonProperty("hangoutLink")
     public void setHangoutLink(String hangoutLink) {
         this.hangoutLink = hangoutLink;
-    }
-
-    @JsonProperty("conferenceData")
-    public ConferenceData getConferenceData() {
-        return conferenceData;
-    }
-
-    @JsonProperty("conferenceData")
-    public void setConferenceData(ConferenceData conferenceData) {
-        this.conferenceData = conferenceData;
     }
 
     @JsonAnyGetter

@@ -80,7 +80,7 @@ public class Room extends NamedEntity {
 
 	public Set<Pet> getPetsInternal() {
 		if (this.pets == null) {
-			this.pets = new HashSet<Pet>();
+			this.pets = new HashSet<>();
 		}
 		return this.pets;
 	}
