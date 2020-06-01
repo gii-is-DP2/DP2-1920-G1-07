@@ -37,7 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class RoomController {
 
 	private static final String			VIEWS_ROOM_CREATE_OR_UPDATE_FORM	= "/rooms/createOrUpdateRoomForm";
-
+	private static final String 		MESSAGE = "message";
 	private final RoomService			roomService;
 
 	@Autowired
@@ -109,8 +109,7 @@ public class RoomController {
 	}
 	@ModelAttribute("types")
 	public Collection<PetType> allPetTypes() {
-		Collection<PetType> petType = this.petService.findPetTypes();
-		return petType;
+		return this.petService.findPetTypes();
 	}
 
 	@GetMapping(value = "/rooms/{roomId}/sitter")
@@ -142,15 +141,15 @@ public class RoomController {
 
 	@PostMapping(value = "/rooms/new")
 	public String processSaveRoom(@Valid final Room room, final BindingResult result, final ModelMap model) {
-		RoomValidator roomValidator = new RoomValidator(this.roomService);
-		roomValidator.validate(room, result);
+		RoomValidator roomVal = new RoomValidator(this.roomService);
+		roomVal.validate(room, result);
 		if (result.hasErrors()) {
-			model.addAttribute("message", "Room not created");
+			model.addAttribute(MESSAGE, "Room not created");
 			model.addAttribute("room", room);
 			return "rooms/createOrUpdateRoomForm";
 		} else {
 			this.roomService.saveRoom(room);
-			model.addAttribute("message", "Room succesfully created");
+			model.addAttribute(MESSAGE, "Room succesfully created");
 		}
 		return "redirect:/rooms/";
 	}
@@ -162,7 +161,7 @@ public class RoomController {
 			for (Reservation r : room.getReservations()) {
 				if (!r.getStatus().getName().equals("ACCEPTED")) {
 					this.roomService.delete(room);
-					model.addAttribute("message", "Event Successfuly deleted");
+					model.addAttribute(MESSAGE, "Event Successfuly deleted");
 				}
 			}
 		} else if (room != null && room.getReservations().isEmpty()) {
@@ -183,8 +182,8 @@ public class RoomController {
 
 	@PostMapping(value = "/rooms/{roomId}/edit")
 	public String processUpdateRoom(@Valid final Room room, @PathVariable("roomId") final int roomId, final BindingResult result, final ModelMap modelMap) {
-		RoomValidator roomValidator = new RoomValidator(this.roomService, roomId);
-		roomValidator.validate(room, result);
+		RoomValidator roomVal = new RoomValidator(this.roomService, roomId);
+		roomVal.validate(room, result);
 
 		if (result.hasErrors()) {
 			return RoomController.VIEWS_ROOM_CREATE_OR_UPDATE_FORM;
@@ -202,7 +201,7 @@ public class RoomController {
 		Room r = this.roomService.findRoomById(roomId);
 		if (r.getReservations() != null ) {
 			Integer numReservationsAccepted = (int) r.getReservations().stream().filter(x -> x.getStatus().getName().equals("ACCEPTED")).count();
-			Boolean completedRoom = numReservationsAccepted == r.getCapacity();
+			Boolean completedRoom = numReservationsAccepted.equals(r.getCapacity());
 			model.addAttribute("completedRoom", completedRoom);
 			//Para no poder eliminar una room si tiene reservas
 			model.addAttribute("notHaveAcceptedReservations", numReservationsAccepted == 0);

@@ -54,6 +54,7 @@ public class CreateVetWhenIsAdminUITest {
 		this.driver.findElement(By.id("password")).sendKeys("4dm1n");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[5]/a/span[2]")).click();
+		Assert.assertEquals("Create Vet", this.driver.findElement(By.linkText("Create Vet")).getText());
 		this.driver.findElement(By.linkText("Create Vet")).click();
 		this.driver.findElement(By.id("firstName")).click();
 		this.driver.findElement(By.id("firstName")).clear();
@@ -71,7 +72,12 @@ public class CreateVetWhenIsAdminUITest {
 		this.driver.findElement(By.id("user.password")).clear();
 		this.driver.findElement(By.id("user.password")).sendKeys("vet");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		//		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[5]/a/span[2]")).click();
+		try {
+			Assert.assertEquals("Vet5 vet5", this.driver.findElement(By.xpath("//table[@id='vetsTable']/tbody/tr[8]/td")).getText());
+		} catch (Error e) {
+			this.verificationErrors.append(e.toString());
+		}
+		//		driver.findElement(By.xpath("//table[@id='vetsTable']/tbody/tr[8]/td")).click();
 	}
 
 	@AfterEach

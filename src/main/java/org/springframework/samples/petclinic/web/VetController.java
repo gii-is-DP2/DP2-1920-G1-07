@@ -55,6 +55,19 @@ public class VetController {
 	private final VetService	vetService;
 
 
+	//	private VetValidator		vetValidator;
+	//
+	//
+	//	@InitBinder
+	//	public void setAllowedFields(final WebDataBinder dataBinder) {
+	//		dataBinder.setDisallowedFields("id");
+	//	}
+	//
+	//	@InitBinder("vet")
+	//	public void initVetBinder(final WebDataBinder dataBinder) {
+	//		dataBinder.setValidator(this.vetValidator);
+	//	}
+
 	@Autowired
 	public VetController(final VetService clinicService) {
 		this.vetService = clinicService;
@@ -70,12 +83,12 @@ public class VetController {
 
 	@PostMapping(value = "/vets/create")
 	public String processCreationForm(@Valid final Vet vet, final BindingResult result, @RequestParam(required = false) final int[] specialties) {
-		//		Vet vet2 = this.vetService.findVetById(vet.getId());
-		//		String r = vet2.getFirstName();
-		//		String t = vet2.getLastName();
+		VetValidator vetValidator = new VetValidator(this.vetService, specialties);
+		vetValidator.validate(vet, result);
 		if (result.hasErrors()) {
 			return VetController.VIEWS_VET_CREATE_FORM;
 		} else {
+
 			for (int i : specialties) {
 				Specialty s = this.vetService.findSpecialiesById(i);
 				vet.addSpecialty(s);

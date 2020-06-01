@@ -23,8 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @Transactional
-@TestPropertySource(
-		locations = "classpath:application-mysql.properties")
+@TestPropertySource(locations = "classpath:application-mysql.properties")
 public class ReservationController2E2Test {
 
 	private static final int TEST_RESERVATION_ID = 1;

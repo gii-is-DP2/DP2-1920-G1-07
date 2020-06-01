@@ -12,7 +12,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.2.4.RELEASE</version>
 	</parent>
-	<name>petclinic</name>
+	<name>Petclinic DP2 G7</name>
 	<repositories>
 		<repository>
 			<id>maven-restlet</id>
@@ -36,13 +36,55 @@
 		<webjars-jquery-ui.version>1.11.4</webjars-jquery-ui.version>
 		<webjars-jquery.version>2.2.4</webjars-jquery.version>
 		<wro4j.version>1.8.0</wro4j.version>
-
+		<!-- Cucumber -->
+		<cucumber.version>5.5.0</cucumber.version>
+		<!-- Jacoco -->
 		<jacoco.version>0.8.5</jacoco.version>
 		<spring-format.version>0.0.19</spring-format.version>
 		<selenium.version>3.141.59</selenium.version>
+
+		<sonar.projectKey>gii-is-DP2_DP2-1920-G1-07</sonar.projectKey>
+		<sonar.organization>gii-is-dp2</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.login>e85c61d9149873727385c7d97dbf568da160de95</sonar.login>
 	</properties>
 
 	<dependencies>
+		<!-- Cucumber Dependencies -->
+		<dependency>
+    		<groupId>io.cucumber</groupId>
+    		<artifactId>cucumber-java</artifactId>
+    		<version>${cucumber.version}</version>
+    		<scope>test</scope>
+    	</dependency>
+    	<dependency>
+    		<groupId>io.cucumber</groupId>
+    		<artifactId>cucumber-junit</artifactId>
+    		<version>${cucumber.version}</version>
+    		<scope>test</scope>
+    	</dependency>
+    	<dependency>
+    		<groupId>io.cucumber</groupId>
+    		<artifactId>cucumber-spring</artifactId>
+    		<version>${cucumber.version}</version>
+    		<scope>test</scope>
+    	</dependency>
+    	<dependency>
+    		<groupId>io.cucumber</groupId>
+    		<artifactId>cucumber-junit-platform-engine</artifactId>
+    		<version>${cucumber.version}</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>net.masterthought</groupId>
+    		<artifactId>cucumber-reporting</artifactId>
+    		<version>4.2.3</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>de.monochromata.cucumber</groupId>
+    		<artifactId>reporting-plugin</artifactId>
+    		<version>4.0.36</version>
+    	</dependency>
+		
 		<!-- Spring and Spring Boot dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -150,7 +192,7 @@
 			<version>4.2.0</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- Para poder hacer pruebas de Api Rest que tengan oauth -->
 		<dependency>
 			<groupId>com.github.scribejava</groupId>
@@ -321,15 +363,15 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M1</version>
 				<configuration>
+					<useSystemClassLoader>false</useSystemClassLoader>
 					<excludes>
 						<exclude>**/*UITest.java</exclude>
 						<exclude>**/*APITest.java</exclude>
-						
 					</excludes>
 				</configuration>
 			</plugin>
@@ -343,8 +385,10 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.0.0-M1</version>
 						<configuration>
 							<skipTests>true</skipTests>
+							<useSystemClassLoader>false</useSystemClassLoader>
 						</configuration>
 					</plugin>
 					<plugin>
@@ -360,7 +404,7 @@
 						</executions>
 						<configuration>
 							<includes>
-								<include>**/*UITest.java</include>
+								<include>**/*CucumberUITest.java</include>
 							</includes>
 						</configuration>
 					</plugin>
@@ -375,7 +419,7 @@
 									<goal>generate</goal>
 								</goals>
 								<configuration>
-									<projectName>${name}</projectName>
+									<projectName>${project.name}</projectName>
 									<outputDirectory>target</outputDirectory>
 									<cucumberOutput>target/cucumber-reports/cucumber-report.json</cucumberOutput>
 									<buildNumber>1</buildNumber>
