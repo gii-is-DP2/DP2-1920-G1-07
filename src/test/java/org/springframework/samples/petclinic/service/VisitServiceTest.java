@@ -20,11 +20,11 @@ public class VisitServiceTest {
 	private VisitService visitService;
 	
 	@Test
-	public void testMyVisits() {
+	void testMyVisits() {
 	
 		Boolean visits = visitService.visitFind().toString().contains("Visit");
 		
-		assertEquals(visits,true);
-		assertNotEquals(visits, false);
+		assertEquals(true,visits);
+		assertNotEquals(false,visits);
 	}
 }

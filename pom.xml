@@ -419,7 +419,7 @@
 									<goal>generate</goal>
 								</goals>
 								<configuration>
-									<projectName>${name}</projectName>
+									<projectName>${project.name}</projectName>
 									<outputDirectory>target</outputDirectory>
 									<cucumberOutput>target/cucumber-reports/cucumber-report.json</cucumberOutput>
 									<buildNumber>1</buildNumber>

@@ -1,33 +1,18 @@
 package org.springframework.samples.petclinic.web;
 
-import java.io.BufferedReader;
-import java.io.IOError;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.samples.petclinic.model.Visit;
-import org.springframework.samples.petclinic.model.googleCalendar.End;
-import org.springframework.samples.petclinic.model.googleCalendar.Event;
-import org.springframework.samples.petclinic.model.googleCalendar.Start;
-import org.springframework.samples.petclinic.resources.GoogleCalendarResources;
-import org.springframework.samples.petclinic.service.VisitService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -40,7 +25,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets.Details;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 
 @Controller
@@ -54,7 +38,6 @@ public class GoogleOauthController extends HttpServlet {
 	*/
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Logger.getLogger(GoogleOauthController.class.getName());
-	private static HttpTransport httptransport;
 	private static final JacksonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 	
 	GoogleClientSecrets clientSecrets;
@@ -70,12 +53,12 @@ public class GoogleOauthController extends HttpServlet {
 
 	@GetMapping(value="/singIn/google")
 	public RedirectView googleConnectionToOauth2(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println(request);
-		return new RedirectView(authorize(request));
+		return new RedirectView(authorize());
 		
 	}
 	
-	private String authorize(HttpServletRequest request) throws Exception {
+	private String authorize() throws IOException, GeneralSecurityException {
+		HttpTransport httptransport;
 		AuthorizationCodeRequestUrl auRequestUrl;
 		if(flow == null) {
 			Details web = new Details();
@@ -86,7 +69,7 @@ public class GoogleOauthController extends HttpServlet {
 			flow = new GoogleAuthorizationCodeFlow.Builder(httptransport, JSON_FACTORY, clientId, clientSecret, Collections.singleton(CalendarScopes.CALENDAR)).build();
 		}
 		auRequestUrl = flow.newAuthorizationUrl().setRedirectUri(redirectUrl);
-		System.out.println("cal authorizationUrl->" + auRequestUrl);
+		log.fine("cal authorizationUrl->" + auRequestUrl);
 		return auRequestUrl.build();
 	}
 	
