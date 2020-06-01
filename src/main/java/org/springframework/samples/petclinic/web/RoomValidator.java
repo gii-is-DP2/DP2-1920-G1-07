@@ -10,7 +10,7 @@ import org.springframework.validation.Validator;
 
 public class RoomValidator implements Validator {
 
-		
+	private static final String			FIELD_REQUIRED	= "This field is required";
 	@Autowired
 	private RoomService roomService;
 	
@@ -32,10 +32,10 @@ public class RoomValidator implements Validator {
 			errors.rejectValue("capacity", "The value 0 is not valid","The value 0 is not valid");
 		}
 		if(room.getCapacity() == null) {
-			errors.rejectValue("capacity", "This field is required","This field is required");
+			errors.rejectValue("capacity", FIELD_REQUIRED,FIELD_REQUIRED);
 		}
 		if(room.getType() == null) {
-			errors.rejectValue("type", "This field is required","This field is required");
+			errors.rejectValue("type", FIELD_REQUIRED,FIELD_REQUIRED);
 		}
 		
 		Collection<String> roomNames = this.roomService.findAllRoomsName();

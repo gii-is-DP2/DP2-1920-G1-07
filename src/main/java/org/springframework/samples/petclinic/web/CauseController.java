@@ -30,6 +30,7 @@ public class CauseController {
 
 	private static final String	VIEWS_CAUSE_CREATE_OR_UPDATE_FORM	= "causes/createOrUpdateCauseForm";
 	private static final String	VIEWS_CAUSE_PENDING_UPDATE_FORM		= "causes/updatePendingCauseForm";
+	private static final String	CAUSE		= "cause";
 
 	private final CauseService	causeService;
 	private final UserService	userService;
@@ -46,7 +47,7 @@ public class CauseController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@InitBinder("cause")
+	@InitBinder(CAUSE)
 	public void initCauseBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new CauseValidator());
 	}
@@ -65,7 +66,7 @@ public class CauseController {
 				causasValidas.add(c);
 			}
 		}
-		model.addAttribute("cause", causasValidas);
+		model.addAttribute(CAUSE, causasValidas);
 		return "causes/causesList";
 	}
 
@@ -89,7 +90,7 @@ public class CauseController {
 	@GetMapping(path = "/cause/new")
 	public String initCreationForm(final ModelMap model) {
 		Cause cause = new Cause();
-		model.addAttribute("cause", cause);
+		model.addAttribute(CAUSE, cause);
 		return CauseController.VIEWS_CAUSE_CREATE_OR_UPDATE_FORM;
 	}
 
@@ -113,7 +114,7 @@ public class CauseController {
 	@GetMapping(path = "/causes/PendingCauses")
 	public String showPendingCausesList(final ModelMap model) {
 		Collection<Cause> myCauses = this.causeService.findPendingCauses();
-		model.addAttribute("cause", myCauses);
+		model.addAttribute(CAUSE, myCauses);
 		return "causes/pendingCauses";
 	}
 
@@ -125,7 +126,7 @@ public class CauseController {
 	@GetMapping(value = "/causes/PendingCauses/cause/{causeId}/edit")
 	public String initUpdateOwnerForm(@PathVariable("causeId") final int causeId, final ModelMap model) {
 		Cause cause = this.causeService.findCauseById(causeId);
-		model.put("cause", cause);
+		model.put(CAUSE, cause);
 		return CauseController.VIEWS_CAUSE_PENDING_UPDATE_FORM;
 	}
 

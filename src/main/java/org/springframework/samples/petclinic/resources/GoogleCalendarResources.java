@@ -12,7 +12,6 @@ public class GoogleCalendarResources {
 	
 	private static final Logger log = Logger.getLogger(GoogleCalendarResources.class.getName());
 	
-	private static final String api_key = "";
 	private final String access_token;
 	private final String URL_INSERT_EVENT = "https://www.googleapis.com/calendar/v3/calendars/%calendarId/events";
 	
@@ -37,7 +36,7 @@ public class GoogleCalendarResources {
 			
 			event = cr.post(eventResponse,Event.class);
 		}catch (ResourceException e) {
-			// TODO: handle exception
+			
 			log.warning("Error when inserting event "+cr.getResponse().getStatus());
 		}
 		return event;

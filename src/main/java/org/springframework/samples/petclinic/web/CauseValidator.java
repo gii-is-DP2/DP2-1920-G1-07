@@ -18,11 +18,11 @@ public class CauseValidator implements Validator {
 		LocalDate deadline = cause.getDeadline();
 		LocalDate now = LocalDate.now();
 
-		if (title == null || title == "") {
+		if (title == null || title.equals("")) {
 			errors.rejectValue("title", "The title is empty", "The title is empty");
 		}
 
-		if (description == null || description == "") {
+		if (description == null || description.equals("")) {
 			errors.rejectValue("description", "The description is empty", "The description is empty");
 		}
 

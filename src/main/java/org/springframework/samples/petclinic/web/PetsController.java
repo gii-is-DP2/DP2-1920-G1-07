@@ -29,6 +29,7 @@ public class PetsController {
 
 	private static final String	VIEWS_PETS_CREATE_OR_UPDATE_FORM	= "pets/createOrUpdatePetForm";
 	private static final String	VIEWS_PETS_LIST_ADMIN				= "pets/petListAdmin";
+	private static final String	REDIRECT_OWNER_PETS	= "redirect:/owner/pets";
 
 	private final PetService	petService;
 	private final OwnerService	ownerService;
@@ -93,7 +94,7 @@ public class PetsController {
 				result.rejectValue("name", "duplicate", "already exists");
 				return PetsController.VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 			}
-			return "redirect:/owner/pets";
+			return REDIRECT_OWNER_PETS;
 		}
 	}
 
@@ -130,7 +131,7 @@ public class PetsController {
 				result.rejectValue("name", "duplicate", "already exists");
 				return PetsController.VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 			}
-			return "redirect:/owner/pets";
+			return REDIRECT_OWNER_PETS;
 		}
 	}
 
@@ -138,6 +139,6 @@ public class PetsController {
 	public String initDelete(@PathVariable("petId") final int petId, final ModelMap model) {
 		Pet pet = this.petService.findPetById(petId);
 		this.petService.deletePet(pet);
-		return "redirect:/owner/pets";
+		return REDIRECT_OWNER_PETS;
 	}
 }

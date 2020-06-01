@@ -37,6 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class RoomController {
 
 	private static final String			VIEWS_ROOM_CREATE_OR_UPDATE_FORM	= "/rooms/createOrUpdateRoomForm";
+	private static final String			REDIRECT_ROOM	= "redirect:/rooms/";
 	private static final String 		MESSAGE = "message";
 	private final RoomService			roomService;
 
@@ -128,7 +129,7 @@ public class RoomController {
 		room2.setSitter(room.getSitter());
 		this.roomService.saveRoom(room2);
 
-		return "redirect:/rooms/" + roomId;
+		return REDIRECT_ROOM + roomId;
 	}
 
 	@GetMapping(value = "/rooms/new")
@@ -151,11 +152,11 @@ public class RoomController {
 			this.roomService.saveRoom(room);
 			model.addAttribute(MESSAGE, "Room succesfully created");
 		}
-		return "redirect:/rooms/";
+		return REDIRECT_ROOM;
 	}
 	@GetMapping(value = "/rooms/delete/{roomId}")
 	public String processDeleteRoom(@PathVariable("roomId") final int roomId, final Model model) {
-		String view = "redirect:/rooms/";
+		String view = REDIRECT_ROOM;
 		Room room = this.roomService.findRoomById(roomId);
 		if (room != null && !room.getReservations().isEmpty()) {
 			for (Reservation r : room.getReservations()) {
@@ -190,7 +191,7 @@ public class RoomController {
 		} else {
 			room.setId(roomId);
 			this.roomService.saveRoom(room);
-			return "redirect:/rooms/" + room.getId();
+			return REDIRECT_ROOM + room.getId();
 		}
 
 	}
