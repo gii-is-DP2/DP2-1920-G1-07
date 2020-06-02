@@ -388,6 +388,7 @@
 						<version>3.0.0-M1</version>
 						<configuration>
 							<skipTests>true</skipTests>
+							<skipLogs>true</skipLogs>
 							<useSystemClassLoader>false</useSystemClassLoader>
 						</configuration>
 					</plugin>
@@ -403,7 +404,6 @@
 							</execution>
 						</executions>
 						<configuration>
-						<skipTests>true</skipTests>
 							<includes>
 								<include>**/*CucumberUITest.java</include>
 							</includes>
@@ -420,7 +420,6 @@
 									<goal>generate</goal>
 								</goals>
 								<configuration>
-								<skipTests>true</skipTests>
 									<projectName>${project.name}</projectName>
 									<outputDirectory>target</outputDirectory>
 									<cucumberOutput>target/cucumber-reports/cucumber-report.json</cucumberOutput>
