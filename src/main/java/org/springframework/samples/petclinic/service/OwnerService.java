@@ -65,17 +65,21 @@ public class OwnerService {
 		//creating user
 		this.userService.saveUser(owner.getUser());
 		//creating authorities
-		authoritiesService.saveAuthorities(owner.getUser().getUsername(), "owner");
+		this.authoritiesService.saveAuthorities(owner.getUser().getUsername(), "owner");
 	}
-	
+
 	@Transactional
-	public Owner findOwnerByUserName(String username) {
-		return ownerRepository.findByUserName(username);
-	}		
+	public Owner findOwnerByUserName(final String username) {
+		return this.ownerRepository.findByUserName(username);
+	}
 
 	@Transactional(readOnly = true)
 	public Owner findOwnerByUser(final String name) {
 		return this.ownerRepository.findByUser(name);
+	}
+
+	public Integer findIdByName(final String name) {
+		return this.ownerRepository.findIdByName(name);
 	}
 
 }

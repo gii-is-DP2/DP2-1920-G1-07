@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.projections.OwnerPets;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
@@ -29,6 +31,7 @@ public class PetsController {
 
 	private static final String	VIEWS_PETS_CREATE_OR_UPDATE_FORM	= "pets/createOrUpdatePetForm";
 	private static final String	VIEWS_PETS_LIST_ADMIN				= "pets/petListAdmin";
+	private static final String	REDIRECT_OWNER_PETS	= "redirect:/owner/pets";
 
 	private final PetService	petService;
 	private final OwnerService	ownerService;
@@ -53,16 +56,48 @@ public class PetsController {
 	}
 
 	@GetMapping(value = "/owner/pets")
-	public ModelAndView showPets(final HttpServletRequest request,ModelMap model) {
+	public ModelAndView showPets(final HttpServletRequest request, final ModelMap model) {
 		/*
-		 * Añado el atributo wasSavedOnGoogleCalendar al model para que en caso de que ya se haya guardado 
+		 * Añado el atributo wasSavedOnGoogleCalendar al model para que en caso de que ya se haya guardado
 		 * la visita de una pet en google calendar ya no salga mas el boton para volver a hacerlo.
 		 */
 		String accessToken = (String) request.getSession().getAttribute("accessToken");
 		model.addAttribute("haceAccessToken", accessToken != null);
 		Principal principal = request.getUserPrincipal();
 		ModelAndView mav = new ModelAndView("pets/petList");
-		mav.addObject(this.ownerService.findOwnerByUser(principal.getName()));
+		Collection<OwnerPets> ow = this.petService.findOwnerPetsById(principal.getName());
+		Owner owner = new Owner();
+		owner.setId(this.ownerService.findIdByName(principal.getName()));
+		for (OwnerPets p : ow) {
+			if (owner.getPets().stream().anyMatch(X -> X.getId().equals(p.getId()))) {
+				if (p.getVisitDate() != null) {
+					Visit v = new Visit();
+					v.setDate(p.getVisitDate());
+					v.setDescription(p.getVisitDescription());
+					owner.getPets().stream().filter(X -> X.getId().equals(p.getId())).findFirst().get().addVisit(v);
+				}
+			} else {
+				Pet pet = new Pet();
+				pet.setName(p.getName());
+				PetType type = new PetType();
+				type.setName(p.getType());
+				pet.setType(type);
+				pet.setBirthDate(p.getBirthDate());
+				Integer id = p.getId();
+				pet.setId(id);
+
+				if (p.getVisitDate() != null) {
+					Visit v = new Visit();
+					v.setDate(p.getVisitDate());
+					v.setDescription(p.getVisitDescription());
+					pet.addVisit(v);
+				}
+
+				owner.addPet(pet);
+
+			}
+		}
+		mav.addObject(owner);
 		return mav;
 	}
 
@@ -93,7 +128,7 @@ public class PetsController {
 				result.rejectValue("name", "duplicate", "already exists");
 				return PetsController.VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 			}
-			return "redirect:/owner/pets";
+			return REDIRECT_OWNER_PETS;
 		}
 	}
 
@@ -130,7 +165,7 @@ public class PetsController {
 				result.rejectValue("name", "duplicate", "already exists");
 				return PetsController.VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 			}
-			return "redirect:/owner/pets";
+			return REDIRECT_OWNER_PETS;
 		}
 	}
 
@@ -138,6 +173,6 @@ public class PetsController {
 	public String initDelete(@PathVariable("petId") final int petId, final ModelMap model) {
 		Pet pet = this.petService.findPetById(petId);
 		this.petService.deletePet(pet);
-		return "redirect:/owner/pets";
+		return REDIRECT_OWNER_PETS;
 	}
 }

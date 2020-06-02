@@ -19,11 +19,6 @@ public class RoomService {
 	private RoomRepository roomRepo;
 
 
-	//	@Transactional
-	//	public int roomCount() throws DataAccessException{ 
-	//			return (int) roomRepo.count();
-	//	}
-	//	
 
 	@Transactional
 	public Collection<Room> allRooms() throws DataAccessException {

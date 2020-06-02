@@ -27,13 +27,12 @@ public class DiagnosisValidator implements Validator {
 		LocalDate date = diagnosis.getDate();
 		LocalDate now = LocalDate.now();
 
-		if (description == null || description == "") {
+		if (description == null || description.equals("")) {
 			errors.rejectValue("description", "The description is empty", "The description is empty");
 		}
 
 		if (date != null) {
-			Boolean posterior = date.isBefore(now);
-			if (posterior) {
+			if (date.isBefore(now)) {
 				errors.rejectValue("date", "The date is before the current date", "The date is before the current date");
 			}
 		} else {

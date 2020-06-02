@@ -32,6 +32,7 @@ public class ReservationController {
 	
 	private static final String STATUS = "status";
 	private static final String CREATERESERVATIONFORM = "reservations/createReservationForm";
+	private static final String REDIRECT_ROOMS = "redirect:/rooms/{roomId}";
 	private final ReservationService reservationService;
 	
 	@Autowired
@@ -122,7 +123,7 @@ public class ReservationController {
 				reservation.setPet(p.getName());
 			// Restricciones
 				this.reservationService.saveReservation(reservation);
-				return "redirect:/rooms/{roomId}";
+				return REDIRECT_ROOMS;
 			}
 		}
 	}
@@ -171,14 +172,14 @@ public class ReservationController {
 			reservation.setPet(p.getName());
 
 			this.reservationService.saveReservation(reservation);
-			return "redirect:/rooms/{roomId}";
+			return REDIRECT_ROOMS;
 		}
 	}
 	@GetMapping(value = "/rooms/{roomId}/reservation/{reservationId}/delete")
 	public String processDeleteReservation(@PathVariable("roomId") int roomId, @PathVariable("reservationId") int reservationId, ModelMap model) {
 		Reservation reservation = this.reservationService.findReservationsById(reservationId);
 		this.reservationService.deleteReservation(reservation);
-		return "redirect:/rooms/{roomId}";
+		return REDIRECT_ROOMS;
 	}
 
 }

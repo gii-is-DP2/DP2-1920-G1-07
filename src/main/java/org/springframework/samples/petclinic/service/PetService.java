@@ -23,6 +23,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.projections.OwnerPets;
 import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
@@ -58,6 +59,11 @@ public class PetService {
 	@Transactional
 	public void saveVisit(final Visit visit) throws DataAccessException {
 		this.visitRepository.save(visit);
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<OwnerPets> findOwnerPetsById(final String string) throws DataAccessException {
+		return this.petRepository.findOwnerPets(string);
 	}
 
 	@Transactional(readOnly = true)

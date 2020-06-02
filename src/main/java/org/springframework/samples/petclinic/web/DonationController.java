@@ -34,19 +34,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/cause/{causeId}/donations")
 public class DonationController {
 
-	@Autowired
-	private DonationService donationService;
-	@Autowired
-	private CauseService causeService;
+	private static final String	DONATION	= "donation";
+	private static final String	MESSAGE		= "message";
 
-	// @ModelAttribute("causes")
-	// public Cause findCauseById(HttpServletRequest request){
-	// String causeId = request.getAttribute("causeId").toString();
-	// return this.causeService.findCauseById(Integer.parseInt(causeId));
-	//
-	// }
+	@Autowired
+	private DonationService		donationService;
+	@Autowired
+	private CauseService		causeService;
 
-	@InitBinder("donation")
+
+	@InitBinder(DonationController.DONATION)
 	public void initDonationBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new DonationValidator());
 	}
@@ -64,35 +61,8 @@ public class DonationController {
 
 	}
 
-	// @GetMapping(path = "/new")
-	// public String createDonation(ModelMap modelMap) {
-	//
-	// String view = "donations/editDonation";
-	//
-	// Object principal =
-	// SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	// UserDetails userDetails = null;
-	// if (principal instanceof UserDetails) {
-	// userDetails = (UserDetails) principal;
-	// }
-	// String userName = userDetails.getUsername();
-	// User u = new User();
-	// u.setUsername(userName);
-	//
-	// Donation d = new Donation();
-	// d.setUser(u);
-	//
-	//
-	// modelMap.addAttribute("donation", d);
-	//
-	//
-	// return view;
-	//
-	// }
-
 	@GetMapping(value = "/new")
-	public String initCreationForm(final Cause c, final ModelMap model, final HttpServletRequest request,
-			@PathVariable("causeId") final int causeId) {
+	public String initCreationForm(final Cause c, final ModelMap model, final HttpServletRequest request, @PathVariable("causeId") final int causeId) {
 		String view = "donations/editDonation";
 		Donation donation = new Donation();
 		c.addDonation(donation);
@@ -104,10 +74,10 @@ public class DonationController {
 		u.setUsername(userName);
 
 		Cause causes = this.causeService.findCauseById(causeId);
-		Collection<Donation> ds = donationService.findDonationCause(causeId);
+		Collection<Donation> ds = this.donationService.findDonationCause(causeId);
 		Double moneyD = 0.;
 		Double moneyF = causes.getMoney();
-		
+
 		if (!ds.isEmpty()) {
 
 			moneyD = ds.stream().mapToDouble(x -> x.getMoney()).sum();
@@ -123,17 +93,14 @@ public class DonationController {
 		donation.setCauses(causes);
 		donation.getCauses().setTitle(nombre);
 
-		model.put("donation", donation);
-
-		System.out.println(donation.getUser().getUsername());
+		model.put(DonationController.DONATION, donation);
 
 		return view;
 
 	}
 
 	@PostMapping(path = "/new")
-	public String saveDonation(@Valid final Donation donation, final BindingResult result, final ModelMap model,
-			final HttpServletRequest request, @PathVariable("causeId") final int causeId) {
+	public String saveDonation(@Valid final Donation donation, final BindingResult result, final ModelMap model, final HttpServletRequest request, @PathVariable("causeId") final int causeId) {
 		String view = "redirect:/cause/{causeId}/donations";
 
 		Principal principal = request.getUserPrincipal();
@@ -148,10 +115,10 @@ public class DonationController {
 		donation.setCauses(causes);
 		donation.getCauses().setTitle(nombre);
 
-		Collection<Donation> ds = donationService.findDonationCause(causeId);
+		Collection<Donation> ds = this.donationService.findDonationCause(causeId);
 		Double moneyD = 0.;
 		Double moneyF = causes.getMoney();
-		
+
 		if (!ds.isEmpty()) {
 
 			moneyD = ds.stream().mapToDouble(x -> x.getMoney()).sum();
@@ -160,32 +127,28 @@ public class DonationController {
 		Double moneyRest = moneyF - moneyD;
 		donation.setMoneyRest(moneyRest);
 
-		if (donation.getMoney() != null) {
-
-			if (donation.getMoney() > moneyRest) {
-				FieldError err = new FieldError("donation", "money", "Your donation must not exceed the reamaining money");
-				result.addError(err);
-			}
+		if (donation.getMoney() != null && donation.getMoney() > moneyRest) {
+			FieldError err = new FieldError(DonationController.DONATION, "money", "Your donation must not exceed the reamaining money");
+			result.addError(err);
 		}
 
 		List<String> x = Arrays.asList("true", "false");
 		model.addAttribute("anonymous", x);
 
 		if (result.hasErrors()) {
-			model.addAttribute("donation", donation);
+			model.addAttribute(DonationController.DONATION, donation);
 			return "donations/editDonation";
 		} else {
 			this.donationService.saveDonation(donation);
 
-			model.addAttribute("message", "Donation successfully saved!");
+			model.addAttribute(DonationController.MESSAGE, "Donation successfully saved!");
 		}
 
 		return view;
 	}
 
 	@GetMapping(path = "/delete/{donationId}")
-	public String deleteDonation(@PathVariable("donationId") final int donationId, final HttpServletRequest request,
-			final ModelMap modelMap, @PathVariable("causeId") final int causeId) {
+	public String deleteDonation(@PathVariable("donationId") final int donationId, final HttpServletRequest request, final ModelMap modelMap, @PathVariable("causeId") final int causeId) {
 		String view = "redirect:/cause/{causeId}/donations";
 
 		Optional<Donation> donation = this.donationService.findDonationById(donationId);
@@ -202,11 +165,11 @@ public class DonationController {
 		if (donation.isPresent()) {
 			this.donationService.delete(donation.get());
 
-			modelMap.addAttribute("message", "Donation successfully deleted!");
+			modelMap.addAttribute(DonationController.MESSAGE, "Donation successfully deleted!");
 
 		} else {
 
-			modelMap.addAttribute("message", "Donation not found!");
+			modelMap.addAttribute(DonationController.MESSAGE, "Donation not found!");
 		}
 
 		return view;

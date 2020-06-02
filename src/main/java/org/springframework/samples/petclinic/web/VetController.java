@@ -55,19 +55,6 @@ public class VetController {
 	private final VetService	vetService;
 
 
-	//	private VetValidator		vetValidator;
-	//
-	//
-	//	@InitBinder
-	//	public void setAllowedFields(final WebDataBinder dataBinder) {
-	//		dataBinder.setDisallowedFields("id");
-	//	}
-	//
-	//	@InitBinder("vet")
-	//	public void initVetBinder(final WebDataBinder dataBinder) {
-	//		dataBinder.setValidator(this.vetValidator);
-	//	}
-
 	@Autowired
 	public VetController(final VetService clinicService) {
 		this.vetService = clinicService;
@@ -93,7 +80,6 @@ public class VetController {
 				Specialty s = this.vetService.findSpecialiesById(i);
 				vet.addSpecialty(s);
 			}
-			//			this.authService.saveAuthorities(vet.getUser().getUsername(), "veterinarian");
 			if (vet.getUser() != null) {
 				vet.getUser().setEnabled(true);
 			}

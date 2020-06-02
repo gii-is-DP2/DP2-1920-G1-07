@@ -37,7 +37,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class RoomController {
 
 	private static final String			VIEWS_ROOM_CREATE_OR_UPDATE_FORM	= "/rooms/createOrUpdateRoomForm";
-	private static final String 		MESSAGE = "message";
+	private static final String			REDIRECT_ROOM						= "redirect:/rooms/";
+	private static final String			MESSAGE								= "message";
 	private final RoomService			roomService;
 
 	@Autowired
@@ -128,7 +129,7 @@ public class RoomController {
 		room2.setSitter(room.getSitter());
 		this.roomService.saveRoom(room2);
 
-		return "redirect:/rooms/" + roomId;
+		return RoomController.REDIRECT_ROOM + roomId;
 	}
 
 	@GetMapping(value = "/rooms/new")
@@ -144,31 +145,33 @@ public class RoomController {
 		RoomValidator roomVal = new RoomValidator(this.roomService);
 		roomVal.validate(room, result);
 		if (result.hasErrors()) {
-			model.addAttribute(MESSAGE, "Room not created");
+			model.addAttribute(RoomController.MESSAGE, "Room not created");
 			model.addAttribute("room", room);
 			return "rooms/createOrUpdateRoomForm";
 		} else {
 			this.roomService.saveRoom(room);
-			model.addAttribute(MESSAGE, "Room succesfully created");
+			model.addAttribute(RoomController.MESSAGE, "Room succesfully created");
 		}
-		return "redirect:/rooms/";
+		return RoomController.REDIRECT_ROOM;
 	}
 	@GetMapping(value = "/rooms/delete/{roomId}")
 	public String processDeleteRoom(@PathVariable("roomId") final int roomId, final Model model) {
-		String view = "redirect:/rooms/";
+		String view = RoomController.REDIRECT_ROOM;
 		Room room = this.roomService.findRoomById(roomId);
-		if (room != null && !room.getReservations().isEmpty()) {
-			for (Reservation r : room.getReservations()) {
-				if (!r.getStatus().getName().equals("ACCEPTED")) {
-					this.roomService.delete(room);
-					model.addAttribute(MESSAGE, "Event Successfuly deleted");
+		if (room != null) {
+			if (!room.getReservations().isEmpty()) {
+				for (Reservation r : room.getReservations()) {
+					if (!r.getStatus().getName().equals("ACCEPTED")) {
+						this.roomService.delete(room);
+						model.addAttribute(RoomController.MESSAGE, "Event Successfuly deleted");
+					}
 				}
+			} else {
+				this.roomService.delete(room);
 			}
-		} else if (room != null && room.getReservations().isEmpty()) {
-			this.roomService.delete(room);
 		} else {
 
-			model.addAttribute("roomNotDeleted", "The room named " + room.getName() + " cannot be removed because it has reservations");
+			model.addAttribute("roomNotDeleted", "The room cannot be removed because it has reservations");
 		}
 		return view;
 	}
@@ -190,7 +193,7 @@ public class RoomController {
 		} else {
 			room.setId(roomId);
 			this.roomService.saveRoom(room);
-			return "redirect:/rooms/" + room.getId();
+			return RoomController.REDIRECT_ROOM + room.getId();
 		}
 
 	}
@@ -199,7 +202,7 @@ public class RoomController {
 		ModelAndView mav = new ModelAndView("rooms/roomDetails");
 
 		Room r = this.roomService.findRoomById(roomId);
-		if (r.getReservations() != null ) {
+		if (r.getReservations() != null) {
 			Integer numReservationsAccepted = (int) r.getReservations().stream().filter(x -> x.getStatus().getName().equals("ACCEPTED")).count();
 			Boolean completedRoom = numReservationsAccepted.equals(r.getCapacity());
 			model.addAttribute("completedRoom", completedRoom);
@@ -211,8 +214,8 @@ public class RoomController {
 			Principal principal = request.getUserPrincipal();
 			int ownerId = this.ownerService.findOwnerByUserName(principal.getName()).getId();
 			Collection<Reservation> reservations = this.reservationService.findReservationsByOwnerAndRoomId(ownerId, roomId);
-			if(!reservations.isEmpty()) {
-			model.addAttribute("myReservations", reservations);
+			if (!reservations.isEmpty()) {
+				model.addAttribute("myReservations", reservations);
 			}
 		}
 		model.put("room", this.roomService.findRoomById(roomId));

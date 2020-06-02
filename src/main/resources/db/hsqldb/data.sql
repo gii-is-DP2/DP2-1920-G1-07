@@ -137,5 +137,6 @@ INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) 
 INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) VALUES (6,'2020-08-22','2020-09-12','14',11,10,2);
 
 INSERT INTO diagnosis(id, description, date, vet_id, pet_id, visit_id) VALUES (1, 'Todo bien', '2013-01-10', 7, 14, 5);
+INSERT INTO diagnosis(id, description, date, vet_id, pet_id, visit_id) VALUES (2, 'Todo bien', '2013-01-10', 7, 17, 5);
 
 
