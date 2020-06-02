@@ -41,9 +41,7 @@ public interface SpringDataVetRepository extends VetRepository, Repository<Vet, 
 	@Query("select s from Specialty s order by s.name")
 	List<Specialty> findSpecialties() throws DataAccessException;
 
-	//	@Override
-	//	@Query("select v from Visit v order by v.id")
-	//	List<Visit> findVisits() throws DataAccessException;
+
 
 	@Override
 	@Query("select v from Visit v where v.vet.user.username = :username")

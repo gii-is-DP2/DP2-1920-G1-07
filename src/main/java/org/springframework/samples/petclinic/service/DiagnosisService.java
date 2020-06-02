@@ -22,10 +22,7 @@ public class DiagnosisService {
 		this.diagnosisRepository = diagnosisRepository;
 	}
 
-	//	@Transactional
-	//	public Collection<Diagnosis> allDiagnosis() throws DataAccessException {
-	//		return this.diagnosisRepository.findAll();
-	//	}
+
 
 	@Transactional
 	public void saveDiagnosis(final Diagnosis diagnosis) throws DataAccessException {

@@ -25,12 +25,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class DiagnosisController {
 
 	private static final String		VIEWS_DIAGNOSIS_CREATE_FORM	= "vets/createDiagnosis";
+	private static final String		DIAGNOSIS	= "diagnosis";
 
 	private final DiagnosisService	diagnosisService;
 
 	private final VetService		vetService;
 
 	private final VisitService		visitService;
+	
 
 
 	@Autowired
@@ -43,7 +45,7 @@ public class DiagnosisController {
 	@GetMapping(value = "/vet/{vetId}/diagnosis")
 	public String initCreationForm(final ModelMap model) {
 		Diagnosis diagnosis = new Diagnosis();
-		model.put("diagnosis", diagnosis);
+		model.put(DIAGNOSIS, diagnosis);
 		return DiagnosisController.VIEWS_DIAGNOSIS_CREATE_FORM;
 	}
 
@@ -57,7 +59,7 @@ public class DiagnosisController {
 
 		if (result.hasErrors()) {
 			model.put("message", "Diagnosis not created");
-			model.put("diagnosis", diagnosis);
+			model.put(DIAGNOSIS, diagnosis);
 			return DiagnosisController.VIEWS_DIAGNOSIS_CREATE_FORM;
 		} else {
 			Vet v = this.vetService.findVetById(vetId);
@@ -76,7 +78,7 @@ public class DiagnosisController {
 	@GetMapping(path = "/diagnosis/myDiagnosis")
 	public String showMyDiagnosisList(final ModelMap model, final HttpServletRequest request, @RequestParam("petId") final int petId) {
 		Collection<Diagnosis> myDiagnosis = this.diagnosisService.findMyDiagnosis(petId);
-		model.put("diagnosis", myDiagnosis);
+		model.put(DIAGNOSIS, myDiagnosis);
 		return "vets/diagnosisList";
 	}
 

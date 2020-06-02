@@ -46,7 +46,7 @@
 		<sonar.projectKey>gii-is-DP2_DP2-1920-G1-07</sonar.projectKey>
 		<sonar.organization>gii-is-dp2</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-		<sonar.login>e85c61d9149873727385c7d97dbf568da160de95</sonar.login>
+		<sonar.login>25d68340f42007a07beac13ab7ac2adb621213ee</sonar.login>
 	</properties>
 
 	<dependencies>
@@ -419,7 +419,7 @@
 									<goal>generate</goal>
 								</goals>
 								<configuration>
-									<projectName>${name}</projectName>
+									<projectName>${project.name}</projectName>
 									<outputDirectory>target</outputDirectory>
 									<cucumberOutput>target/cucumber-reports/cucumber-report.json</cucumberOutput>
 									<buildNumber>1</buildNumber>

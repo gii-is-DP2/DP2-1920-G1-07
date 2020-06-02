@@ -1,22 +1,16 @@
 package org.springframework.samples.petclinic.web;
 
-import java.time.LocalDate;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.model.Pet;
-import org.springframework.samples.petclinic.model.Reservation;
 import org.springframework.samples.petclinic.model.Room;
-import org.springframework.samples.petclinic.service.PetService;
 import org.springframework.samples.petclinic.service.RoomService;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.Validator;
 
 public class RoomValidator implements Validator {
 
-	private static final String REQUIERED = "This field is required";
-		
+	private static final String			FIELD_REQUIRED	= "This field is required";
 	@Autowired
 	private RoomService roomService;
 	
@@ -38,10 +32,10 @@ public class RoomValidator implements Validator {
 			errors.rejectValue("capacity", "The value 0 is not valid","The value 0 is not valid");
 		}
 		if(room.getCapacity() == null) {
-			errors.rejectValue("capacity", "This field is required","This field is required");
+			errors.rejectValue("capacity", FIELD_REQUIRED,FIELD_REQUIRED);
 		}
 		if(room.getType() == null) {
-			errors.rejectValue("type", "This field is required","This field is required");
+			errors.rejectValue("type", FIELD_REQUIRED,FIELD_REQUIRED);
 		}
 		
 		Collection<String> roomNames = this.roomService.findAllRoomsName();

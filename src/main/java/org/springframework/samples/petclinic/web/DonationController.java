@@ -33,6 +33,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/cause/{causeId}/donations")
 public class DonationController {
+	
+	private static final String		DONATION	= "donation";
+	private static final String		MESSAGE	= "message";
 
 	@Autowired
 	private DonationService donationService;
@@ -46,7 +49,7 @@ public class DonationController {
 	//
 	// }
 
-	@InitBinder("donation")
+	@InitBinder(DONATION)
 	public void initDonationBinder(final WebDataBinder dataBinder) {
 		dataBinder.setValidator(new DonationValidator());
 	}
@@ -64,31 +67,7 @@ public class DonationController {
 
 	}
 
-	// @GetMapping(path = "/new")
-	// public String createDonation(ModelMap modelMap) {
-	//
-	// String view = "donations/editDonation";
-	//
-	// Object principal =
-	// SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	// UserDetails userDetails = null;
-	// if (principal instanceof UserDetails) {
-	// userDetails = (UserDetails) principal;
-	// }
-	// String userName = userDetails.getUsername();
-	// User u = new User();
-	// u.setUsername(userName);
-	//
-	// Donation d = new Donation();
-	// d.setUser(u);
-	//
-	//
-	// modelMap.addAttribute("donation", d);
-	//
-	//
-	// return view;
-	//
-	// }
+
 
 	@GetMapping(value = "/new")
 	public String initCreationForm(final Cause c, final ModelMap model, final HttpServletRequest request,
@@ -123,7 +102,7 @@ public class DonationController {
 		donation.setCauses(causes);
 		donation.getCauses().setTitle(nombre);
 
-		model.put("donation", donation);
+		model.put(DONATION, donation);
 
 		System.out.println(donation.getUser().getUsername());
 
@@ -163,7 +142,7 @@ public class DonationController {
 		if (donation.getMoney() != null) {
 
 			if (donation.getMoney() > moneyRest) {
-				FieldError err = new FieldError("donation", "money", "Your donation must not exceed the reamaining money");
+				FieldError err = new FieldError(DONATION, "money", "Your donation must not exceed the reamaining money");
 				result.addError(err);
 			}
 		}
@@ -172,12 +151,12 @@ public class DonationController {
 		model.addAttribute("anonymous", x);
 
 		if (result.hasErrors()) {
-			model.addAttribute("donation", donation);
+			model.addAttribute(DONATION, donation);
 			return "donations/editDonation";
 		} else {
 			this.donationService.saveDonation(donation);
 
-			model.addAttribute("message", "Donation successfully saved!");
+			model.addAttribute(MESSAGE, "Donation successfully saved!");
 		}
 
 		return view;
@@ -202,11 +181,11 @@ public class DonationController {
 		if (donation.isPresent()) {
 			this.donationService.delete(donation.get());
 
-			modelMap.addAttribute("message", "Donation successfully deleted!");
+			modelMap.addAttribute(MESSAGE, "Donation successfully deleted!");
 
 		} else {
 
-			modelMap.addAttribute("message", "Donation not found!");
+			modelMap.addAttribute(MESSAGE, "Donation not found!");
 		}
 
 		return view;
