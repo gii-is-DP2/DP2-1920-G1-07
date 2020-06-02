@@ -403,6 +403,7 @@
 							</execution>
 						</executions>
 						<configuration>
+						<skipTests>true</skipTests>
 							<includes>
 								<include>**/*CucumberUITest.java</include>
 							</includes>
@@ -419,6 +420,7 @@
 									<goal>generate</goal>
 								</goals>
 								<configuration>
+								<skipTests>true</skipTests>
 									<projectName>${project.name}</projectName>
 									<outputDirectory>target</outputDirectory>
 									<cucumberOutput>target/cucumber-reports/cucumber-report.json</cucumberOutput>
