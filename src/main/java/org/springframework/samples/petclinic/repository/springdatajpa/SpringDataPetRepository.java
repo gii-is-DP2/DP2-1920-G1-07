@@ -24,6 +24,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.projections.OwnerPets;
 import org.springframework.samples.petclinic.repository.PetRepository;
 
 /**
@@ -46,4 +47,7 @@ public interface SpringDataPetRepository extends PetRepository, Repository<Pet, 
 	@Query("SELECT p FROM Pet p where p.owner.user.username LIKE :name")
 	Collection<Pet> findPetsByOwnerName(String name);
 
+	@Override
+	@Query("SELECT p.id AS id, p.name AS name, p.birthDate AS birthDate, t.name AS type, v.description AS visitDescription, v.date AS visitDate FROM Pet p INNER JOIN p.type t LEFT JOIN p.visits v WHERE p.owner.user.username =:nameOwner")
+	Collection<OwnerPets> findOwnerPets(String nameOwner);
 }
