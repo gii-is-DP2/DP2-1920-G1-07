@@ -16,8 +16,6 @@ import org.springframework.samples.petclinic.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jayway.jsonpath.internal.filter.RelationalOperator;
-
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public class CauseServiceTests {
