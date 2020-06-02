@@ -36,11 +36,11 @@ public class VetValidator implements Validator {
 			errors.rejectValue("specialties", "The specialties is empty", "The specialties is empty");
 		}
 
-		if (username == null || username == "") {
+		if (username == null || username.equals("")) {
 			errors.rejectValue("user.username", "The username is empty", "The username is empty");
 		}
 
-		if (password == null || password == "") {
+		if (password == null || password.equals("")) {
 			errors.rejectValue("user.password", "The password is empty", "The password is empty");
 		}
 

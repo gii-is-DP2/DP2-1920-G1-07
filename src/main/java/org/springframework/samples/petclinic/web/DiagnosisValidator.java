@@ -27,7 +27,7 @@ public class DiagnosisValidator implements Validator {
 		LocalDate date = diagnosis.getDate();
 		LocalDate now = LocalDate.now();
 
-		if (description == null || description == "") {
+		if (description == null || description.equals("")) {
 			errors.rejectValue("description", "The description is empty", "The description is empty");
 		}
 

@@ -27,7 +27,7 @@ public class VisitValidator implements Validator {
 		LocalDate date = visit.getDate();
 		LocalDate now = LocalDate.now();
 
-		if (description == null || description == "") {
+		if (description == null || description.equals("")) {
 			errors.rejectValue("description", "The description is empty", "The description is empty");
 		}
 
