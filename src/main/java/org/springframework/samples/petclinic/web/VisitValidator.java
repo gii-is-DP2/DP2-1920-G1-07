@@ -32,8 +32,7 @@ public class VisitValidator implements Validator {
 		}
 
 		if (date != null) {
-			Boolean posterior = date.isBefore(now);
-			if (posterior) {
+			if (date.isBefore(now)) {
 				errors.rejectValue("date", "The date is before the current date", "The date is before the current date");
 			}
 		} else {

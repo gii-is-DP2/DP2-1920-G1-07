@@ -33,8 +33,7 @@ public class CauseValidator implements Validator {
 		}
 
 		if (deadline != null) {
-			Boolean posterior = deadline.isBefore(now);
-			if (posterior) {
+			if (deadline.isBefore(now)) {
 				errors.rejectValue("deadline", "The deadline is before the current date", "The deadline is before the current date");
 			}
 		} else {

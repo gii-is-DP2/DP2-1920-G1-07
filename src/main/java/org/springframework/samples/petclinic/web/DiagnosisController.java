@@ -25,14 +25,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class DiagnosisController {
 
 	private static final String		VIEWS_DIAGNOSIS_CREATE_FORM	= "vets/createDiagnosis";
-	private static final String		DIAGNOSIS	= "diagnosis";
+	private static final String		DIAGNOSIS					= "diagnosis";
 
 	private final DiagnosisService	diagnosisService;
 
 	private final VetService		vetService;
 
 	private final VisitService		visitService;
-	
 
 
 	@Autowired
@@ -45,7 +44,7 @@ public class DiagnosisController {
 	@GetMapping(value = "/vet/{vetId}/diagnosis")
 	public String initCreationForm(final ModelMap model) {
 		Diagnosis diagnosis = new Diagnosis();
-		model.put(DIAGNOSIS, diagnosis);
+		model.put(DiagnosisController.DIAGNOSIS, diagnosis);
 		return DiagnosisController.VIEWS_DIAGNOSIS_CREATE_FORM;
 	}
 
@@ -53,13 +52,10 @@ public class DiagnosisController {
 	public String processCreateDiagnosis(@Valid final Diagnosis diagnosis, final BindingResult result, final ModelMap model, @PathVariable("vetId") final int vetId, @RequestParam("visitId") final int visitId) {
 		DiagnosisValidator diagnosisValidator = new DiagnosisValidator(this.diagnosisService);
 		diagnosisValidator.validate(diagnosis, result);
-		//		if (diagnosis.getDate() == null) {
-		//			result.rejectValue("date", "Date must not be null");
-		//		}
 
 		if (result.hasErrors()) {
 			model.put("message", "Diagnosis not created");
-			model.put(DIAGNOSIS, diagnosis);
+			model.put(DiagnosisController.DIAGNOSIS, diagnosis);
 			return DiagnosisController.VIEWS_DIAGNOSIS_CREATE_FORM;
 		} else {
 			Vet v = this.vetService.findVetById(vetId);
@@ -78,7 +74,7 @@ public class DiagnosisController {
 	@GetMapping(path = "/diagnosis/myDiagnosis")
 	public String showMyDiagnosisList(final ModelMap model, final HttpServletRequest request, @RequestParam("petId") final int petId) {
 		Collection<Diagnosis> myDiagnosis = this.diagnosisService.findMyDiagnosis(petId);
-		model.put(DIAGNOSIS, myDiagnosis);
+		model.put(DiagnosisController.DIAGNOSIS, myDiagnosis);
 		return "vets/diagnosisList";
 	}
 

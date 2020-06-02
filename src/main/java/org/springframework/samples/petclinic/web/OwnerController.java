@@ -17,7 +17,6 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -30,7 +29,6 @@ import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -48,8 +46,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class OwnerController {
 
 	private static final String	VIEWS_OWNER_CREATE_OR_UPDATE_FORM	= "owners/createOrUpdateOwnerForm";
-
-	//	private static final String	VIEWS_OWNER_DETAILS					= "owners/ownerDetails";
 
 	private final OwnerService	ownerService;
 
@@ -145,21 +141,5 @@ public class OwnerController {
 		mav.addObject(this.ownerService.findOwnerById(ownerId));
 		return mav;
 	}
-
-	////////////////////////////////
-
-	//	@GetMapping(value = "/owners/profile")
-	//	public String processFindProfile(final Owner owner, final BindingResult result, final Map<String, Object> model) {
-	//		Integer idOwner = owner.getId();
-	//		return "redirect:/owners/profile/" + idOwner;
-	//
-	//	}
-	//
-	//	@GetMapping("/owners/profile/{ownerId}")
-	//	public ModelAndView showProfile(@PathVariable("ownerId") final int ownerId) {
-	//		ModelAndView mav = new ModelAndView("owners/ownerDetails");
-	//		mav.addObject(this.ownerService.findOwnerById(ownerId));
-	//		return mav;
-	//	}
 
 }
