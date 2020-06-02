@@ -16,8 +16,6 @@ import org.springframework.samples.petclinic.model.Status;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jayway.jsonpath.internal.filter.RelationalOperator;
-
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 public class CauseServiceTests {
@@ -29,16 +27,19 @@ public class CauseServiceTests {
 	@Test
 	void shouldFindAcceptedCauses() {
 		Collection<Cause> causes = this.causeService.findAcceptedCauses();
+		Integer tamaño = causes.size();
 
-		Assertions.assertThat(causes.size()).isEqualTo(2);
-		Assertions.assertThat(causes.size()).isNotEqualTo(4);
+		Assertions.assertThat(tamaño).isEqualTo(2);
+		Assertions.assertThat(tamaño).isNotEqualTo(4);
 	}
 
 	@Test
 	void shouldFindPendingStatus() {
+		//Arrange
 		Status pending = this.causeService.findPendingStatus();
+		//Act
 		String name = pending.getName();
-
+		//Assert
 		Assertions.assertThat(name).isEqualTo("PENDING");
 		Assertions.assertThat(name).isNotEqualTo("PENDINGG");
 	}
@@ -46,37 +47,43 @@ public class CauseServiceTests {
 	@Test
 	void shoudFindMyCauses() {
 		Collection<Cause> myCauses = this.causeService.findMyCauses("owner1");
+		Integer tamaño = myCauses.size();
 
-		Assertions.assertThat(myCauses.size()).isEqualTo(3);
-		Assertions.assertThat(myCauses.size()).isNotEqualTo(2);
+		Assertions.assertThat(tamaño).isEqualTo(3);
+		Assertions.assertThat(tamaño).isNotEqualTo(2);
 	}
 
 	@Test
 	void shouldFindPendingCauses() {
 		Collection<Cause> causes = this.causeService.findPendingCauses();
+		Integer tamaño = causes.size();
 
-		Assertions.assertThat(causes.size()).isEqualTo(1);
-		Assertions.assertThat(causes.size()).isNotEqualTo(3);
+		Assertions.assertThat(tamaño).isEqualTo(1);
+		Assertions.assertThat(tamaño).isNotEqualTo(3);
 	}
 
 	@Test
 	void shouldFindStatus() {
 		Collection<Status> status = this.causeService.findStatus();
-		Assertions.assertThat(status.size()).isEqualTo(3);
-		Assertions.assertThat(status.size()).isNotEqualTo(2);
+		Integer tamaño = status.size();
+
+		Assertions.assertThat(tamaño).isEqualTo(3);
+		Assertions.assertThat(tamaño).isNotEqualTo(2);
 	}
 
 	@Test
 	void shouldFindCauseById() {
 		Cause cause = this.causeService.findCauseById(1);
+		String title = cause.getTitle();
 
-		Assertions.assertThat(cause.getTitle()).isEqualTo("First Cause");
-		Assertions.assertThat(cause.getTitle()).isNotEqualTo("Second Cause");
+		Assertions.assertThat(title).isEqualTo("First Cause");
+		Assertions.assertThat(title).isNotEqualTo("Second Cause");
 	}
 
 	@Test
 	@Transactional
 	void shouldInsertCause() {
+		//Arrange
 		Collection<Cause> causas1 = this.causeService.findAllCauses();
 		Cause c = new Cause();
 		c.setTitle("Causa prueba");
@@ -86,9 +93,12 @@ public class CauseServiceTests {
 		c.setDeadline(LocalDate.of(2020, 10, 30));
 		this.causeService.saveCauses(c);
 		Collection<Cause> causas2 = this.causeService.findAllCauses();
-
-		Assertions.assertThat(causas2.size()).isEqualTo(causas1.size() + 1);
-		Assertions.assertThat(causas2.size()).isNotEqualTo(causas1.size());
+		//Act
+		Integer tamaño1 = causas1.size();
+		Integer tamaño2 = causas2.size();
+		//Assert
+		Assertions.assertThat(tamaño2).isEqualTo(tamaño1 + 1);
+		Assertions.assertThat(tamaño2).isNotEqualTo(tamaño1);
 	}
 
 }
