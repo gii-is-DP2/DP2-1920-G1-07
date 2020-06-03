@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-public class SitterServiceTest {
+class SitterServiceTest {
 
 	@Autowired
 	protected OwnerService		ownerService;
@@ -53,4 +53,17 @@ public class SitterServiceTest {
 			this.sitterService.saveSitter(sitter);
 		});
 	}
+	
+	@Test
+	@Transactional
+	void shouldFindAllSitter() {
+		assertThat(sitterService.findAll().size()==1);
+	}
+	
+	@Test
+	@Transactional
+	void shouldFindSitter() {
+		assertThat(sitterService.findById(14).getTelephone().equals("6085555487"));
+	}
+	
 }

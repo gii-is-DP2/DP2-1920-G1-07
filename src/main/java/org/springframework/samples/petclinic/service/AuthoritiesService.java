@@ -52,7 +52,11 @@ public class AuthoritiesService {
 		authoritiesRepository.save(authority);
 	}
 	public Authorities findAuthorityByName(String username) throws DataAccessException {
-		 return authoritiesRepository.findById(username).get();
+		Authorities res = null;
+		if(authoritiesRepository.findById(username).isPresent()) {
+			res = authoritiesRepository.findById(username).get();
+		}
+		 return res;
 	}
 
 

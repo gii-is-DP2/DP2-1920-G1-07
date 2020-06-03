@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-mysql.properties")
-public class CauseControllerE2ETest {
+class CauseControllerE2ETest {
 
 	private static final int	TEST_CAUSE_ID	= 1;
 
