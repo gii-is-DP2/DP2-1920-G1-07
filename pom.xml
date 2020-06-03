@@ -388,7 +388,6 @@
 						<version>3.0.0-M1</version>
 						<configuration>
 							<skipTests>true</skipTests>
-							<skipLogs>true</skipLogs>
 							<useSystemClassLoader>false</useSystemClassLoader>
 						</configuration>
 					</plugin>

@@ -61,9 +61,8 @@ public class GoogleCalendarAPITest {
 			event.setEnd(end);
 			event.setSummary("Ejemplo de Evento creado en el Test del Pet Clinic del grupo G7 de DP2-BORRAR-");
 			String calendarId = "primary";
-			RestAssured.given().auth().preemptive().oauth2(GoogleCalendarAPITest.ACCESS_TOKEN).given().request().contentType(ContentType.JSON)
-
-				.response().with().body(event).when().post("https://www.googleapis.com/calendar/v3/calendars/" + calendarId + "/events").then().statusCode(200).and().assertThat()
+			RestAssured.given().auth().preemptive().oauth2(GoogleCalendarAPITest.ACCESS_TOKEN).given().request().contentType(ContentType.JSON).log().all().response().log().all().with().body(event).when()
+				.post("https://www.googleapis.com/calendar/v3/calendars/" + calendarId + "/events").then().statusCode(200).and().assertThat()
 				//Esta son las unicas propiedades comunes que no dependen del usuario que esté introduciendo el evento
 				//Y por lo tanto las unicas que podemos probar que existen.
 				.body("kind", Matchers.equalTo("calendar#event")).body("status", Matchers.equalTo("confirmed")); //Es confirmed si el evento se ha insertado.
