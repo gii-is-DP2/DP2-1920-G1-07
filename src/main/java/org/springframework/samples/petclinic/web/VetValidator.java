@@ -28,11 +28,11 @@ public class VetValidator implements Validator {
 	@Override
 	public void validate(final Object obj, final Errors errors) {
 		Vet vet = (Vet) obj;
-		int[] specialties = this.specialties;
+		int[] specialt = this.specialties;
 		String username = vet.getUser().getUsername();
 		String password = vet.getUser().getPassword();
 
-		if (specialties == null) {
+		if (specialt == null) {
 			errors.rejectValue("specialties", "The specialties is empty", "The specialties is empty");
 		}
 

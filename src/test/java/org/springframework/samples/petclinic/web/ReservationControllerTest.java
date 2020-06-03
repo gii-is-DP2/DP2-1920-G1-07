@@ -40,7 +40,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @WebMvcTest(controllers=ReservationController.class,
 			excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 			excludeAutoConfiguration= SecurityConfiguration.class)
-public class ReservationControllerTest {
+class ReservationControllerTest {
 	
 	
 	public static final int TEST_RESERVATION_ID = 1;
