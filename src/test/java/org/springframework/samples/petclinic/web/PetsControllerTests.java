@@ -43,7 +43,6 @@ import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.projections.OwnerPets;
 import org.springframework.samples.petclinic.service.OwnerService;
 import org.springframework.samples.petclinic.service.PetService;
-import org.springframework.samples.petclinic.service.VetService;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -97,6 +96,74 @@ class PetsControllerTests {
 		}
 	};
 	
+private static final OwnerPets TEST_OWNERPETS2 = new OwnerPets() {
+		
+		@Override
+		public String getVisitDescription() {
+			return "Hola2";
+		}
+		
+		@Override
+		public LocalDate getVisitDate() {
+			LocalDate a = LocalDate.of(2015, 5, 8);
+			return a;
+		}
+		
+		@Override
+		public String getType() {
+			return "Cat";
+		}
+		
+		@Override
+		public String getName() {
+			return "Jule";
+		}
+		
+		@Override
+		public Integer getId() {
+			return 20;
+		}
+		
+		@Override
+		public LocalDate getBirthDate() {
+			LocalDate a = LocalDate.of(2010, 5, 6);
+			return a;
+		}
+	};
+	
+private static final OwnerPets TEST_OWNERPETS3 = new OwnerPets() {
+		
+		@Override
+		public String getVisitDescription() {
+			return null;
+		}
+		
+		@Override
+		public LocalDate getVisitDate() {
+			return null;
+		}
+		
+		@Override
+		public String getType() {
+			return "Cat";
+		}
+		
+		@Override
+		public String getName() {
+			return "Jula";
+		}
+		
+		@Override
+		public Integer getId() {
+			return 25;
+		}
+		
+		@Override
+		public LocalDate getBirthDate() {
+			LocalDate a = LocalDate.of(2010, 5, 7);
+			return a;
+		}
+	};
 	@Autowired
 	private PetsController petsController;
 
@@ -121,6 +188,8 @@ class PetsControllerTests {
 		pet.setName("Pet");
 		Collection<OwnerPets> owpet = new ArrayList<OwnerPets>();
 		owpet.add(TEST_OWNERPETS);
+		owpet.add(TEST_OWNERPETS2);
+		owpet.add(TEST_OWNERPETS3);
 		given(this.petService.findPetTypes()).willReturn(Lists.newArrayList(cat));
 		given(this.ownerService.findOwnerById(TEST_OWNER_ID)).willReturn(new Owner());
 		given(this.ownerService.findOwnerByUser(TEST_USER_NAME)).willReturn(new Owner());
