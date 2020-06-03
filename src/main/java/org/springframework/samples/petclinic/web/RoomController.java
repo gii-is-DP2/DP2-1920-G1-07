@@ -94,10 +94,10 @@ public class RoomController {
 
 	@GetMapping(value = "/rooms")
 	public String listadoDeRomms(final ModelMap modelMap) {
-		String vista = "rooms/roomList";
-		Iterable<Room> rooms = this.roomService.allRooms();
-		modelMap.addAttribute("rooms", rooms);
-		return vista;
+		 String vista = "rooms/roomList";
+		 Iterable<Room> rooms = this.roomService.allRooms();
+		 modelMap.addAttribute("rooms", rooms);
+		 return vista;
 	}
 
 	@GetMapping(value = "sitter/rooms")
