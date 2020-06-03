@@ -158,17 +158,16 @@ public class RoomController {
 	public String processDeleteRoom(@PathVariable("roomId") final int roomId, final Model model) {
 		String view = RoomController.REDIRECT_ROOM;
 		Room room = this.roomService.findRoomById(roomId);
-		if (room != null) {
-			if (!room.getReservations().isEmpty()) {
-				for (Reservation r : room.getReservations()) {
-					if (!r.getStatus().getName().equals("ACCEPTED")) {
-						this.roomService.delete(room);
-						model.addAttribute(RoomController.MESSAGE, "Event Successfuly deleted");
-					}
+		if (room != null && !room.getReservations().isEmpty()) {
+			for (Reservation r : room.getReservations()) {
+				if (!r.getStatus().getName().equals("ACCEPTED")) {
+					this.roomService.delete(room);
+					model.addAttribute(RoomController.MESSAGE, "Event Successfuly deleted");
 				}
-			} else {
-				this.roomService.delete(room);
 			}
+		} else if (room != null && room.getReservations().isEmpty()) {
+			this.roomService.delete(room);
+
 		} else {
 
 			model.addAttribute("roomNotDeleted", "The room cannot be removed because it has reservations");
