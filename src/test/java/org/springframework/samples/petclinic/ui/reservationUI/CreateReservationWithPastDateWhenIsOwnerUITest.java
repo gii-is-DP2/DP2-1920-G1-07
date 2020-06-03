@@ -23,20 +23,20 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CreateReservationWithPastDateWhenIsOwnerUITest {
 
-	private WebDriver		driver;
-	private String			baseUrl;
-	private boolean			acceptNextAlert		= true;
-	private StringBuffer	verificationErrors	= new StringBuffer();
+	private WebDriver driver;
+	private String baseUrl;
+	private boolean acceptNextAlert = true;
+	private StringBuffer verificationErrors = new StringBuffer();
 	@LocalServerPort
-	private int				port;
-
+	private int port;
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
-		//		String pathToGeckoDriver = "C:\\Users\\mediamarkt\\Downloads";
-		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
-		//		driver = new FirefoxDriver();
+		// String pathToGeckoDriver = "C:\\Users\\mediamarkt\\Downloads";
+		// System.setProperty("webdriver.gecko.driver", pathToGeckoDriver +
+		// "\\geckodriver.exe");
+		// driver = new FirefoxDriver();
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -57,15 +57,17 @@ public class CreateReservationWithPastDateWhenIsOwnerUITest {
 		this.driver.findElement(By.linkText("Room4")).click();
 		this.driver.findElement(By.linkText("Add New Reservation")).click();
 		this.driver.findElement(By.id("entryDate")).click();
-		this.driver.findElement(By.linkText("17")).click();
+		this.driver.findElement(By.id("entryDate")).clear();
+		this.driver.findElement(By.id("entryDate")).sendKeys("2019/02/02");
 		this.driver.findElement(By.id("exitDate")).click();
-		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
-		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[2]/span")).click();
-		this.driver.findElement(By.linkText("20")).click();
-		new Select(this.driver.findElement(By.id("pet"))).selectByVisibleText("Pet Bird");
+		this.driver.findElement(By.id("exitDate")).clear();
+		this.driver.findElement(By.id("exitDate")).sendKeys("2021/01/02");
+		this.driver.findElement(By.xpath("//div/div/div/div/div")).click();
+		new Select(driver.findElement(By.id("pet"))).selectByVisibleText("Pet Bird");
 		this.driver.findElement(By.xpath("//option[@value='17']")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Assert.assertEquals("The entry date must be after the current date", this.driver.findElement(By.xpath("//form[@id='add-reservation-form']/div/div/div/span[2]")).getText());
+		Assert.assertEquals("The entry date must be after the current date",
+				this.driver.findElement(By.xpath("//form[@id='add-reservation-form']/div/div/div/span[2]")).getText());
 	}
 
 	@AfterEach

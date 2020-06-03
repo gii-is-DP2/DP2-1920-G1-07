@@ -54,9 +54,9 @@ public class AcceptReservationWhenIsAdminUITest {
 	    driver.findElement(By.xpath("//button[@type='submit']")).click();
 	    driver.findElement(By.xpath("//div[@id='main-navbar']/ul/li[2]/a/span[2]")).click();
 	    driver.findElement(By.linkText("Room4")).click();
-		String statusbefore = driver.findElement(By.linkText("REJECTED")).getText();
-		Assert.assertEquals("REJECTED", statusbefore);
-		driver.findElement(By.linkText("REJECTED")).click();
+		String statusbefore = driver.findElement(By.linkText("PENDING")).getText();
+		Assert.assertEquals("PENDING", statusbefore);
+		driver.findElement(By.linkText("PENDING")).click();
 		new Select(driver.findElement(By.id("status"))).selectByVisibleText("ACCEPTED");
 		driver.findElement(By.xpath("//option[@value='ACCEPTED']")).click();
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
