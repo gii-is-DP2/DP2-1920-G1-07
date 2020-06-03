@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -238,4 +239,20 @@ class PetServiceTests {
 		assertThat(visitArr[0].getPet().getId()).isEqualTo(7);
 	}
 
+	@Test
+	void shouldFindOwnerPetByUserName() throws Exception {
+		assertThat(this.petService.findOwnerPetsById("owner1").size()==2);
+	}
+	
+	void shouldSavePet() throws Exception {
+		int nPets = this.petService.findAll().size();
+		Pet pet = new Pet();
+		pet.setName("wario");
+		Collection<PetType> types = this.petService.findPetTypes();
+		pet.setType(EntityUtils.getById(types, PetType.class, 2));
+		pet.setBirthDate(LocalDate.now());
+		pet.setDiagnoses(new HashSet<>());
+		this.petService.savePet(pet);
+		assertThat(this.petService.findAll().size()==(nPets+1));
+	}
 }

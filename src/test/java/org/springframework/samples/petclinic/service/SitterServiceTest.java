@@ -53,4 +53,17 @@ class SitterServiceTest {
 			this.sitterService.saveSitter(sitter);
 		});
 	}
+	
+	@Test
+	@Transactional
+	void shouldFindAllSitter() {
+		assertThat(sitterService.findAll().size()==1);
+	}
+	
+	@Test
+	@Transactional
+	void shouldFindSitter() {
+		assertThat(sitterService.findById(14).getTelephone().equals("6085555487"));
+	}
+	
 }
