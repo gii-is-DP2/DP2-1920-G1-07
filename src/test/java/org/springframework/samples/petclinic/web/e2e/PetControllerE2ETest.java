@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-mysql.properties")
-class PetControllerE2ETest {
+public class PetControllerE2ETest {
 
 	private static final int TEST_OWNER_ID = 10;
 	private static final int TEST_PET_ID = 13;

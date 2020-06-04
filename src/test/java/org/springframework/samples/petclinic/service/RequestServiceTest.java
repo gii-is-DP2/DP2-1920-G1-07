@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-class RequestServiceTest {
+public class RequestServiceTest {
 
 	@Autowired
 	protected OwnerService		ownerService;

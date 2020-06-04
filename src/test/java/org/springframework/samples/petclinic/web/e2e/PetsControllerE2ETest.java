@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-mysql.properties")
-class PetsControllerE2ETest {
+public class PetsControllerE2ETest {
 
 
 	private static final int TEST_OWNER_ID = 10;

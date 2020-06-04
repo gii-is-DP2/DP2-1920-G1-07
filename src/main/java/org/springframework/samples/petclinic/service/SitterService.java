@@ -33,11 +33,7 @@ public class SitterService {
 	}
 
 	public Sitter findById(final int i) {
-		if (this.sitterRepository.findById(i).isPresent()) {
-			return this.sitterRepository.findById(i).get();
-		} else {
-			return null;
-		}
+		return this.sitterRepository.findById(i).get();
 	}
 
 }

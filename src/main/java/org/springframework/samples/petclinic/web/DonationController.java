@@ -50,13 +50,14 @@ public class DonationController {
 
 	@GetMapping()
 	public String listDonations(final ModelMap modelMap, @PathVariable("causeId") final int causeId) {
-		 String view = "donations/donationsList";
-		 Iterable<Donation> donations = this.donationService.findDonationCause(causeId);
-		 Cause causes = this.causeService.findCauseById(causeId);
 
-		 modelMap.addAttribute("causes", causes);
-		 modelMap.addAttribute("donations", donations);
-		 return view;
+		String view = "donations/donationsList";
+		Iterable<Donation> donations = this.donationService.findDonationCause(causeId);
+		Cause causes = this.causeService.findCauseById(causeId);
+
+		modelMap.addAttribute("causes", causes);
+		modelMap.addAttribute("donations", donations);
+		return view;
 
 	}
 

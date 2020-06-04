@@ -30,7 +30,7 @@ import com.sun.org.apache.xerces.internal.parsers.SecurityConfiguration;
 @WebMvcTest(controllers=DonationController.class,
 		excludeFilters= @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = WebSecurityConfigurer.class),
 		excludeAutoConfiguration = SecurityConfiguration.class)
- class DonationControllerTest {
+public class DonationControllerTest {
 	
 	public static final int TEST_DONATION_ID = 1;
 	public static final int TEST_CAUSE_ID = 1;

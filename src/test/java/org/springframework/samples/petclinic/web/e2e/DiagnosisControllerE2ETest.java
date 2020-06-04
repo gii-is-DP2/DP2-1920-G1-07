@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @Transactional
 @TestPropertySource(locations = "classpath:application-mysql.properties")
-class DiagnosisControllerE2ETest {
+public class DiagnosisControllerE2ETest {
 
 	private static final int	TEST_VET_ID			= 1;
 

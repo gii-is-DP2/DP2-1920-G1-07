@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-class RoomServiceTest {
+public class RoomServiceTest {
 	
 	@Autowired
 	private RoomService roomService;

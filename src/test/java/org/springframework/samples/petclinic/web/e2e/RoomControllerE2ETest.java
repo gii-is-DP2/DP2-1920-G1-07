@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @TestPropertySource(locations = "classpath:application-mysql.properties")
-class RoomControllerE2ETest {
+public class RoomControllerE2ETest {
 
 	private static final int TEST_ROOM_ID = 1;
 	private static final int TEST_ROOM2_ID = 2;

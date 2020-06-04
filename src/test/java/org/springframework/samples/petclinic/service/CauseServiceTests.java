@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-class CauseServiceTests {
+public class CauseServiceTests {
 
 	@Autowired
 	protected CauseService causeService;
