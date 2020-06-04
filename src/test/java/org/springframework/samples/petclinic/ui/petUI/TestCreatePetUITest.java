@@ -34,8 +34,8 @@ public class TestCreatePetUITest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
-		//		String pathToGeckoDriver = "C:\\gecko";
-		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		//String pathToGeckoDriver = "C:\\gecko";
+		//System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -56,6 +56,7 @@ public class TestCreatePetUITest {
 		this.driver.findElement(By.id("name")).clear();
 		this.driver.findElement(By.id("name")).sendKeys("oleeeeee");
 		this.driver.findElement(By.id("birthDate")).click();
+		this.driver.findElement(By.xpath("//div[@id='ui-datepicker-div']/div/a[1]/span")).click();
 		this.driver.findElement(By.linkText("1")).click();
 		new Select(this.driver.findElement(By.id("type"))).selectByVisibleText("cat");
 		this.driver.findElement(By.xpath("//option[@value='cat']")).click();

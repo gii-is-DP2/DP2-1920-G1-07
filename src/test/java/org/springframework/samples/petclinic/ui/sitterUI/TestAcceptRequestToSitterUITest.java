@@ -34,8 +34,8 @@ public class TestAcceptRequestToSitterUITest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.gecko.driver", System.getenv("webdriver.gecko.driver"));
-		//		String pathToGeckoDriver = "C:\\gecko";
-		//		System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
+		//String pathToGeckoDriver = "C:\\gecko";
+		//System.setProperty("webdriver.gecko.driver", pathToGeckoDriver + "\\geckodriver.exe");
 		this.driver = new FirefoxDriver();
 		this.baseUrl = "https://www.google.com/";
 		this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -70,6 +70,7 @@ public class TestAcceptRequestToSitterUITest {
 		this.driver.findElement(By.id("username")).sendKeys("admin1");
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/admin/request')]")).click();
+		this.driver.findElement(By.linkText("Accept request")).click();
 		this.driver.findElement(By.linkText("Accept request")).click();
 		this.driver.findElement(By.xpath("//div[@id='main-navbar']/ul[2]/li/a/strong")).click();
 		this.driver.findElement(By.xpath("//a[contains(@href, '/logout')]")).click();
