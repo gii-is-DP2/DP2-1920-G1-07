@@ -66,8 +66,8 @@ public class CreateReservationWhenIsOwnerUITest {
 		new Select(this.driver.findElement(By.id("pet"))).selectByVisibleText("Pet Dog");
 		this.driver.findElement(By.xpath("//option[@value='16']")).click();
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
-		Assert.assertEquals("2020/06/19", this.driver.findElement(By.xpath("//tr[2]/td[3]")).getText());
-		Assert.assertEquals("2020/06/27", this.driver.findElement(By.xpath("//tr[2]/td[4]")).getText());
+		Assert.assertEquals("2020/08/19", this.driver.findElement(By.xpath("//tr[2]/td[3]")).getText());
+		Assert.assertEquals("2020/08/27", this.driver.findElement(By.xpath("//tr[2]/td[4]")).getText());
 		Assert.assertEquals("Pet Dog", this.driver.findElement(By.xpath("//tr[2]/td[5]")).getText());
 	}
 
