@@ -42,7 +42,7 @@ public class TestCreatePetFailedUITest {
 
 	@Test
 	public void testCreatePetFailed() throws Exception {
-		this.driver.get("http://localhost:8080" + this.port);
+		this.driver.get("http://localhost:" + this.port);
 		this.driver.findElement(By.xpath("//a[contains(@href, '/login')]")).click();
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys("0wn3r");
