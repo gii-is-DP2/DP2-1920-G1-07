@@ -26,8 +26,8 @@ class RoomServiceTest {
 	
 	@Test
 	void shoudFindRoomByCorrectId() {
-		Room room  = this.roomService.findRoomById(1);
-		assertThat(room.getName()).isEqualTo("Room1");
+		Room room  = this.roomService.findRoomById(2);
+		assertThat(room.getName()).isEqualTo("Room2");
 		
 	}
 	@Test

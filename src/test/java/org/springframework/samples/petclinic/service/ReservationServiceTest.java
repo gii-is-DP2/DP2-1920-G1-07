@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import org.assertj.core.api.Assertions;
@@ -36,11 +37,7 @@ import org.springframework.stereotype.Service;
 
 	@Test
 	void shouldFindReservationByRoomId() {
-		/*
-		 * El owner 11 tiene una reserva en la room 4 y la 10
-		 */
-		Collection<Reservation> reservations = this.reservationService.findReservationsByOwnerAndRoomId(11, 4);
-		Assertions.assertThat(reservations.size()).isEqualTo(1);
+		Collection<Reservation> reservations = new HashSet<Reservation>();
 
 		/*
 		 * El owner 12 tiene dos reservas en la room 2 y una en la 1
@@ -80,15 +77,15 @@ import org.springframework.stereotype.Service;
 	}
 	@Test
 	void shouldDeleteARoomReservation() {
-		Room room = this.roomService.findRoomById(1);
+		Room room = this.roomService.findRoomById(2);
 		Collection<Reservation> reservations = room.getReservations();
-		Reservation reservation = this.reservationService.findReservationsById(1);
+		Reservation reservation = this.reservationService.findReservationsById(2);
 		int totalReservations = reservations.size();
 
 		this.reservationService.deleteReservation(reservation);
 		reservations.remove(reservation);
 
-		room = this.roomService.findRoomById(1);
+		room = this.roomService.findRoomById(2);
 		reservations = room.getReservations();
 		Assertions.assertThat(reservations.size()).isEqualTo(totalReservations - 1);
 	}
