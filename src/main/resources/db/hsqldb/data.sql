@@ -11,14 +11,14 @@ INSERT INTO authorities VALUES ('sitter1','sitter');
 INSERT INTO users(username,password,enabled) VALUES ('amine','12345',TRUE);
 INSERT INTO authorities VALUES ('amine','owner');
 
+INSERT INTO users(username,password,enabled) VALUES ('ownerRequest','owner',TRUE);
+INSERT INTO authorities VALUES ('ownerRequest','owner');
+
 INSERT INTO users(username,password,enabled) VALUES ('pablo','12345',TRUE);
 INSERT INTO authorities VALUES ('pablo','owner');
 
 INSERT INTO users(username,password,enabled) VALUES ('ownerFail','owner',TRUE);
 INSERT INTO authorities VALUES ('ownerFail','owner');
-
-INSERT INTO users(username,password,enabled) VALUES ('ownerRequest','owner',TRUE);
-INSERT INTO authorities VALUES ('ownerRequest','owner');
 
 INSERT INTO users(username,password,enabled) VALUES ('owner','owner',TRUE);
 INSERT INTO authorities VALUES ('owner','owner');
@@ -29,8 +29,7 @@ INSERT INTO authorities VALUES ('vet1','veterinarian');
 INSERT INTO users(username,password,enabled) VALUES ('vet2','12345',TRUE);
 INSERT INTO authorities VALUES ('vet2','veterinarian');
 
-INSERT INTO users(username,password,enabled) VALUES ('vet5','pablo',TRUE);
-INSERT INTO authorities VALUES ('vet5','veterinarian');
+
 
 
 INSERT INTO vets VALUES (1, 'James', 'Carter', 'vet1');
@@ -42,9 +41,9 @@ INSERT INTO vets VALUES (6, 'Sharon', 'Jenkins', 'vet1');
 INSERT INTO vets VALUES (7, 'Vet2', 'vet2', 'vet2');
 
 
-INSERT INTO specialties VALUES (1, 'radiology');
-INSERT INTO specialties VALUES (2, 'surgery');
-INSERT INTO specialties VALUES (3, 'dentistry');
+INSERT INTO specialties(id,name) VALUES (1, 'radiology');
+INSERT INTO specialties(id,name) VALUES (2, 'surgery');
+INSERT INTO specialties(id,name) VALUES (3, 'dentistry');
 
 INSERT INTO vet_specialties VALUES (2, 1);
 INSERT INTO vet_specialties VALUES (3, 2);
@@ -110,7 +109,6 @@ INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (14, 'Pet Cat', '20
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (15, 'Pet Snake', '2018-07-08', 4, 11);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (16, 'Pet Dog', '2017-06-18', 2, 12);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (17, 'Pet Bird', '2012-06-28', 5, 12);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (19, 'Pet Bird', '2012-06-28', 5, 11);
 
 
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (1, 7, '2013-01-01', 'rabies shot');
@@ -119,24 +117,20 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (5, 14, '2020-01-04', 'spayed');
 
-INSERT INTO visits(id,visit_date,description,pet_id,vet_id) VALUES (6, '2020-01-04', 'spayed', 13, 7 );
-
 INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (1, 'First Cause', 'This is my first cause', '2020-12-30', 10000.00, 1, 'owner1');
 INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (2, 'Second Cause', 'This is my second cause', '2020-06-20', 10000.00, 3, 'owner1');
 INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (3, 'Third Cause', 'This is my third cause', '2020-10-30', 10000.00, 2, 'owner1');
 INSERT INTO cause(id, title, description, deadline, money, status_id, username) VALUES (4, 'Prueba Cause', 'This is my third cause', '2020-10-30', 10000.00, 2, 'admin1');
 
-INSERT INTO donation VALUES (1, 'true',5000.0,NULL,3,'admin1');
-INSERT INTO donation VALUES (2, 'false',2000.0,NULL,3,'admin1');
-INSERT INTO donation VALUES (3, 'true',1000.0,NULL,3,'admin1');
+INSERT INTO donation(id,anonymous,money,money_rest,causes_id,user_id) VALUES (1, true,5000.0,NULL,3,'admin1');
+INSERT INTO donation(id,anonymous,money,money_rest,causes_id,user_id) VALUES (2, false,2000.0,NULL,3,'admin1');
+INSERT INTO donation(id,anonymous,money,money_rest,causes_id,user_id) VALUES (3, true,1000.0,NULL,3,'admin1');
 
 INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) VALUES (1,'2020-07-12','2020-07-20','15',12,1,1);
 INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) VALUES (2,'2020-07-20','2020-07-22','16',12,2,1);
 INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) VALUES (3,'2020-08-20','2020-08-22','16',12,2,1);
-INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) VALUES (5,'2020-07-02','2020-07-22','17',11,4,1);
+INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) VALUES (5,'2020-07-02','2020-07-22','17',11,4,3);
 INSERT INTO reservation(id,entry_date,exit_date,pet,owner_id,room_id,status_id) VALUES (6,'2020-08-22','2020-09-12','14',11,10,2);
 
 INSERT INTO diagnosis(id, description, date, vet_id, pet_id, visit_id) VALUES (1, 'Todo bien', '2013-01-10', 7, 14, 5);
-INSERT INTO diagnosis(id, description, date, vet_id, pet_id, visit_id) VALUES (2, 'Todo bien', '2013-01-10', 7, 17, 5);
-
 
